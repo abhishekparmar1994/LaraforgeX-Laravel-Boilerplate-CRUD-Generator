@@ -14,6 +14,18 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/process', [\App\Http\Controllers\InstallController::class, 'install']);
     });
 
+    // Activity Audit Logs API routes
+    Route::prefix('activity-logs')->group(function (): void {
+        Route::get('/', [\App\Http\Controllers\ActivityLogController::class, 'index']);
+        Route::delete('/', [\App\Http\Controllers\ActivityLogController::class, 'clear']);
+    });
+
+    // System Health & SMTP API routes
+    Route::prefix('health')->group(function (): void {
+        Route::get('/metrics', [\App\Http\Controllers\HealthController::class, 'metrics']);
+        Route::post('/test-mail', [\App\Http\Controllers\HealthController::class, 'testMail']);
+    });
+
     // Outgoing Webhooks API routes
     Route::prefix('webhooks')->group(function (): void {
         Route::get('/', [\App\Http\Controllers\WebhookController::class, 'index']);
@@ -38,6 +50,7 @@ Route::prefix('v1')->group(function (): void {
         Route::get('/schema', [CrudGeneratorController::class, 'schema']);
         Route::post('/preview', [CrudGeneratorController::class, 'preview']);
         Route::post('/generate', [CrudGeneratorController::class, 'generate']);
+        Route::post('/publish', [CrudGeneratorController::class, 'publish']);
         Route::get('/download/{module}', [CrudGeneratorController::class, 'download']);
     });
 });

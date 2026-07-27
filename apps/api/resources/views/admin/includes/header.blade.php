@@ -16,6 +16,30 @@
   <!-- Right: notification + user dropdown -->
   <div class="flex items-center gap-3">
 
+    <!-- Theme Customizer Dropdown -->
+    <div class="relative" id="theme-dropdown-wrapper">
+      <button id="theme-dropdown-toggle"
+        class="h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer"
+        onclick="toggleThemeDropdown()"
+        title="Theme Customizer">
+        <i class="fa-solid fa-palette text-sm text-brand-600"></i>
+      </button>
+
+      <div id="theme-dropdown-panel"
+        class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs p-3 space-y-3">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Accent Color Palette</p>
+          <div class="grid grid-cols-5 gap-1.5">
+            <button onclick="setAccentTheme('#2b47ff')" class="h-6 w-6 rounded-full bg-[#2b47ff] border-2 border-white shadow cursor-pointer" title="Royal Blue"></button>
+            <button onclick="setAccentTheme('#10b981')" class="h-6 w-6 rounded-full bg-[#10b981] border-2 border-white shadow cursor-pointer" title="Emerald"></button>
+            <button onclick="setAccentTheme('#8b5cf6')" class="h-6 w-6 rounded-full bg-[#8b5cf6] border-2 border-white shadow cursor-pointer" title="Deep Violet"></button>
+            <button onclick="setAccentTheme('#f59e0b')" class="h-6 w-6 rounded-full bg-[#f59e0b] border-2 border-white shadow cursor-pointer" title="Sunset Amber"></button>
+            <button onclick="setAccentTheme('#f43f5e')" class="h-6 w-6 rounded-full bg-[#f43f5e] border-2 border-white shadow cursor-pointer" title="Crimson Rose"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Language Switcher Dropdown -->
     <div class="relative" id="lang-dropdown-wrapper">
       <button id="lang-dropdown-toggle"
@@ -537,6 +561,18 @@
       }
     });
   });
+
+  function toggleThemeDropdown() {
+    $('#theme-dropdown-panel').toggleClass('hidden');
+  }
+
+  function setAccentTheme(color) {
+    localStorage.setItem('laraforgex_theme_color', color);
+    $('#theme-dropdown-panel').addClass('hidden');
+    if (typeof showToast === 'function') {
+      showToast('success', 'Theme color preference saved!');
+    }
+  }
 
   function toggleLangDropdown() {
     $('#lang-dropdown-panel').toggleClass('hidden');

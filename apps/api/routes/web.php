@@ -29,4 +29,5 @@ Route::prefix('admin')->group(function () {
     Route::get('/health', [\App\Http\Controllers\AdminController::class, 'health']);
     Route::get('/webhooks', [\App\Http\Controllers\AdminController::class, 'webhooks']);
     Route::get('/docs', [\App\Http\Controllers\AdminController::class, 'docs']);
+    Route::get('/activity-logs', [\App\Http\Controllers\AdminController::class, 'activityLogs']);
 });

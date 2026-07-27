@@ -182,4 +182,27 @@ class CrudGeneratorController extends Controller
 
         return response()->download($zipPath)->deleteFileAfterSend(true);
     }
+
+    /**
+     * Publish generated CRUD module code directly into app/ directory structure.
+     */
+    public function publish(Request $request): JsonResponse
+    {
+        $module = basename((string) $request->input('module'));
+        $folderPath = base_path("codegenerator/{$module}");
+
+        if (!File::isDirectory($folderPath)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Generated folder for module '{$module}' does not exist.",
+            ], 404);
+        }
+
+        File::copyDirectory($folderPath, base_path());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Module '{$module}' has been published live into the application codebase!",
+        ]);
+    }
 }

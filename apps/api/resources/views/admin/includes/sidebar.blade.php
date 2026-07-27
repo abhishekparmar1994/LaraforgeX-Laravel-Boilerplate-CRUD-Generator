@@ -218,6 +218,32 @@
         </div>
       </div>
 
+      <!-- Audit Trail Group -->
+      <div id="menu-audit" class="relative group sidebar-group">
+        <a href="/admin/activity-logs"
+          class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
+                  {{ request()->is('admin/activity-logs*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i class="fa-solid fa-list-check w-4 text-center {{ request()->is('admin/activity-logs*') ? 'text-brand-500' : 'text-amber-500' }}"></i>
+          <span>Audit Logs</span>
+        </a>
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+          Audit Logs
+        </div>
+      </div>
+
+      <!-- System Health Group -->
+      <div id="menu-health" class="relative group sidebar-group">
+        <a href="/admin/health"
+          class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
+                  {{ request()->is('admin/health*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i class="fa-solid fa-heart-pulse w-4 text-center {{ request()->is('admin/health*') ? 'text-brand-500' : 'text-rose-500' }}"></i>
+          <span>System Health</span>
+        </a>
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+          System Health
+        </div>
+      </div>
+
     </nav>
   </div>
 </aside>

@@ -123,4 +123,9 @@ class AdminController extends Controller
     {
         return view('admin.docs.index');
     }
+
+    public function activityLogs(): View
+    {
+        return view('admin.activity_logs.index');
+    }
 }
