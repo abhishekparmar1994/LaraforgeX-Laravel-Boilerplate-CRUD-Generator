@@ -185,7 +185,7 @@
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/backups*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i class="fa-solid fa-database w-4 text-center {{ request()->is('admin/backups*') ? 'text-brand-500' : 'text-emerald-500' }}"></i>
-          <span>Database Backups</span>
+          <span data-i18n="backups">Database Backups</span>
         </a>
         <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
           Database Backups
@@ -198,7 +198,7 @@
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/webhooks*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i class="fa-solid fa-satellite-dish w-4 text-center {{ request()->is('admin/webhooks*') ? 'text-brand-500' : 'text-sky-500' }}"></i>
-          <span>Webhooks Engine</span>
+          <span data-i18n="webhooks">Webhooks Engine</span>
         </a>
         <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
           Webhooks Engine
@@ -211,7 +211,7 @@
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/docs*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i class="fa-solid fa-code w-4 text-center {{ request()->is('admin/docs*') ? 'text-brand-500' : 'text-indigo-500' }}"></i>
-          <span>API Documentation</span>
+          <span data-i18n="api_docs">API Documentation</span>
         </a>
         <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
           API Documentation
@@ -224,7 +224,7 @@
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/activity-logs*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i class="fa-solid fa-list-check w-4 text-center {{ request()->is('admin/activity-logs*') ? 'text-brand-500' : 'text-amber-500' }}"></i>
-          <span>Audit Logs</span>
+          <span data-i18n="audit_logs">Audit Logs</span>
         </a>
         <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
           Audit Logs
@@ -237,7 +237,7 @@
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/health*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i class="fa-solid fa-heart-pulse w-4 text-center {{ request()->is('admin/health*') ? 'text-brand-500' : 'text-rose-500' }}"></i>
-          <span>System Health</span>
+          <span data-i18n="system_health">System Health</span>
         </a>
         <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
           System Health

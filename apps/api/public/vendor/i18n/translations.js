@@ -30,6 +30,11 @@
       edit: 'Edit',
       view: 'View',
       create_new: 'Create New',
+      backups: 'Database Backups',
+      webhooks: 'Webhooks Engine',
+      api_docs: 'API Documentation',
+      audit_logs: 'Audit Logs',
+      system_health: 'System Health',
     },
     es: {
       dashboard: 'Panel de Control',
@@ -56,6 +61,11 @@
       edit: 'Editar',
       view: 'Ver',
       create_new: 'Crear Nuevo',
+      backups: 'Copias de Seguridad',
+      webhooks: 'Motor de Webhooks',
+      api_docs: 'Documentación API',
+      audit_logs: 'Registros de Auditoría',
+      system_health: 'Salud del Sistema',
     },
     fr: {
       dashboard: 'Tableau de Bord',
@@ -82,6 +92,11 @@
       edit: 'Modifier',
       view: 'Voir',
       create_new: 'Créer Nouveau',
+      backups: 'Sauvegardes BDD',
+      webhooks: 'Moteur Webhooks',
+      api_docs: 'Documentation API',
+      audit_logs: 'Journaux d\'Audit',
+      system_health: 'Santé du Système',
     },
     de: {
       dashboard: 'Übersicht',
@@ -108,6 +123,11 @@
       edit: 'Bearbeiten',
       view: 'Anzeigen',
       create_new: 'Neu erstellen',
+      backups: 'Datenbank-Backups',
+      webhooks: 'Webhooks-Engine',
+      api_docs: 'API-Dokumentation',
+      audit_logs: 'Audit-Protokolle',
+      system_health: 'Systemzustand',
     },
     ar: {
       dashboard: 'لوحة التحكم',
@@ -134,6 +154,11 @@
       edit: 'تعديل',
       view: 'عرض',
       create_new: 'إنشاء جديد',
+      backups: 'نسخ احتياطية',
+      webhooks: 'محرك Webhooks',
+      api_docs: 'توثيق API',
+      audit_logs: 'سجلات التدقيق',
+      system_health: 'صحة النظام',
     },
     hi: {
       dashboard: 'डैशबोर्ड',
@@ -160,6 +185,11 @@
       edit: 'संपादित करें',
       view: 'देखें',
       create_new: 'नया बनाएं',
+      backups: 'डेटाबेस बैकअप',
+      webhooks: 'वेबहुक इंजन',
+      api_docs: 'API दस्तावेज़',
+      audit_logs: 'ऑडिट लॉग्स',
+      system_health: 'सिस्टम स्वास्थ्य',
     }
   };
 
