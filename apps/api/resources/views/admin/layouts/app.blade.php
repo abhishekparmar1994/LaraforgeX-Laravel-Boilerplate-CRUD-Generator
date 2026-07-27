@@ -142,17 +142,17 @@
     <main class="flex-1 min-w-0 flex flex-col overflow-x-hidden">
 
       <!-- Topbar (user dropdown, hamburger) -->
-      <div class="px-4 sm:px-6 lg:px-8 pt-5 mb-6">
+      <div class="px-4 sm:px-5 lg:px-6 pt-5 mb-6">
         @include('admin.includes.header')
       </div>
 
       <!-- Page content -->
-      <div class="flex-1 px-4 sm:px-6 lg:px-8 pb-8">
+      <div class="flex-1 px-4 sm:px-5 lg:px-6 pb-8">
         @yield('content')
       </div>
 
       <!-- Footer -->
-      <div class="px-4 sm:px-6 lg:px-8">
+      <div class="px-4 sm:px-5 lg:px-6">
         @include('admin.includes.footer')
       </div>
     </main>
