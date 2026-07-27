@@ -53,7 +53,7 @@
               { key: 'actions', label: 'Actions', sortable: false, class: 'text-right' }
           ],
           fetch: async () => {
-              const res = await axios.get('/api/v1/backups');
+              const res = await axios.get('/backups');
               return res.data.data;
           },
           row: (item) => `
@@ -83,7 +83,7 @@
       $('#btn-generate-backup').prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Generating Dump...');
 
       try {
-          const res = await axios.post('/api/v1/backups/generate');
+          const res = await axios.post('/backups/generate');
           if (res.data.success) {
               showToast('success', res.data.message);
               backupTable.reload();
@@ -107,7 +107,7 @@
 
       if (confirm.isConfirmed) {
           try {
-              const res = await axios.delete(`/api/v1/backups/${encodeURIComponent(filename)}`);
+              const res = await axios.delete(`/backups/${encodeURIComponent(filename)}`);
               if (res.data.success) {
                   showToast('success', res.data.message);
                   backupTable.reload();

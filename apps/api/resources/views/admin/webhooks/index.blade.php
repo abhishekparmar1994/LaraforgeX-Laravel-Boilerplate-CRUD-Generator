@@ -85,7 +85,7 @@
               { key: 'actions', label: 'Actions', sortable: false, class: 'text-right' }
           ],
           fetch: async () => {
-              const res = await axios.get('/api/v1/webhooks');
+              const res = await axios.get('/webhooks');
               return res.data.data;
           },
           row: (item) => `
@@ -112,7 +112,7 @@
       $('#form-webhook').on('submit', async function(e) {
           e.preventDefault();
           try {
-              const res = await axios.post('/api/v1/webhooks', {
+              const res = await axios.post('/webhooks', {
                   name: $('#wh-name').val(),
                   url: $('#wh-url').val(),
                   event: $('#wh-event').val()
@@ -134,7 +134,7 @@
   async function pingWebhook(url) {
       showToast('info', 'Sending ping test payload...');
       try {
-          const res = await axios.post('/api/v1/webhooks/test', { url });
+          const res = await axios.post('/webhooks/test', { url });
           if (res.data.success) {
               showToast('success', res.data.message);
           }
@@ -146,7 +146,7 @@
   async function deleteWebhook(id) {
       if (confirm('Delete this webhook endpoint?')) {
           try {
-              const res = await axios.delete(`/api/v1/webhooks/${id}`);
+              const res = await axios.delete(`/webhooks/${id}`);
               if (res.data.success) {
                   showToast('success', res.data.message);
                   webhookTable.reload();
