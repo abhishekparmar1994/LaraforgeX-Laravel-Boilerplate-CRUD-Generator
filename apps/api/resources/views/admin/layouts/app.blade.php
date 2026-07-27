@@ -14,6 +14,22 @@
   <!-- ApexCharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>
+    (function() {
+      var savedColor = localStorage.getItem('laraforgex_theme_color');
+      if (savedColor) {
+        var styleEl = document.createElement('style');
+        styleEl.id = 'dynamic-accent-style';
+        styleEl.textContent = `
+          .bg-brand-600, .bg-brand-500 { background-color: ${savedColor} !important; }
+          .text-brand-600, .text-brand-500 { color: ${savedColor} !important; }
+          .border-brand-500, .border-brand-600 { border-color: ${savedColor} !important; }
+          .bg-brand-50 { background-color: ${savedColor}18 !important; }
+        `;
+        document.head.appendChild(styleEl);
+      }
+    })();
+  </script>
+  <script>
     tailwind.config = {
       theme: {
         extend: {

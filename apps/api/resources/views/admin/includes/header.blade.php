@@ -566,11 +566,28 @@
     $('#theme-dropdown-panel').toggleClass('hidden');
   }
 
+  function applyAccentColor(color) {
+    if (!color) return;
+    let styleEl = document.getElementById('dynamic-accent-style');
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'dynamic-accent-style';
+      document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = `
+      .bg-brand-600, .bg-brand-500 { background-color: ${color} !important; }
+      .text-brand-600, .text-brand-500 { color: ${color} !important; }
+      .border-brand-500, .border-brand-600 { border-color: ${color} !important; }
+      .bg-brand-50 { background-color: ${color}18 !important; }
+    `;
+  }
+
   function setAccentTheme(color) {
     localStorage.setItem('laraforgex_theme_color', color);
+    applyAccentColor(color);
     $('#theme-dropdown-panel').addClass('hidden');
     if (typeof showToast === 'function') {
-      showToast('success', 'Theme color preference saved!');
+      showToast('success', 'Theme accent color updated!');
     }
   }
 
