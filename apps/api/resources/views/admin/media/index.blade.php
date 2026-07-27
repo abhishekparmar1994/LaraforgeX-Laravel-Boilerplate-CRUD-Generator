@@ -28,6 +28,37 @@
     </div>
   </div>
 
+  <!-- ── Filter Bar ──────────────────────────────────────────────── -->
+  <div class="bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+      <!-- File Name Search -->
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">File Name</label>
+        <input id="filter-media-name" type="text" placeholder="Search file name..."
+               class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 placeholder-slate-400 focus:outline-none focus:border-brand-500 transition">
+      </div>
+      <!-- MIME Type -->
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">File Type</label>
+        <select id="filter-media-type"
+                class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+          <option value="">All Types</option>
+          <option value="image">Images</option>
+          <option value="video">Videos</option>
+          <option value="application/pdf">PDFs</option>
+          <option value="application">Documents</option>
+        </select>
+      </div>
+      <!-- Reset -->
+      <div class="flex items-end">
+        <button id="btn-reset-media-filters"
+                class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold transition">
+          <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Reusable Responsive DataTable -->
   <div id="media-datatable"></div>
 </div>
@@ -95,6 +126,37 @@ $(document).ready(function() {
 
     mediaTable.load().then(() => {
         initDropzoneUploader();
+    });
+
+    // ── Filter Logic ─────────────────────────────────────────────
+    function applyMediaFilters() {
+      const name = $('#filter-media-name').val().toLowerCase().trim();
+      const type = $('#filter-media-type').val();
+      const raw  = mediaTable.getRawData();
+      const result = raw.filter(m => {
+        const matchName = !name || (m.name || '').toLowerCase().includes(name);
+        const mime      = m.mime_type || '';
+        const matchType = !type
+          || (type === 'image'           && mime.startsWith('image/'))
+          || (type === 'video'           && mime.startsWith('video/'))
+          || (type === 'application/pdf' && mime === 'application/pdf')
+          || (type === 'application'     && mime.startsWith('application/') && mime !== 'application/pdf');
+        return matchName && matchType;
+      });
+      mediaTable.setData(result);
+    }
+
+    let _mediaFilterTimer;
+    $('#filter-media-name').on('input', () => {
+      clearTimeout(_mediaFilterTimer);
+      _mediaFilterTimer = setTimeout(applyMediaFilters, 200);
+    });
+    $('#filter-media-type').on('change', applyMediaFilters);
+
+    $('#btn-reset-media-filters').on('click', () => {
+      $('#filter-media-name').val('');
+      $('#filter-media-type').val('');
+      mediaTable.setData(null);
     });
 
     // ── Actions ────────────────────────────────────────────────

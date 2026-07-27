@@ -24,6 +24,43 @@
     </button>
   </div>
 
+  <!-- ── Filter Bar ──────────────────────────────────────────────── -->
+  <div class="bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+      <!-- Name Search -->
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Permission Name</label>
+        <input id="filter-perm-name" type="text" placeholder="e.g. users.edit"
+               class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 placeholder-slate-400 font-mono focus:outline-none focus:border-brand-500 transition">
+      </div>
+      <!-- Guard Filter -->
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Guard</label>
+        <select id="filter-perm-guard"
+                class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+          <option value="">All Guards</option>
+          <option value="web">web</option>
+          <option value="api">api</option>
+        </select>
+      </div>
+      <!-- Role Filter -->
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Assigned Role</label>
+        <select id="filter-perm-role"
+                class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+          <option value="">All Roles</option>
+        </select>
+      </div>
+      <!-- Reset -->
+      <div class="flex items-end">
+        <button id="btn-reset-perm-filters"
+                class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold transition">
+          <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- DataTable mount point -->
   <div id="permissions-datatable"></div>
 </div>
@@ -129,7 +166,43 @@ $(document).ready(function() {
         row: permissionRow
     });
 
-    permissionsTable.load();
+    permissionsTable.load().then(() => {
+      // Populate role filter from loaded roles list
+      if (rolesList.length) {
+        const opts = rolesList.map(r => `<option value="${r.name}">${r.name}</option>`).join('');
+        $('#filter-perm-role').append(opts);
+      }
+    });
+
+    // ── Filter Logic ─────────────────────────────────────────────
+    function applyPermFilters() {
+      const name  = $('#filter-perm-name').val().toLowerCase().trim();
+      const guard = $('#filter-perm-guard').val();
+      const role  = $('#filter-perm-role').val();
+      const raw   = permissionsTable.getRawData();
+      const result = raw.filter(p => {
+        const matchName  = !name  || p.name.toLowerCase().includes(name);
+        const matchGuard = !guard || (p.guard_name || 'web') === guard;
+        const assignedRoles = rolesByPermission[p.name] || [];
+        const matchRole  = !role  || assignedRoles.includes(role);
+        return matchName && matchGuard && matchRole;
+      });
+      permissionsTable.setData(result);
+    }
+
+    let _permFilterTimer;
+    $('#filter-perm-name').on('input', () => {
+      clearTimeout(_permFilterTimer);
+      _permFilterTimer = setTimeout(applyPermFilters, 200);
+    });
+    $('#filter-perm-guard, #filter-perm-role').on('change', applyPermFilters);
+
+    $('#btn-reset-perm-filters').on('click', () => {
+      $('#filter-perm-name').val('');
+      $('#filter-perm-guard').val('');
+      $('#filter-perm-role').val('');
+      permissionsTable.setData(null);
+    });
 
     // ── Action Handlers ────────────────────────────────────────
     $('#btn-create-permission').click(function() {

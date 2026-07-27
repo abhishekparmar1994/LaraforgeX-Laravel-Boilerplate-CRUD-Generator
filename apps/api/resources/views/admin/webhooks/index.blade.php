@@ -33,6 +33,37 @@
       </div>
     </div>
 
+    <!-- ── Filter Bar ──────────────────────────────────────────────── -->
+    <div class="bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+        <!-- Name Search -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Webhook Name</label>
+          <input id="filter-wh-name" type="text" placeholder="Search webhook name..."
+                 class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 placeholder-slate-400 focus:outline-none focus:border-brand-500 transition">
+        </div>
+        <!-- Event Type -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Trigger Event</label>
+          <select id="filter-wh-event"
+                  class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+            <option value="">All Events</option>
+            <option value="user.registered">user.registered</option>
+            <option value="crud.created">crud.created</option>
+            <option value="backup.generated">backup.generated</option>
+            <option value="setting.updated">setting.updated</option>
+          </select>
+        </div>
+        <!-- Reset -->
+        <div class="flex items-end">
+          <button id="btn-reset-wh-filters"
+                  class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold transition">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Webhooks Table -->
     <div id="webhooks-datatable"></div>
 
@@ -108,6 +139,32 @@
       });
 
       webhookTable.load();
+
+      // ── Filter Logic ─────────────────────────────────────────────
+      function applyWebhookFilters() {
+        const name  = $('#filter-wh-name').val().toLowerCase().trim();
+        const event = $('#filter-wh-event').val();
+        const raw   = webhookTable.getRawData();
+        const result = raw.filter(w => {
+          const matchName  = !name  || (w.name || '').toLowerCase().includes(name);
+          const matchEvent = !event || w.event === event;
+          return matchName && matchEvent;
+        });
+        webhookTable.setData(result);
+      }
+
+      let _whFilterTimer;
+      $('#filter-wh-name').on('input', () => {
+        clearTimeout(_whFilterTimer);
+        _whFilterTimer = setTimeout(applyWebhookFilters, 200);
+      });
+      $('#filter-wh-event').on('change', applyWebhookFilters);
+
+      $('#btn-reset-wh-filters').on('click', () => {
+        $('#filter-wh-name').val('');
+        $('#filter-wh-event').val('');
+        webhookTable.setData(null);
+      });
 
       $('#form-webhook').on('submit', async function(e) {
           e.preventDefault();

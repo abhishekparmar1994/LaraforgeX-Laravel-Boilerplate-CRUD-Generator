@@ -322,7 +322,8 @@
     return Promise.resolve()
       .then(function () { return self.fetchFn(); })
       .then(function (data) {
-        self.data = Array.isArray(data) ? data : [];
+        self._rawData = Array.isArray(data) ? data.slice() : [];
+        self.data     = Array.isArray(data) ? data : [];
         self._applyFilter();
         self._render();
         /* Re-trigger scroll hint after data renders */
@@ -347,6 +348,31 @@
   AdminTable.prototype.reload = function () {
     return this.load();
   };
+
+  /**
+   * Override the displayed rows with an externally filtered subset.
+   * Called by filter bars — does NOT re-fetch from the server.
+   * Pass null to restore the full original dataset.
+   * @param {Array|null} rows - Pre-filtered row array, or null to reset
+   */
+  AdminTable.prototype.setData = function (rows) {
+    this.data     = Array.isArray(rows) ? rows : (this._rawData || []);
+    this.page     = 1;
+    this.query    = '';
+    var searchEl  = this.el.querySelector('.dt-search');
+    if (searchEl) searchEl.value = '';
+    this._applyFilter();
+    this._render();
+  };
+
+  /**
+   * Return the raw (unfiltered) dataset cached on last load.
+   * @returns {Array}
+   */
+  AdminTable.prototype.getRawData = function () {
+    return this._rawData || [];
+  };
+
 
   /**
    * Destroy the table — remove injected styles and clear the mount point.

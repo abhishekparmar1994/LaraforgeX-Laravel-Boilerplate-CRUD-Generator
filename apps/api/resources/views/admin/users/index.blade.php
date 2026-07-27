@@ -25,6 +25,38 @@
     </button>
   </div>
 
+  <!-- ── Filter Bar ──────────────────────────────────────────────── -->
+  <div class="bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+      <!-- Status Filter -->
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Status</label>
+        <select id="filter-user-status"
+                class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="suspended">Suspended</option>
+        </select>
+      </div>
+      <!-- Role Filter -->
+      <div class="space-y-1">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Role</label>
+        <select id="filter-user-role"
+                class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+          <option value="">All Roles</option>
+        </select>
+      </div>
+      <!-- Reset -->
+      <div class="flex items-end">
+        <button id="btn-reset-user-filters"
+                class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold transition">
+          <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- DataTable mount point -->
   <div id="users-datatable"></div>
 
@@ -190,7 +222,34 @@ $(document).ready(function () {
     row: userRow,
   });
 
-  usersTable.load();
+  usersTable.load().then(() => {
+    // Populate role filter from loaded roles list
+    if (rolesList.length) {
+      const roleOpts = rolesList.map(r => `<option value="${r.name}">${r.name}</option>`).join('');
+      $('#filter-user-role').append(roleOpts);
+    }
+  });
+
+  // ── Filter Logic ─────────────────────────────────────────────
+  function applyUserFilters() {
+    const status = $('#filter-user-status').val();
+    const role   = $('#filter-user-role').val();
+    const raw    = usersTable.getRawData();
+    const result = raw.filter(u => {
+      const matchStatus = !status || u.status === status;
+      const matchRole   = !role   || (u.roles || []).includes(role);
+      return matchStatus && matchRole;
+    });
+    usersTable.setData(result);
+  }
+
+  $('#filter-user-status, #filter-user-role').on('change', applyUserFilters);
+
+  $('#btn-reset-user-filters').on('click', () => {
+    $('#filter-user-status').val('');
+    $('#filter-user-role').val('');
+    usersTable.setData(null);
+  });
 
   // ── CRUD helpers ─────────────────────────────────────────────
   function buildRolesCheckboxList(userRoles) {

@@ -33,6 +33,31 @@
       </div>
     </div>
 
+    <!-- ── Filter Bar ──────────────────────────────────────────────── -->
+    <div class="bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+        <!-- Date From -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Date From</label>
+          <input type="date" id="filter-backup-from"
+                 class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+        </div>
+        <!-- Date To -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Date To</label>
+          <input type="date" id="filter-backup-to"
+                 class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+        </div>
+        <!-- Reset -->
+        <div class="flex items-end">
+          <button id="btn-reset-backup-filters"
+                  class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold transition">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Backups Table Container -->
     <div id="backups-datatable"></div>
 
@@ -77,6 +102,28 @@
       });
 
       backupTable.load();
+
+      // ── Filter Logic ─────────────────────────────────────────────
+      function applyBackupFilters() {
+        const from = $('#filter-backup-from').val() ? new Date($('#filter-backup-from').val()) : null;
+        const to   = $('#filter-backup-to').val()   ? new Date($('#filter-backup-to').val() + 'T23:59:59') : null;
+        const raw  = backupTable.getRawData();
+        const result = raw.filter(item => {
+          const d       = item.created_at ? new Date(item.created_at) : null;
+          const fromOk  = !from || (d && d >= from);
+          const toOk    = !to   || (d && d <= to);
+          return fromOk && toOk;
+        });
+        backupTable.setData(result);
+      }
+
+      $('#filter-backup-from, #filter-backup-to').on('change', applyBackupFilters);
+
+      $('#btn-reset-backup-filters').on('click', () => {
+        $('#filter-backup-from').val('');
+        $('#filter-backup-to').val('');
+        backupTable.setData(null);
+      });
   });
 
   async function generateBackup() {

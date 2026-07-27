@@ -33,6 +33,44 @@
       </div>
     </div>
 
+    <!-- ── Filter Bar ──────────────────────────────────────────────── -->
+    <div class="bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+        <!-- Action Type -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Action Type</label>
+          <select id="filter-log-action"
+                  class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+            <option value="">All Actions</option>
+            <option value="login">login</option>
+            <option value="logout">logout</option>
+            <option value="created">created</option>
+            <option value="updated">updated</option>
+            <option value="deleted">deleted</option>
+          </select>
+        </div>
+        <!-- Date From -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Date From</label>
+          <input type="date" id="filter-log-from"
+                 class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+        </div>
+        <!-- Date To -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Date To</label>
+          <input type="date" id="filter-log-to"
+                 class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 transition">
+        </div>
+        <!-- Reset -->
+        <div class="flex items-end">
+          <button id="btn-reset-log-filters"
+                  class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold transition">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Logs Table Container -->
     <div id="logs-datatable"></div>
 
@@ -71,6 +109,32 @@
       });
 
       logsTable.load();
+
+      // ── Filter Logic ─────────────────────────────────────────────
+      function applyLogFilters() {
+        const action = $('#filter-log-action').val().toLowerCase();
+        const from   = $('#filter-log-from').val() ? new Date($('#filter-log-from').val()) : null;
+        const to     = $('#filter-log-to').val()   ? new Date($('#filter-log-to').val() + 'T23:59:59') : null;
+        const raw    = logsTable.getRawData();
+        const result = raw.filter(item => {
+          const matchAction = !action || (item.action || '').toLowerCase().includes(action);
+          const itemDate    = item.created_at ? new Date(item.created_at) : null;
+          const matchFrom   = !from || (itemDate && itemDate >= from);
+          const matchTo     = !to   || (itemDate && itemDate <= to);
+          return matchAction && matchFrom && matchTo;
+        });
+        logsTable.setData(result);
+      }
+
+      $('#filter-log-action').on('change', applyLogFilters);
+      $('#filter-log-from, #filter-log-to').on('change', applyLogFilters);
+
+      $('#btn-reset-log-filters').on('click', () => {
+        $('#filter-log-action').val('');
+        $('#filter-log-from').val('');
+        $('#filter-log-to').val('');
+        logsTable.setData(null);
+      });
   });
 
   async function clearLogs() {
