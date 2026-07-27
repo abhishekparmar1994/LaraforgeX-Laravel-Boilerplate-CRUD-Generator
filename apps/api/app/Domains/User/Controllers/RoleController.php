@@ -15,12 +15,32 @@ class RoleController extends Controller
 {
     /**
      * Display a listing of roles and available system permissions.
+     * Supports server-side filters: ?name=&has_parent=yes|no
+     *
+     * @param  Request $request  Optional filter params: name (string), has_parent (yes|no)
+     * @return JsonResponse      Roles list with full permission associations and all permissions
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         Gate::authorize('admin-only');
 
-        $roles = Role::with('parent', 'permissions')->get();
+        $query = Role::with('parent', 'permissions');
+
+        // Filter by role name
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        // Filter by parent presence
+        if ($request->filled('has_parent')) {
+            if ($request->input('has_parent') === 'yes') {
+                $query->whereNotNull('parent_id');
+            } elseif ($request->input('has_parent') === 'no') {
+                $query->whereNull('parent_id');
+            }
+        }
+
+        $roles = $query->get();
         $permissions = Permission::all();
 
         return response()->json([

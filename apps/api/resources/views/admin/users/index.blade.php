@@ -207,15 +207,21 @@ $(document).ready(function () {
       { key: 'actions',       label: 'Actions',       sortable: false, class: 'text-right' },
     ],
     fetch: async () => {
+      const params = {};
+      const status = $('#filter-user-status').val();
+      const role   = $('#filter-user-role').val();
+      if (status) params.status = status;
+      if (role)   params.role   = role;
+
       if (isAdmin) {
         const [usersRes, rolesRes] = await Promise.all([
-          axios.get('/users'),
+          axios.get('/users', { params }),
           axios.get('/roles'),
         ]);
         rolesList = rolesRes.data.data.roles;
         return usersRes.data.data;
       } else {
-        const usersRes = await axios.get('/users');
+        const usersRes = await axios.get('/users', { params });
         return usersRes.data.data;
       }
     },
@@ -230,17 +236,9 @@ $(document).ready(function () {
     }
   });
 
-  // ── Filter Logic ─────────────────────────────────────────────
+  // ── Server-Side Filter Logic ──────────────────────────────────
   function applyUserFilters() {
-    const status = $('#filter-user-status').val();
-    const role   = $('#filter-user-role').val();
-    const raw    = usersTable.getRawData();
-    const result = raw.filter(u => {
-      const matchStatus = !status || u.status === status;
-      const matchRole   = !role   || (u.roles || []).includes(role);
-      return matchStatus && matchRole;
-    });
-    usersTable.setData(result);
+    usersTable.reload();
   }
 
   $('#filter-user-status, #filter-user-role').on('change', applyUserFilters);
@@ -248,7 +246,7 @@ $(document).ready(function () {
   $('#btn-reset-user-filters').on('click', () => {
     $('#filter-user-status').val('');
     $('#filter-user-role').val('');
-    usersTable.setData(null);
+    usersTable.reload();
   });
 
   // ── CRUD helpers ─────────────────────────────────────────────

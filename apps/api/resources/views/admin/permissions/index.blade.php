@@ -148,11 +148,23 @@ $(document).ready(function() {
             { key: 'actions',    label: 'Actions',         sortable: false, class: 'text-right' }
         ],
         fetch: async () => {
-            const response = await axios.get('/roles');
-            rolesList = response.data.data.roles;
-            permissionsList = response.data.data.permissions;
+            // Always fetch roles for the lookup map and dropdown population
+            const params = {};
+            const name  = $('#filter-perm-name').val().trim();
+            const guard = $('#filter-perm-guard').val();
+            const role  = $('#filter-perm-role').val();
+            if (name)  params.name  = name;
+            if (guard) params.guard = guard;
+            if (role)  params.role  = role;
 
-            // Clear lookup map
+            const [rolesRes, permsRes] = await Promise.all([
+                axios.get('/roles'),
+                axios.get('/permissions', { params }),
+            ]);
+            rolesList = rolesRes.data.data.roles;
+            permissionsList = permsRes.data.data;
+
+            // Rebuild lookup map
             rolesByPermission = {};
             rolesList.forEach(role => {
                 (role.permissions || []).forEach(p => {
@@ -174,34 +186,19 @@ $(document).ready(function() {
       }
     });
 
-    // ── Filter Logic ─────────────────────────────────────────────
-    function applyPermFilters() {
-      const name  = $('#filter-perm-name').val().toLowerCase().trim();
-      const guard = $('#filter-perm-guard').val();
-      const role  = $('#filter-perm-role').val();
-      const raw   = permissionsTable.getRawData();
-      const result = raw.filter(p => {
-        const matchName  = !name  || p.name.toLowerCase().includes(name);
-        const matchGuard = !guard || (p.guard_name || 'web') === guard;
-        const assignedRoles = rolesByPermission[p.name] || [];
-        const matchRole  = !role  || assignedRoles.includes(role);
-        return matchName && matchGuard && matchRole;
-      });
-      permissionsTable.setData(result);
-    }
-
+    // ── Server-Side Filter Logic ──────────────────────────────────
     let _permFilterTimer;
     $('#filter-perm-name').on('input', () => {
       clearTimeout(_permFilterTimer);
-      _permFilterTimer = setTimeout(applyPermFilters, 200);
+      _permFilterTimer = setTimeout(() => permissionsTable.reload(), 400);
     });
-    $('#filter-perm-guard, #filter-perm-role').on('change', applyPermFilters);
+    $('#filter-perm-guard, #filter-perm-role').on('change', () => permissionsTable.reload());
 
     $('#btn-reset-perm-filters').on('click', () => {
       $('#filter-perm-name').val('');
       $('#filter-perm-guard').val('');
       $('#filter-perm-role').val('');
-      permissionsTable.setData(null);
+      permissionsTable.reload();
     });
 
     // ── Action Handlers ────────────────────────────────────────

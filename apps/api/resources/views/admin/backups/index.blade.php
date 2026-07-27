@@ -78,7 +78,12 @@
               { key: 'actions', label: 'Actions', sortable: false, class: 'text-right' }
           ],
           fetch: async () => {
-              const res = await axios.get('/backups');
+              const params = {};
+              const from = $('#filter-backup-from').val();
+              const to   = $('#filter-backup-to').val();
+              if (from) params.from = from;
+              if (to)   params.to   = to;
+              const res = await axios.get('/backups', { params });
               return res.data.data;
           },
           row: (item) => `
@@ -103,26 +108,13 @@
 
       backupTable.load();
 
-      // ── Filter Logic ─────────────────────────────────────────────
-      function applyBackupFilters() {
-        const from = $('#filter-backup-from').val() ? new Date($('#filter-backup-from').val()) : null;
-        const to   = $('#filter-backup-to').val()   ? new Date($('#filter-backup-to').val() + 'T23:59:59') : null;
-        const raw  = backupTable.getRawData();
-        const result = raw.filter(item => {
-          const d       = item.created_at ? new Date(item.created_at) : null;
-          const fromOk  = !from || (d && d >= from);
-          const toOk    = !to   || (d && d <= to);
-          return fromOk && toOk;
-        });
-        backupTable.setData(result);
-      }
-
-      $('#filter-backup-from, #filter-backup-to').on('change', applyBackupFilters);
+      // ── Server-Side Filter Logic ──────────────────────────────────
+      $('#filter-backup-from, #filter-backup-to').on('change', () => backupTable.reload());
 
       $('#btn-reset-backup-filters').on('click', () => {
         $('#filter-backup-from').val('');
         $('#filter-backup-to').val('');
-        backupTable.setData(null);
+        backupTable.reload();
       });
   });
 

@@ -117,7 +117,12 @@ $(document).ready(function() {
             { key: 'actions',   label: 'Actions',   sortable: false, class: 'text-right' }
         ],
         fetch: async () => {
-            const response = await axios.get('/media');
+            const params = {};
+            const name = $('#filter-media-name').val().trim();
+            const type = $('#filter-media-type').val();
+            if (name) params.name = name;
+            if (type) params.type = type;
+            const response = await axios.get('/media', { params });
             const files = response.data.data.files || [];
             return files;
         },
@@ -128,35 +133,18 @@ $(document).ready(function() {
         initDropzoneUploader();
     });
 
-    // ── Filter Logic ─────────────────────────────────────────────
-    function applyMediaFilters() {
-      const name = $('#filter-media-name').val().toLowerCase().trim();
-      const type = $('#filter-media-type').val();
-      const raw  = mediaTable.getRawData();
-      const result = raw.filter(m => {
-        const matchName = !name || (m.name || '').toLowerCase().includes(name);
-        const mime      = m.mime_type || '';
-        const matchType = !type
-          || (type === 'image'           && mime.startsWith('image/'))
-          || (type === 'video'           && mime.startsWith('video/'))
-          || (type === 'application/pdf' && mime === 'application/pdf')
-          || (type === 'application'     && mime.startsWith('application/') && mime !== 'application/pdf');
-        return matchName && matchType;
-      });
-      mediaTable.setData(result);
-    }
-
+    // ── Server-Side Filter Logic ──────────────────────────────────
     let _mediaFilterTimer;
     $('#filter-media-name').on('input', () => {
       clearTimeout(_mediaFilterTimer);
-      _mediaFilterTimer = setTimeout(applyMediaFilters, 200);
+      _mediaFilterTimer = setTimeout(() => mediaTable.reload(), 400);
     });
-    $('#filter-media-type').on('change', applyMediaFilters);
+    $('#filter-media-type').on('change', () => mediaTable.reload());
 
     $('#btn-reset-media-filters').on('click', () => {
       $('#filter-media-name').val('');
       $('#filter-media-type').val('');
-      mediaTable.setData(null);
+      mediaTable.reload();
     });
 
     // ── Actions ────────────────────────────────────────────────

@@ -24,21 +24,34 @@ class BackupController extends Controller
     }
 
     /**
-     * List all database backups.
+     * List all database backups with optional server-side date filters.
+     * Supports: ?from=YYYY-MM-DD, ?to=YYYY-MM-DD
+     *
+     * @param  Request $request  Optional filter params: from, to
+     * @return JsonResponse      Filtered backup file list sorted latest first
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $files = File::files($this->backupDir);
         $backups = [];
 
+        $from = $request->filled('from') ? strtotime($request->input('from') . ' 00:00:00') : null;
+        $to   = $request->filled('to')   ? strtotime($request->input('to')   . ' 23:59:59') : null;
+
         foreach ($files as $file) {
             if ($file->getExtension() === 'sql' || $file->getExtension() === 'gz') {
+                $mtime = $file->getMTime();
+
+                // Apply date range filter
+                if ($from && $mtime < $from) continue;
+                if ($to   && $mtime > $to)   continue;
+
                 $backups[] = [
-                    'filename' => $file->getFilename(),
-                    'size_bytes' => $file->getSize(),
-                    'size_human' => $this->formatBytes($file->getSize()),
-                    'created_at' => date('Y-m-d H:i:s', $file->getMTime()),
-                    'download_url' => "/api/v1/backups/download/" . urlencode($file->getFilename()),
+                    'filename'     => $file->getFilename(),
+                    'size_bytes'   => $file->getSize(),
+                    'size_human'   => $this->formatBytes($file->getSize()),
+                    'created_at'   => date('Y-m-d H:i:s', $mtime),
+                    'download_url' => '/api/v1/backups/download/' . urlencode($file->getFilename()),
                 ];
             }
         }

@@ -92,7 +92,14 @@
               { key: 'created_at', label: 'Timestamp', sortable: true, responsive: 'sm' }
           ],
           fetch: async () => {
-              const res = await axios.get('/activity-logs');
+              const params = {};
+              const action = $('#filter-log-action').val();
+              const from   = $('#filter-log-from').val();
+              const to     = $('#filter-log-to').val();
+              if (action) params.action = action;
+              if (from)   params.from   = from;
+              if (to)     params.to     = to;
+              const res = await axios.get('/activity-logs', { params });
               return res.data.data;
           },
           row: (item) => `
@@ -110,30 +117,15 @@
 
       logsTable.load();
 
-      // ── Filter Logic ─────────────────────────────────────────────
-      function applyLogFilters() {
-        const action = $('#filter-log-action').val().toLowerCase();
-        const from   = $('#filter-log-from').val() ? new Date($('#filter-log-from').val()) : null;
-        const to     = $('#filter-log-to').val()   ? new Date($('#filter-log-to').val() + 'T23:59:59') : null;
-        const raw    = logsTable.getRawData();
-        const result = raw.filter(item => {
-          const matchAction = !action || (item.action || '').toLowerCase().includes(action);
-          const itemDate    = item.created_at ? new Date(item.created_at) : null;
-          const matchFrom   = !from || (itemDate && itemDate >= from);
-          const matchTo     = !to   || (itemDate && itemDate <= to);
-          return matchAction && matchFrom && matchTo;
-        });
-        logsTable.setData(result);
-      }
-
-      $('#filter-log-action').on('change', applyLogFilters);
-      $('#filter-log-from, #filter-log-to').on('change', applyLogFilters);
+      // ── Server-Side Filter Logic ──────────────────────────────────
+      $('#filter-log-action').on('change', () => logsTable.reload());
+      $('#filter-log-from, #filter-log-to').on('change', () => logsTable.reload());
 
       $('#btn-reset-log-filters').on('click', () => {
         $('#filter-log-action').val('');
         $('#filter-log-from').val('');
         $('#filter-log-to').val('');
-        logsTable.setData(null);
+        logsTable.reload();
       });
   });
 

@@ -144,7 +144,13 @@ $(document).ready(function() {
             { key: 'actions',     label: 'Actions',                   sortable: false, class: 'text-right' }
         ],
         fetch: async () => {
-            const response = await axios.get('/roles');
+            const params = {};
+            const name      = $('#filter-role-name').val().trim();
+            const hasParent = $('#filter-role-parent').val();
+            if (name)      params.name       = name;
+            if (hasParent) params.has_parent = hasParent;
+
+            const response = await axios.get('/roles', { params });
             rolesList = response.data.data.roles;
             permissionsList = response.data.data.permissions;
 
@@ -162,32 +168,18 @@ $(document).ready(function() {
 
     rolesTable.load();
 
-    // ── Filter Logic ─────────────────────────────────────────────
-    function applyRoleFilters() {
-      const name   = $('#filter-role-name').val().toLowerCase().trim();
-      const parent = $('#filter-role-parent').val();
-      const raw    = rolesTable.getRawData();
-      const result = raw.filter(r => {
-        const matchName   = !name   || r.name.toLowerCase().includes(name);
-        const matchParent = !parent
-          || (parent === 'yes' && !!r.parent_id)
-          || (parent === 'no'  && !r.parent_id);
-        return matchName && matchParent;
-      });
-      rolesTable.setData(result);
-    }
-
+    // ── Server-Side Filter Logic ──────────────────────────────────
     let _roleFilterTimer;
     $('#filter-role-name').on('input', () => {
       clearTimeout(_roleFilterTimer);
-      _roleFilterTimer = setTimeout(applyRoleFilters, 200);
+      _roleFilterTimer = setTimeout(() => rolesTable.reload(), 400);
     });
-    $('#filter-role-parent').on('change', applyRoleFilters);
+    $('#filter-role-parent').on('change', () => rolesTable.reload());
 
     $('#btn-reset-role-filters').on('click', () => {
       $('#filter-role-name').val('');
       $('#filter-role-parent').val('');
-      rolesTable.setData(null);
+      rolesTable.reload();
     });
 
     // ── Actions & Helpers ──────────────────────────────────────

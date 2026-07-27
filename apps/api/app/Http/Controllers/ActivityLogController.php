@@ -40,16 +40,45 @@ class ActivityLogController extends Controller
     }
 
     /**
-     * List all system activity audit logs.
+     * List system activity audit logs with optional server-side filters.
+     * Supports: ?action= (partial match), ?from=YYYY-MM-DD, ?to=YYYY-MM-DD
+     *
+     * @param  Request $request  Optional filter params: action, from, to
+     * @return JsonResponse      Filtered and sorted activity log entries
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $logs = json_decode(File::get($this->storageFile), true) ?? [];
+
+        // Filter by action type (partial match, case-insensitive)
+        if ($request->filled('action')) {
+            $action = strtolower($request->input('action'));
+            $logs = array_filter($logs, fn($l) =>
+                str_contains(strtolower($l['action'] ?? ''), $action)
+            );
+        }
+
+        // Filter by date range
+        if ($request->filled('from')) {
+            $from = strtotime($request->input('from') . ' 00:00:00');
+            $logs = array_filter($logs, fn($l) =>
+                isset($l['created_at']) && strtotime($l['created_at']) >= $from
+            );
+        }
+
+        if ($request->filled('to')) {
+            $to = strtotime($request->input('to') . ' 23:59:59');
+            $logs = array_filter($logs, fn($l) =>
+                isset($l['created_at']) && strtotime($l['created_at']) <= $to
+            );
+        }
+
+        // Sort latest first
         usort($logs, fn($a, $b) => strcmp($b['created_at'], $a['created_at']));
 
         return response()->json([
             'success' => true,
-            'data' => $logs,
+            'data' => array_values($logs),
         ]);
     }
 

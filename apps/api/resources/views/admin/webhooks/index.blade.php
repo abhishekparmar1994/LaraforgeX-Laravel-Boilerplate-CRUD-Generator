@@ -116,7 +116,12 @@
               { key: 'actions', label: 'Actions', sortable: false, class: 'text-right' }
           ],
           fetch: async () => {
-              const res = await axios.get('/webhooks');
+              const params = {};
+              const name  = $('#filter-wh-name').val().trim();
+              const event = $('#filter-wh-event').val();
+              if (name)  params.name  = name;
+              if (event) params.event = event;
+              const res = await axios.get('/webhooks', { params });
               return res.data.data;
           },
           row: (item) => `
@@ -140,30 +145,18 @@
 
       webhookTable.load();
 
-      // ── Filter Logic ─────────────────────────────────────────────
-      function applyWebhookFilters() {
-        const name  = $('#filter-wh-name').val().toLowerCase().trim();
-        const event = $('#filter-wh-event').val();
-        const raw   = webhookTable.getRawData();
-        const result = raw.filter(w => {
-          const matchName  = !name  || (w.name || '').toLowerCase().includes(name);
-          const matchEvent = !event || w.event === event;
-          return matchName && matchEvent;
-        });
-        webhookTable.setData(result);
-      }
-
+      // ── Server-Side Filter Logic ──────────────────────────────────
       let _whFilterTimer;
       $('#filter-wh-name').on('input', () => {
         clearTimeout(_whFilterTimer);
-        _whFilterTimer = setTimeout(applyWebhookFilters, 200);
+        _whFilterTimer = setTimeout(() => webhookTable.reload(), 400);
       });
-      $('#filter-wh-event').on('change', applyWebhookFilters);
+      $('#filter-wh-event').on('change', () => webhookTable.reload());
 
       $('#btn-reset-wh-filters').on('click', () => {
         $('#filter-wh-name').val('');
         $('#filter-wh-event').val('');
-        webhookTable.setData(null);
+        webhookTable.reload();
       });
 
       $('#form-webhook').on('submit', async function(e) {

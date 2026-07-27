@@ -22,15 +22,36 @@ use Illuminate\Support\Facades\Gate;
 class PermissionController extends Controller
 {
     /**
-     * List all system permissions.
+     * List all system permissions with optional server-side filters.
+     * Supports: ?name= (partial match), ?guard=web|api, ?role= (role name)
      *
-     * @return JsonResponse  Array of all permission records
+     * @param  Request $request  Optional filter params: name, guard, role
+     * @return JsonResponse      Filtered array of permission records
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         Gate::authorize('admin-only');
 
-        $permissions = Permission::orderBy('name')->get();
+        $query = Permission::orderBy('name');
+
+        // Partial name match
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        // Guard filter
+        if ($request->filled('guard')) {
+            $query->where('guard_name', $request->input('guard'));
+        }
+
+        // Filter by assigned role name
+        if ($request->filled('role')) {
+            $query->whereHas('roles', function ($q) use ($request) {
+                $q->where('name', $request->input('role'));
+            });
+        }
+
+        $permissions = $query->get();
 
         return response()->json([
             'success' => true,

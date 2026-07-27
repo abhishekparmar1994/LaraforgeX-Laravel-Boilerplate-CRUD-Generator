@@ -20,20 +20,40 @@ class MediaController extends Controller
     ) {}
 
     /**
-     * List folder contents (subfolders and files).
+     * List folder contents (subfolders and files) with optional server-side filters.
+     * Supports: ?name= (partial match on filename), ?type= (mime type prefix: image|video|application)
+     *
+     * @param  Request $request  Optional: folder_id, name (string), type (string)
+     * @return JsonResponse      Filtered folders and files in the given folder
      */
     public function index(Request $request): JsonResponse
     {
         $folderId = $request->query('folder_id');
-        $userId = $request->user()->id;
+        $userId   = $request->user()->id;
 
         $contents = $this->repository->getFolderContents($folderId, $userId);
+
+        $files = $contents['files'];
+
+        // Filter by file name (partial match)
+        if ($request->filled('name')) {
+            $name  = strtolower($request->input('name'));
+            $files = $files->filter(fn($f) =>
+                str_contains(strtolower($f->name ?? $f->original_filename ?? ''), $name)
+            )->values();
+        }
+
+        // Filter by MIME type prefix (image, video, application)
+        if ($request->filled('type')) {
+            $type  = $request->input('type');
+            $files = $files->filter(fn($f) => str_starts_with($f->mime_type ?? '', $type))->values();
+        }
 
         return response()->json([
             'success' => true,
             'data' => [
                 'folders' => $contents['folders'],
-                'files' => $contents['files'],
+                'files'   => $files,
             ]
         ]);
     }

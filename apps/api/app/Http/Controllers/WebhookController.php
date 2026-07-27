@@ -32,14 +32,33 @@ class WebhookController extends Controller
     }
 
     /**
-     * List all registered webhooks.
+     * List all registered webhooks with optional server-side filters.
+     * Supports: ?name= (partial match), ?event= (exact trigger event)
+     *
+     * @param  Request $request  Optional filter params: name, event
+     * @return JsonResponse      Filtered webhook list
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $webhooks = json_decode(File::get($this->storageFile), true) ?? [];
+
+        // Filter by webhook name (partial match)
+        if ($request->filled('name')) {
+            $name = strtolower($request->input('name'));
+            $webhooks = array_filter($webhooks, fn($w) =>
+                str_contains(strtolower($w['name'] ?? ''), $name)
+            );
+        }
+
+        // Filter by trigger event (exact match)
+        if ($request->filled('event')) {
+            $event = $request->input('event');
+            $webhooks = array_filter($webhooks, fn($w) => ($w['event'] ?? '') === $event);
+        }
+
         return response()->json([
             'success' => true,
-            'data' => $webhooks,
+            'data' => array_values($webhooks),
         ]);
     }
 
