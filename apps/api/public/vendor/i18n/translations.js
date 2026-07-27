@@ -157,4 +157,20 @@
     });
   };
 
+  /* Auto-restore translation and RTL layout on DOM load */
+  if (typeof document !== 'undefined') {
+    var initTranslation = function () {
+      var savedCode = localStorage.getItem('laraforgex_lang_code') || 'en';
+      var savedDir = localStorage.getItem('laraforgex_lang_dir') || 'ltr';
+      document.documentElement.setAttribute('dir', savedDir);
+      global.translatePage(savedCode);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTranslation);
+    } else {
+      initTranslation();
+    }
+  }
+
 })(typeof window !== 'undefined' ? window : this);

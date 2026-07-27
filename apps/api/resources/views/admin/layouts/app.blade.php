@@ -9,6 +9,8 @@
 
   <!-- Tailwind CDN (offline vendor) -->
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
+  <!-- Universal i18n Translations -->
+  <script src="{{ asset('vendor/i18n/translations.js') }}"></script>
   <script>
     tailwind.config = {
       theme: {
