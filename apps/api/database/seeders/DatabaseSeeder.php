@@ -141,5 +141,8 @@ class DatabaseSeeder extends Seeder
                 $settingData
             );
         }
+
+        // Mark installation complete
+        file_put_contents(storage_path('installed'), date('Y-m-d H:i:s'));
     }
 }

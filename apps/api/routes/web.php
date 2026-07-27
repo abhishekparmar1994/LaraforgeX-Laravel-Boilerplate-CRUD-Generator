@@ -6,6 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/install', [\App\Http\Controllers\InstallController::class, 'index']);
+
 Route::get('/landing', function () {
     return file_get_contents(public_path('codecanyon_landing.html'));
 });

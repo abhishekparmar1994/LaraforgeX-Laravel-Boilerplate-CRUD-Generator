@@ -16,6 +16,44 @@
   <!-- Right: notification + user dropdown -->
   <div class="flex items-center gap-3">
 
+    <!-- Language Switcher Dropdown -->
+    <div class="relative" id="lang-dropdown-wrapper">
+      <button id="lang-dropdown-toggle"
+        class="h-9 px-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer text-xs font-bold gap-1.5"
+        onclick="toggleLangDropdown()"
+        title="Language Selector">
+        <span id="current-lang-flag">🇺🇸</span>
+        <span id="current-lang-code" class="uppercase font-mono">EN</span>
+        <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
+      </button>
+
+      <div id="lang-dropdown-panel"
+        class="hidden absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs">
+        <div class="py-1">
+          <button onclick="setLanguage('en', '🇺🇸', 'EN', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span>🇺🇸 English</span>
+            <span class="text-[10px] text-slate-400">LTR</span>
+          </button>
+          <button onclick="setLanguage('es', '🇪🇸', 'ES', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span>🇪🇸 Español</span>
+            <span class="text-[10px] text-slate-400">LTR</span>
+          </button>
+          <button onclick="setLanguage('fr', '🇫🇷', 'FR', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span>🇫🇷 Français</span>
+            <span class="text-[10px] text-slate-400">LTR</span>
+          </button>
+          <button onclick="setLanguage('de', '🇩🇪', 'DE', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span>🇩🇪 Deutsch</span>
+            <span class="text-[10px] text-slate-400">LTR</span>
+          </button>
+          <button onclick="setLanguage('ar', '🇸🇦', 'AR', 'rtl')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span>🇸🇦 العربية</span>
+            <span class="text-[10px] text-brand-600 font-bold">RTL</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Notification Bell -->
     <button
       class="relative h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm"
@@ -498,5 +536,43 @@
         window.handleAjaxError(err, 'Failed to update password.');
       }
     });
+  });
+
+  function toggleLangDropdown() {
+    $('#lang-dropdown-panel').toggleClass('hidden');
+  }
+
+  function setLanguage(code, flag, label, dir) {
+    localStorage.setItem('laraforgex_lang_code', code);
+    localStorage.setItem('laraforgex_lang_flag', flag);
+    localStorage.setItem('laraforgex_lang_label', label);
+    localStorage.setItem('laraforgex_lang_dir', dir);
+
+    $('#current-lang-flag').text(flag);
+    $('#current-lang-code').text(label);
+    $('html').attr('dir', dir);
+    $('#lang-dropdown-panel').addClass('hidden');
+
+    if (typeof showToast === 'function') {
+      showToast('success', `Language set to ${label} (${dir.toUpperCase()})`);
+    }
+  }
+
+  $(document).ready(function() {
+    const savedFlag = localStorage.getItem('laraforgex_lang_flag');
+    const savedLabel = localStorage.getItem('laraforgex_lang_label');
+    const savedDir = localStorage.getItem('laraforgex_lang_dir');
+
+    if (savedFlag && savedLabel && savedDir) {
+      $('#current-lang-flag').text(savedFlag);
+      $('#current-lang-code').text(savedLabel);
+      $('html').attr('dir', savedDir);
+    }
+  });
+
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest('#lang-dropdown-wrapper').length) {
+      $('#lang-dropdown-panel').addClass('hidden');
+    }
   });
 </script>
