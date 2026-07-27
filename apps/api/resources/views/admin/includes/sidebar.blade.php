@@ -64,11 +64,11 @@
             class="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                           {{ request()->is('admin/roles*') || request()->is('admin/permissions*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
             onclick="toggleSubmenu('submenu-rbac', 'chevron-rbac')">
-            <span class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
               <i
                 class="fa-solid fa-shield-halved w-4 text-center {{ request()->is('admin/roles*') || request()->is('admin/permissions*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
               <span data-i18n="roles">Access Control</span>
-            </span>
+            </div>
             <i id="chevron-rbac"
               class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-200 {{ request()->is('admin/roles*') || request()->is('admin/permissions*') ? 'rotate-90' : '' }}"></i>
           </button>
@@ -115,11 +115,11 @@
             class="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                           {{ request()->is('admin/media*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
             onclick="toggleSubmenu('submenu-media', 'chevron-media')">
-            <span class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
               <i
                 class="fa-solid fa-folder-open w-4 text-center {{ request()->is('admin/media*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
               <span data-i18n="media">Media Cloud</span>
-            </span>
+            </div>
             <i id="chevron-media"
               class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-200 {{ request()->is('admin/media*') ? 'rotate-90' : '' }}"></i>
           </button>
