@@ -78,13 +78,27 @@
       </div>
     </div>
 
-    <!-- Notification Bell -->
-    <button
-      class="relative h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm"
-      title="Notifications">
-      <i class="fa-regular fa-bell text-sm"></i>
-      <span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-brand-500 border-2 border-white"></span>
-    </button>
+    <!-- Notification Bell & Dropdown Hub -->
+    <div class="relative" id="notif-dropdown-wrapper">
+      <button id="notif-dropdown-toggle"
+        class="relative h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm cursor-pointer"
+        onclick="toggleNotifDropdown()"
+        title="Notifications">
+        <i class="fa-regular fa-bell text-sm"></i>
+        <span id="notif-badge-dot" class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-white"></span>
+      </button>
+
+      <div id="notif-dropdown-panel"
+        class="hidden absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs font-sans">
+        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+          <span class="font-extrabold text-slate-900">Notifications</span>
+          <button onclick="markAllNotificationsRead()" class="text-[10px] font-bold text-brand-600 hover:underline border-0 bg-transparent cursor-pointer">Mark all as read</button>
+        </div>
+        <div id="notif-list-container" class="divide-y divide-slate-100 max-h-72 overflow-y-auto">
+          <div class="p-4 text-center text-slate-400 text-xs">Loading notifications...</div>
+        </div>
+      </div>
+    </div>
 
     <!-- User Dropdown -->
     <div class="relative" id="user-dropdown-wrapper">
@@ -634,6 +648,73 @@
   $(document).on('click', function(e) {
     if (!$(e.target).closest('#lang-dropdown-wrapper').length) {
       $('#lang-dropdown-panel').addClass('hidden');
+    }
+  });
+  function toggleNotifDropdown() {
+    const isHidden = $('#notif-dropdown-panel').hasClass('hidden');
+    $('#notif-dropdown-panel').toggleClass('hidden');
+    if (isHidden) {
+      loadNotifications();
+    }
+  }
+
+  async function loadNotifications() {
+    try {
+      const res = await axios.get('/notifications');
+      const items = res.data.data || [];
+      const unreadCount = res.data.unread_count || 0;
+
+      if (unreadCount > 0) {
+        $('#notif-badge-dot').removeClass('hidden');
+      } else {
+        $('#notif-badge-dot').addClass('hidden');
+      }
+
+      if (items.length === 0) {
+        $('#notif-list-container').html('<div class="p-4 text-center text-slate-400 text-xs">No new notifications</div>');
+        return;
+      }
+
+      let html = '';
+      items.forEach(item => {
+        html += `
+          <div class="p-3 hover:bg-slate-50 transition flex items-start gap-3 ${item.read ? 'opacity-60' : ''}">
+            <div class="h-7 w-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid ${item.icon}"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="font-bold text-slate-900 leading-tight">${item.title}</p>
+              <p class="text-slate-500 text-[11px] leading-snug truncate mt-0.5">${item.message}</p>
+              <span class="text-[9px] text-slate-400 font-medium block mt-1">${item.time_ago}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      $('#notif-list-container').html(html);
+    } catch (e) {
+      $('#notif-list-container').html('<div class="p-4 text-center text-rose-500 text-xs">Failed to load notifications</div>');
+    }
+  }
+
+  async function markAllNotificationsRead() {
+    try {
+      await axios.post('/notifications/mark-read');
+      $('#notif-badge-dot').addClass('hidden');
+      loadNotifications();
+      if (typeof showToast === 'function') {
+        showToast('success', 'Notifications marked as read');
+      }
+    } catch (e) { }
+  }
+
+  $(document).ready(function() {
+    loadNotifications();
+  });
+
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest('#notif-dropdown-wrapper').length) {
+      $('#notif-dropdown-panel').addClass('hidden');
     }
   });
 </script>

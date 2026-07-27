@@ -14,6 +14,12 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/process', [\App\Http\Controllers\InstallController::class, 'install']);
     });
 
+    // Notification Hub API routes
+    Route::prefix('notifications')->group(function (): void {
+        Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index']);
+        Route::post('/mark-read', [\App\Http\Controllers\NotificationController::class, 'markRead']);
+    });
+
     // Activity Audit Logs API routes
     Route::prefix('activity-logs')->group(function (): void {
         Route::get('/', [\App\Http\Controllers\ActivityLogController::class, 'index']);
