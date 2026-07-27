@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaraforgeX — Modern Laravel 13 DDD Boilerplate & Visual CRUD Generator</title>
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Pro CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #f3f4f6;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Outfit', sans-serif;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+    }
+    .gradient-border {
+      position: relative;
+      background: #111827;
+      border-radius: 1rem;
+    }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 1.05rem;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4), rgba(236, 72, 153, 0.2));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glow-effect {
+      box-shadow: 0 0 50px -10px rgba(99, 102, 241, 0.3);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- ── NAVBAR ──────────────────────────────────────────────────────────── -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl gradient-bg flex items-center justify-center text-white text-lg font-black shadow-lg shadow-brand-500/30">
+          LX
+        </div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-white font-display">Laraforge<span class="gradient-text">X</span></span>
+          <span class="ml-2 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">v1.0 Laravel 13</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-wider text-slate-300">
+        <a href="#overview" class="hover:text-brand-400 transition">Overview</a>
+        <a href="#crud-generator" class="hover:text-brand-400 transition">CRUD Engine</a>
+        <a href="#architecture" class="hover:text-brand-400 transition">DDD Architecture</a>
+        <a href="#features" class="hover:text-brand-400 transition">Features</a>
+        <a href="#pricing" class="hover:text-brand-400 transition">Pricing</a>
+      </nav>
+
+      <!-- CTA Buttons -->
+      <div class="flex items-center gap-3">
+        <a href="/admin/crud-generator" target="_blank" class="hidden sm:inline-flex px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition">
+          <i class="fa-solid fa-desktop mr-2 text-brand-400"></i> Live Admin Demo
+        </a>
+        <a href="#pricing" class="px-5 py-2.5 rounded-xl gradient-bg text-white font-bold text-xs hover:opacity-95 transition shadow-lg shadow-brand-600/30 inline-flex items-center gap-2">
+          <i class="fa-solid fa-cart-shopping"></i> Buy on CodeCanyon ($39)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-28 space-y-32">
+
+    <!-- ── HERO SECTION ────────────────────────────────────────────────────── -->
+    <section id="overview" class="relative overflow-hidden pt-12 pb-16">
+      
+      <!-- Background Ambient Glows -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div class="absolute top-1/3 right-10 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
+        
+        <!-- Top Announcement Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-brand-500/30 text-xs font-semibold text-brand-300">
+          <span class="flex h-2 w-2 rounded-full bg-brand-400 animate-ping"></span>
+          <span class="text-amber-400 font-bold">NEW RELEASE</span> — Production Ready Laravel 13 & PHP 8.5 Stack
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-5xl mx-auto leading-none font-display">
+          Build Enterprise Laravel Apps <br class="hidden sm:inline">
+          <span class="gradient-text">10x Faster with Code Automation</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-base sm:text-xl text-slate-400 max-w-3xl mx-auto font-normal leading-relaxed">
+          Stop writing repetitive CRUD boilerplate code. Inspect any database schema, configure 35+ form control types, map relationships with automated type compatibility validation, and generate production-ready DDD modules in 1 click.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <a href="/admin/crud-generator" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-2xl gradient-bg text-white font-extrabold text-sm hover:scale-[1.02] active:scale-95 transition shadow-xl shadow-brand-600/30 inline-flex items-center justify-center gap-3">
+            <i class="fa-solid fa-wand-magic-sparkles text-lg"></i> Launch Visual CRUD Generator
+          </a>
+          <a href="#crud-generator" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-extrabold text-sm border border-slate-700 transition inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-play text-brand-400"></i> Explore Workflow Steps
+          </a>
+        </div>
+
+        <!-- Highlights Badges Bar -->
+        <div class="pt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-bold text-slate-400">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Laravel 13 Octane Ready
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> 35+ Form Control Types
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> 11 Laravel Relation Types
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> 100% Responsive Blade Views
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Sanctum V4 API Security
+          </div>
+        </div>
+
+        <!-- IDE / Web Mockup Window -->
+        <div class="pt-10 max-w-6xl mx-auto">
+          <div class="gradient-border p-2 shadow-2xl glow-effect">
+            <div class="bg-slate-950 rounded-xl overflow-hidden border border-slate-800">
+              
+              <!-- Window Header Bar -->
+              <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="h-3 w-3 rounded-full bg-rose-500"></div>
+                  <div class="h-3 w-3 rounded-full bg-amber-500"></div>
+                  <div class="h-3 w-3 rounded-full bg-emerald-500"></div>
+                  <span class="ml-3 text-xs font-mono text-slate-400 font-semibold">LaraforgeX Visual Generator Engine — Step 2: Field Configuration Matrix</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px] font-mono text-slate-500">
+                  <span class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 font-bold">21 Tables Detected</span>
+                  <span class="px-2 py-0.5 rounded bg-brand-950 text-brand-300 border border-brand-800 font-bold">DDD Lite Architecture</span>
+                </div>
+              </div>
+
+              <!-- Interactive Mockup Image / Content -->
+              <div class="p-6 bg-slate-900/50 text-left space-y-4">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                  <div>
+                    <h3 class="text-base font-bold text-white font-display">Target Output Directory: <span class="font-mono text-brand-400">codegenerator/Product/</span></h3>
+                    <p class="text-xs text-slate-400">Auto-generated models, DTOs, requests, actions, repositories, Blade views, seeders, factories, unit/feature tests.</p>
+                  </div>
+                  <span class="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs border border-emerald-500/30">
+                    <i class="fa-solid fa-check-double mr-1"></i> Schema Verified
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+                  <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                    <div class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Domain Actions Generated</div>
+                    <div class="text-brand-300 font-bold">✓ CreateProductAction.php</div>
+                    <div class="text-brand-300 font-bold">✓ UpdateProductAction.php</div>
+                    <div class="text-brand-300 font-bold">✓ DeleteProductAction.php</div>
+                    <div class="text-brand-300 font-bold">✓ ExportProductAction.php</div>
+                  </div>
+                  <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                    <div class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Contract DTOs & Repositories</div>
+                    <div class="text-purple-300 font-bold">✓ CreateProductDTO.php</div>
+                    <div class="text-purple-300 font-bold">✓ UpdateProductDTO.php</div>
+                    <div class="text-purple-300 font-bold">✓ ProductRepository.php</div>
+                    <div class="text-purple-300 font-bold">✓ ProductRepositoryInterface.php</div>
+                  </div>
+                  <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                    <div class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Responsive Blade Views</div>
+                    <div class="text-pink-300 font-bold">✓ index.blade.php (DataTable)</div>
+                    <div class="text-pink-300 font-bold">✓ create.blade.php (Form)</div>
+                    <div class="text-pink-300 font-bold">✓ edit.blade.php (Form)</div>
+                    <div class="text-pink-300 font-bold">✓ show.blade.php (Details)</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── 5-STEP VISUAL CRUD GENERATOR WORKFLOW ───────────────────────────── -->
+    <section id="crud-generator" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="text-center space-y-4 max-w-3xl mx-auto">
+        <h2 class="text-3xl sm:text-5xl font-black text-white font-display">
+          How the <span class="gradient-text">5-Step Visual Generator</span> Works
+        </h2>
+        <p class="text-slate-400 text-base">
+          Intuitive step-by-step wizard engineered to inspect schemas and construct production-ready Laravel code without touching manual stubs.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        
+        <!-- Step 1 Card -->
+        <div class="p-6 rounded-2xl glass-card border border-slate-800 space-y-4 hover:border-brand-500/50 transition">
+          <div class="h-10 w-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold font-mono border border-brand-500/30">
+            01
+          </div>
+          <h3 class="text-lg font-bold text-white font-display">Schema Inspection</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Select DB connection & database. Auto-detects tables with live row counts and schema indexes.
+          </p>
+        </div>
+
+        <!-- Step 2 Card -->
+        <div class="p-6 rounded-2xl glass-card border border-slate-800 space-y-4 hover:border-brand-500/50 transition">
+          <div class="h-10 w-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold font-mono border border-purple-500/30">
+            02
+          </div>
+          <h3 class="text-lg font-bold text-white font-display">Field Matrix & Rules</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Customize 35+ control types and 1-click validation rule badges (`required`, `email`, `unique`, `max:255`).
+          </p>
+        </div>
+
+        <!-- Step 3 Card -->
+        <div class="p-6 rounded-2xl glass-card border border-slate-800 space-y-4 hover:border-brand-500/50 transition">
+          <div class="h-10 w-10 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold font-mono border border-pink-500/30">
+            03
+          </div>
+          <h3 class="text-lg font-bold text-white font-display">Relation Builder</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Map relationships with automated data type compatibility checks (blocks `bigint` to `varchar` mismatch).
+          </p>
+        </div>
+
+        <!-- Step 4 Card -->
+        <div class="p-6 rounded-2xl glass-card border border-slate-800 space-y-4 hover:border-brand-500/50 transition">
+          <div class="h-10 w-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold font-mono border border-emerald-500/30">
+            04
+          </div>
+          <h3 class="text-lg font-bold text-white font-display">Architecture Options</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Toggle Seeders, Factories, Observers, Notifications, and automated PHPUnit Unit/Feature test suites.
+          </p>
+        </div>
+
+        <!-- Step 5 Card -->
+        <div class="p-6 rounded-2xl glass-card border border-slate-800 space-y-4 hover:border-brand-500/50 transition">
+          <div class="h-10 w-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono border border-amber-500/30">
+            05
+          </div>
+          <h3 class="text-lg font-bold text-white font-display">1-Click Generation</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Inspect generated code in full path previewer, copy snippets, or download complete module ZIP.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ── GENERATED MODULE FILE TREE ARCHITECTURE ────────────────────────── -->
+    <section id="architecture" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        
+        <div class="space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold border border-brand-500/30">
+            CLEAN ARCHITECTURE
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-black text-white font-display leading-tight">
+            15+ Production-Ready Files <br>
+            <span class="gradient-text">Generated in Seconds</span>
+          </h2>
+          <p class="text-slate-400 text-base leading-relaxed">
+            Unlike basic CRUD generators that dumping messy spaghetti code into single controllers, LaraforgeX outputs clean Domain-Driven Design (DDD Lite) modules inside <code class="text-brand-300 font-mono font-bold">codegenerator/{ModuleName}/</code>.
+          </p>
+
+          <div class="space-y-3 pt-2 text-xs font-semibold text-slate-300">
+            <div class="flex items-center gap-3">
+              <div class="h-6 w-6 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</div>
+              <span>Atomic Domain Actions & Service Contracts</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="h-6 w-6 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</div>
+              <span>Type-Safe DTOs (Data Transfer Objects)</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="h-6 w-6 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</div>
+              <span>Repositories & Repositories Interfaces</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="h-6 w-6 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</div>
+              <span>4 Fully-Styled Blade Views (`index`, `create`, `edit`, `show`)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- File Tree Visualizer Box -->
+        <div class="gradient-border p-6 font-mono text-xs text-slate-300 space-y-2 bg-slate-950 rounded-2xl shadow-2xl">
+          <div class="text-brand-400 font-bold">codegenerator/Product/</div>
+          <div class="pl-4 text-slate-400">├── app/Domains/Product/</div>
+          <div class="pl-8 text-slate-300">├── Actions/</div>
+          <div class="pl-12 text-emerald-400">│   ├── CreateProductAction.php</div>
+          <div class="pl-12 text-emerald-400">│   ├── UpdateProductAction.php</div>
+          <div class="pl-12 text-emerald-400">│   └── DeleteProductAction.php</div>
+          <div class="pl-8 text-slate-300">├── DTOs/</div>
+          <div class="pl-12 text-purple-400">│   ├── CreateProductDTO.php</div>
+          <div class="pl-12 text-purple-400">│   └── UpdateProductDTO.php</div>
+          <div class="pl-8 text-slate-300">├── Models/</div>
+          <div class="pl-12 text-pink-400">│   └── Product.php</div>
+          <div class="pl-8 text-slate-300">├── Repositories/</div>
+          <div class="pl-12 text-amber-400">│   ├── ProductRepository.php</div>
+          <div class="pl-12 text-amber-400">│   └── Contracts/ProductRepositoryInterface.php</div>
+          <div class="pl-8 text-slate-300">└── Http/Controllers/</div>
+          <div class="pl-12 text-cyan-400">    └── ProductController.php</div>
+          <div class="pl-4 text-slate-400">└── resources/views/admin/products/</div>
+          <div class="pl-8 text-amber-300">├── index.blade.php (DataTable)</div>
+          <div class="pl-8 text-amber-300">├── create.blade.php (Form)</div>
+          <div class="pl-8 text-amber-300">├── edit.blade.php (Form)</div>
+          <div class="pl-8 text-amber-300">└── show.blade.php (Details)</div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ── COMPARISON TABLE ────────────────────────────────────────────────── -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="text-center space-y-4 max-w-3xl mx-auto">
+        <h2 class="text-3xl sm:text-5xl font-black text-white font-display">
+          Why LaraforgeX Outperforms <span class="gradient-text">Standard CRUD Tools</span>
+        </h2>
+        <p class="text-slate-400 text-base">
+          Built from the ground up for modern Laravel developers who demand clean architecture without sacrificed speed.
+        </p>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 glass-card">
+        <table class="w-full text-left text-xs font-sans">
+          <thead class="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[11px] font-bold">
+            <tr>
+              <th class="p-4">Feature / Architecture</th>
+              <th class="p-4 text-rose-400">Traditional Generators</th>
+              <th class="p-4 text-brand-400 font-bold bg-brand-950/30">LaraforgeX Engine</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-medium text-slate-300">
+            <tr>
+              <td class="p-4 font-bold text-white">Code Architecture</td>
+              <td class="p-4 text-slate-500">Fat Monolithic Controllers</td>
+              <td class="p-4 text-emerald-400 font-bold bg-brand-950/20">Domain-Driven Design (DDD Lite) Actions</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-white">Data Validation</td>
+              <td class="p-4 text-slate-500">Raw Untyped Request Arrays</td>
+              <td class="p-4 text-emerald-400 font-bold bg-brand-950/20">Type-Safe DTO Contracts & Requests</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-white">Validation Customization</td>
+              <td class="p-4 text-slate-500">Manual String Typing</td>
+              <td class="p-4 text-emerald-400 font-bold bg-brand-950/20">1-Click Interactive Rule Badges</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-white">Relationship Mapping</td>
+              <td class="p-4 text-slate-500">Manual text fields (Error Prone)</td>
+              <td class="p-4 text-emerald-400 font-bold bg-brand-950/20">Auto Column Dropdowns & Type Compatibility Validation</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-white">Blade View Output</td>
+              <td class="p-4 text-slate-500">Basic HTML tables or empty stubs</td>
+              <td class="p-4 text-emerald-400 font-bold bg-brand-950/20">4 Styled Views (`index`, `create`, `edit`, `show`)</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-white">Output Destination</td>
+              <td class="p-4 text-slate-500">Overwrites core project files directly</td>
+              <td class="p-4 text-emerald-400 font-bold bg-brand-950/20">Safe isolation inside `codegenerator/` folder</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ── PRICING SECTION ─────────────────────────────────────────────────── -->
+    <section id="pricing" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="text-center space-y-4 max-w-3xl mx-auto">
+        <h2 class="text-3xl sm:text-5xl font-black text-white font-display">
+          Simple, Transparent <span class="gradient-text">Pricing</span>
+        </h2>
+        <p class="text-slate-400 text-base">
+          Get full access to the complete Laravel 13 source code, visual generator engine, and lifetime updates.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        
+        <!-- Regular License Card -->
+        <div class="p-8 rounded-3xl glass-card border border-slate-800 space-y-6 relative">
+          <div class="space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-400">Regular License</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-5xl font-black text-white font-display">$39</span>
+              <span class="text-slate-400 text-xs font-medium">/ single product use</span>
+            </div>
+            <p class="text-xs text-slate-400">Perfect for developers building a commercial website or client project.</p>
+          </div>
+
+          <div class="space-y-3 text-xs font-medium text-slate-300 border-t border-slate-800 pt-6">
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> Full Laravel 13 Core Source Code</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> Visual 5-Step CRUD Generator Tool</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> CLI Artisan Command `php artisan make:crud`</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> 100% Responsive Glassmorphism Theme</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> Lifetime Free Product Updates</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> 6 Months Customer Support</div>
+          </div>
+
+          <a href="#" class="block w-full py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-center font-extrabold text-xs text-white border border-slate-700 transition">
+            Purchase Regular License
+          </a>
+        </div>
+
+        <!-- Extended License Card (Featured) -->
+        <div class="p-8 rounded-3xl gradient-border space-y-6 relative glow-effect">
+          <div class="absolute -top-3 right-8 px-3 py-1 rounded-full gradient-bg text-white font-bold text-[10px] uppercase tracking-widest shadow-lg">
+            Agency Favorite
+          </div>
+
+          <div class="space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-purple-400">Extended License</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-5xl font-black text-white font-display">$199</span>
+              <span class="text-slate-400 text-xs font-medium">/ unlimited client projects</span>
+            </div>
+            <p class="text-xs text-slate-400">For agencies & freelancers selling software applications to end clients.</p>
+          </div>
+
+          <div class="space-y-3 text-xs font-medium text-slate-300 border-t border-slate-800 pt-6">
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> All Regular License Features</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> Commercial SaaS & Client Redistribution</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> Unlimited End-User Applications</div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-400"></i> Priority Developer Support</div>
+          </div>
+
+          <a href="#" class="block w-full py-4 rounded-xl gradient-bg text-center font-extrabold text-xs text-white hover:opacity-95 transition shadow-lg shadow-brand-600/30">
+            Purchase Extended License
+          </a>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
+    <footer class="border-t border-slate-800 py-12 text-slate-500 text-xs">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-white font-display">LaraforgeX</span> © 2026. Premium CodeCanyon Item.
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="/admin/crud-generator" class="hover:text-slate-300 transition">Live Admin Demo</a>
+          <a href="#" class="hover:text-slate-300 transition">Documentation</a>
+          <a href="#" class="hover:text-slate-300 transition">Envato Support</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+</body>
+</html>

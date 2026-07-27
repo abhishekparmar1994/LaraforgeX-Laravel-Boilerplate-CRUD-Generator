@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaraforgeX — Enterprise Laravel Core Boilerplate Documentation</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f7ff',
+              100: '#ebf0ff',
+              200: '#d6e0ff',
+              300: '#b3c7ff',
+              400: '#85a3ff',
+              500: '#5275ff',
+              600: '#2b47ff',
+              700: '#1b2eff',
+              800: '#111fff',
+              900: '#0007e0',
+              950: '#00048f',
+            },
+            slate: {
+              900: '#0b0f19',
+              950: '#060810',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Neon Glow effect */
+    .neon-glow {
+      box-shadow: 0 10px 30px -10px rgba(82, 117, 255, 0.08);
+    }
+
+    .neon-border:hover {
+      box-shadow: 0 0 20px -5px rgba(82, 117, 255, 0.2);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-700 font-sans selection:bg-brand-500 selection:text-white antialiased">
+
+  <!-- Main Layout -->
+  <div class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-white/80 border-b border-slate-200">
+      <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div
+            class="h-9 w-9 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white font-display font-extrabold text-xl shadow-md shadow-brand-500/10">
+            L
+          </div>
+          <span class="font-display font-bold text-xl text-slate-900 tracking-tight">Laraforge<span
+              class="text-brand-600">X</span></span>
+          <span
+            class="px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-mono font-medium text-slate-600">v1.0.0</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="../apps/api/laraforgex_postman_collection.json" download
+            class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-slate-250 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
+            <i class="fa-solid fa-file-arrow-down"></i> Postman Collection
+          </a>
+          <a href="https://laravel.com" target="_blank"
+            class="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-brand-600 text-sm font-semibold text-white hover:bg-brand-500 transition shadow-md shadow-brand-600/10">
+            Laravel 13 Core
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex-1 max-w-8xl w-full mx-auto flex">
+
+      <!-- Sidebar -->
+      <aside
+        class="hidden lg:block w-72 shrink-0 border-r border-slate-200 p-6 space-y-8 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto bg-slate-50/50">
+        <nav class="space-y-6">
+          <div>
+            <h5 class="text-xs font-semibold text-slate-500 uppercase tracking-widest px-3 mb-3 font-display">Getting
+              Started</h5>
+            <ul class="space-y-1">
+              <li>
+                <a href="#welcome"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-house text-brand-600"></i> Welcome & Overview
+                </a>
+              </li>
+              <li>
+                <a href="#install"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-terminal text-brand-600"></i> Installation & Setup
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-xs font-semibold text-slate-500 uppercase tracking-widest px-3 mb-3 font-display">
+              Architecture</h5>
+            <ul class="space-y-1">
+              <li>
+                <a href="#ddd"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-cubes text-brand-600"></i> Grouping by Features
+                </a>
+              </li>
+              <li>
+                <a href="#generator"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-code-fork text-brand-600"></i> Domain Generator CLI
+                </a>
+              </li>
+              <li>
+                <a href="#patterns"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-diagram-project text-brand-600"></i> Code Patterns & Standards
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-xs font-semibold text-slate-500 uppercase tracking-widest px-3 mb-3 font-display">Features
+            </h5>
+            <ul class="space-y-1">
+              <li>
+                <a href="#security"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-shield-halved text-brand-600"></i> Identity & RBAC Security
+                </a>
+              </li>
+              <li>
+                <a href="#settings"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-sliders text-brand-600"></i> Encrypted Settings Store
+                </a>
+              </li>
+              <li>
+                <a href="#media"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-folder-open text-brand-600"></i> Cloud Media Manager
+                </a>
+              </li>
+              <li>
+                <a href="#audit"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Queued Audit Trails
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-xs font-semibold text-slate-500 uppercase tracking-widest px-3 mb-3 font-display">Developer
+              Tools</h5>
+            <ul class="space-y-1">
+              <li>
+                <a href="#sandbox"
+                  class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-medium">
+                  <i class="fa-solid fa-circle-play text-brand-600"></i> Interactive API Sandbox
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="flex-1 min-w-0 p-6 sm:p-10 lg:p-16 space-y-24 overflow-y-auto max-h-[calc(100vh-4rem)] bg-white">
+
+        <!-- Welcome Section -->
+        <section id="welcome" class="space-y-6">
+          <div class="relative rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 p-8 sm:p-12 neon-glow">
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-brand-500/5 rounded-full blur-3xl"></div>
+            <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl"></div>
+
+            <div class="relative space-y-4">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-xs font-semibold text-brand-600">
+                <i class="fa-solid fa-sparkles"></i> Enterprise SaaS Base
+              </span>
+              <h1 class="font-display font-extrabold text-4xl sm:text-5xl text-slate-900 tracking-tight">
+                Laraforge<span class="text-brand-600">X</span>
+              </h1>
+              <p class="text-lg sm:text-xl text-slate-600 max-w-3xl leading-relaxed">
+                A clean, headless backend starter template for Laravel 13. Built specifically to help developers write
+                highly structured, secure, and scalable systems like SaaS, ERP, CRM, and LMS portals.
+              </p>
+              <div class="pt-4 flex flex-wrap gap-4">
+                <a href="#install"
+                  class="px-6 py-2.5 rounded-lg bg-brand-600 text-white font-semibold text-sm hover:bg-brand-500 transition shadow-md shadow-brand-600/10">
+                  Get Started
+                </a>
+                <a href="#sandbox"
+                  class="px-6 py-2.5 rounded-lg bg-slate-200 border border-slate-300 text-slate-700 font-semibold text-sm hover:text-slate-900 hover:bg-slate-350 transition">
+                  Try API Sandbox
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+            <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <div
+                class="h-10 w-10 rounded-lg bg-brand-50/10 border border-brand-500/20 flex items-center justify-center text-brand-600 text-lg">
+                <i class="fa-solid fa-cubes"></i>
+              </div>
+              <h3 class="font-display font-bold text-lg text-slate-950">Grouped by Features</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                We group files by features (like Users or Billing) instead of file types. This keeps your code
+                organized, easy to find, and easy to edit.
+              </p>
+            </div>
+            <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <div
+                class="h-10 w-10 rounded-lg bg-indigo-50/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 text-lg">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <h3 class="font-display font-bold text-lg text-slate-950">Enhanced Auth Security</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Includes simple Google Authenticator 2FA, passwordless email login links, and automatic role inheritance
+                (like Admin inheriting Teacher permissions).
+              </p>
+            </div>
+            <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <div
+                class="h-10 w-10 rounded-lg bg-cyan-50/10 border border-cyan-500/20 flex items-center justify-center text-cyan-600 text-lg">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <h3 class="font-display font-bold text-lg text-slate-955">Direct-to-Cloud Uploads</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Upload files directly from the browser to Amazon S3 or Cloudflare R2. This saves server memory,
+                bandwidth, and prevents slow page speeds.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section id="install" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Installation & Sandbox Setup</h2>
+            <p class="text-sm text-slate-500">Run the project locally on your machine.</p>
+          </div>
+
+          <div class="space-y-4 leading-relaxed">
+            <p>
+              LaraforgeX requires <strong class="text-slate-900">PHP 8.3+</strong> and <strong
+                class="text-slate-900">Composer 2.0+</strong>. Make sure your local database (MySQL/PostgreSQL) and
+              Redis are running.
+            </p>
+
+            <div class="bg-slate-900 rounded-lg border border-slate-800 p-5 font-mono text-sm space-y-2 text-slate-300">
+              <div
+                class="flex items-center justify-between text-xs text-slate-500 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3">
+                <span>Terminal Commands</span>
+                <i class="fa-regular fa-copy cursor-pointer hover:text-white" onclick="copyToClipboard(this)"></i>
+              </div>
+              <div class="copy-target">
+                # Navigate to the Laravel API Core folder<br>
+                cd apps/api<br><br>
+                # Copy environment configuration and generate app key<br>
+                cp .env.example .env<br>
+                php artisan key:generate<br><br>
+                # Run database migrations and seed sandbox data<br>
+                php artisan migrate:fresh --seed
+              </div>
+            </div>
+
+            <div
+              class="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-sm text-emerald-650 flex gap-3">
+              <i class="fa-solid fa-circle-check text-lg mt-0.5"></i>
+              <div>
+                <strong>Sandbox Data Loaded:</strong> Running the seeder creates three standard test accounts (Admin,
+                Teacher, and Student) with pre-configured UUIDs matching our API sandbox simulator below.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Grouping by Features Section -->
+        <section id="ddd" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Feature-Based Directory Structure</h2>
+            <p class="text-sm text-slate-500">Grouping files by features instead of file types.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div class="space-y-4 leading-relaxed">
+              <p>
+                Standard Laravel projects mix all controllers, models, and requests together. In big projects, finding
+                your files gets hard. LaraforgeX fixes this by grouping all files for a single feature (like Users,
+                Settings, or Media) inside a single directory under `app/Domains/`.
+              </p>
+              <ul class="space-y-2 text-sm text-slate-500 list-disc list-inside">
+                <li><strong class="text-slate-800">Actions:</strong> Classes that do exactly one task (e.g., <code
+                    class="text-brand-600 font-mono text-xs">CreateUserAction</code>).</li>
+                <li><strong class="text-slate-800">DTOs (Data Transfer Objects):</strong> Clean, read-only parameters
+                  lists that validate input data.</li>
+                <li><strong class="text-slate-800">Repositories:</strong> Classes that handle all database queries.</li>
+                <li><strong class="text-slate-800">Providers:</strong> Autoload file routing and dependencies bindings
+                  automatically.</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm font-mono space-y-1">
+              <div
+                class="text-xs text-slate-500 border-b border-slate-200 pb-2 mb-3 font-semibold uppercase tracking-widest">
+                Directory Layout</div>
+              <div class="text-brand-600">app/Domains/User/</div>
+              <div class="pl-4 text-slate-550">├── Actions/ <span class="text-slate-400"># Handles workflow logic</span></div>
+              <div class="pl-4 text-slate-550">├── DTOs/ <span class="text-slate-400"># Typed request parameters</span></div>
+              <div class="pl-4 text-slate-550">├── Models/ <span class="text-slate-400"># Database UUID models</span></div>
+              <div class="pl-4 text-slate-550">├── Policies/ <span class="text-slate-400"># Route gate rules</span></div>
+              <div class="pl-4 text-slate-550">├── Requests/ <span class="text-slate-400"># Form validations</span></div>
+              <div class="pl-4 text-slate-550">├── Resources/ <span class="text-slate-400"># Outbound API formatters</span></div>
+              <div class="pl-4 text-slate-550">├── Repositories/</div>
+              <div class="pl-8 text-slate-550">├── Contracts/ <span class="text-slate-400"># Repository interfaces</span></div>
+              <div class="pl-8 text-slate-550">└── Eloquent/ <span class="text-slate-400"># Database query code</span></div>
+              <div class="pl-4 text-slate-550">├── Enums/ <span class="text-slate-400"># Domain status values</span></div>
+              <div class="pl-4 text-slate-550">├── Events/ <span class="text-slate-400"># Dispatched core events</span></div>
+              <div class="pl-4 text-slate-550">├── Listeners/ <span class="text-slate-400"># Event callback triggers</span></div>
+              <div class="pl-4 text-slate-550">├── Notifications/ <span class="text-slate-400"># System mail/alert classes</span></div>
+              <div class="pl-4 text-slate-550">├── Jobs/ <span class="text-slate-400"># Queued background tasks</span></div>
+              <div class="pl-4 text-slate-550">├── Exceptions/ <span class="text-slate-400"># Custom error exceptions</span></div>
+              <div class="pl-4 text-slate-550">├── Traits/ <span class="text-slate-400"># Shared helper functions</span></div>
+              <div class="pl-4 text-slate-550">├── Rules/ <span class="text-slate-400"># Custom validation rules</span></div>
+              <div class="pl-4 text-slate-550">├── Interfaces/ <span class="text-slate-400"># Custom code contracts</span></div>
+              <div class="pl-4 text-slate-550">├── Tests/ <span class="text-slate-450"># Unit & feature tests</span></div>
+              <div class="pl-4 text-slate-550">└── UserServiceProvider.php</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Domain Generator CLI Section -->
+        <section id="generator" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Artisan Domain Generator</h2>
+            <p class="text-sm text-slate-500">Create new feature folders and boilerplates in one click.</p>
+          </div>
+
+          <div class="space-y-4 leading-relaxed">
+            <p>
+              Instead of creating folders, files, and binding service providers manually, you can use our simple custom
+              generator command:
+            </p>
+            <div class="bg-slate-900 rounded-lg border border-slate-800 p-5 font-mono text-sm space-y-2 text-slate-300">
+              <div
+                class="flex items-center justify-between text-xs text-slate-500 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3">
+                <span>Artisan CLI</span>
+              </div>
+              <div class="text-slate-200">php artisan make:domain Billing</div>
+            </div>
+            <p>
+              This command instantly scaffolds a new folder under `app/Domains/Billing/` along with the matching
+              `BillingServiceProvider`, base Eloquent models, repository templates, validation requests, JSON resource
+              formatters, and test suites.
+            </p>
+            
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3 font-mono text-xs">
+              <div class="text-xs font-semibold text-slate-550 uppercase tracking-widest border-b border-slate-200 pb-2">Generated Files List</div>
+              <ul class="space-y-1.5 text-slate-600">
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Models/Billing.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Repositories/Contracts/BillingRepositoryInterface.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Repositories/Eloquent/BillingRepository.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Requests/CreateBillingRequest.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Resources/BillingResource.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Policies/BillingPolicy.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Actions/CreateBillingAction.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/DTOs/CreateBillingDTO.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Tests/Unit/BillingUnitTest.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/Tests/Feature/BillingFeatureTest.php</li>
+                <li><i class="fa-solid fa-file-code text-brand-600 mr-2"></i> app/Domains/Billing/BillingServiceProvider.php</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Code Patterns & Standards Section -->
+        <section id="patterns" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Clean Code Patterns</h2>
+            <p class="text-sm text-slate-500">Visualizing files inside a feature flow.</p>
+          </div>
+
+          <p class="leading-relaxed">
+            Each class has one clean task. Here is how a business workflow (like creating a user) is structured across
+            files:
+          </p>
+
+          <!-- Code Tabs -->
+          <div class="border border-slate-205 rounded-xl overflow-hidden bg-slate-50">
+            <div class="flex border-b border-slate-200 overflow-x-auto bg-slate-100">
+              <button class="code-tab-btn px-5 py-3 text-sm font-semibold border-b-2 border-brand-500 text-brand-600"
+                onclick="switchCodeTab('action', this)">Action Class</button>
+              <button
+                class="code-tab-btn px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-900"
+                onclick="switchCodeTab('dto', this)">DTO Class</button>
+              <button
+                class="code-tab-btn px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-900"
+                onclick="switchCodeTab('repository', this)">Repository</button>
+              <button
+                class="code-tab-btn px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-900"
+                onclick="switchCodeTab('controller', this)">Controller</button>
+            </div>
+
+            <div class="p-6 font-mono text-xs sm:text-sm text-slate-300 overflow-x-auto bg-slate-900 leading-relaxed">
+              <!-- Action Code -->
+              <pre id="code-action" class="code-block block"><code><span class="text-slate-500">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Domains\User\Actions;
+
+use App\Domains\User\DTOs\CreateUserDTO;
+use App\Domains\User\Models\User;
+use App\Domains\User\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
+
+class CreateUserAction
+{
+    public function __construct(
+        protected UserRepositoryInterface $repository
+    ) {}
+
+    public function execute(CreateUserDTO $dto): User
+    {
+        $userData = [
+            'name' => $dto->name,
+            'email' => $dto->email,
+            'password' => Hash::make($dto->password),
+            'status' => $dto->status,
+        ];
+
+        /** @var User $user */
+        $user = $this->repository->create($userData);
+
+        if (!empty($dto->roles)) {
+            $user->assignRole($dto->roles);
+        }
+
+        return $user;
+    }
+}</span></code></pre>
+
+              <!-- DTO Code -->
+              <pre id="code-dto" class="code-block hidden"><code><span class="text-slate-500">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Domains\User\DTOs;
+
+use App\Shared\DTOs\BaseDTO;
+
+class CreateUserDTO extends BaseDTO
+{
+    public function __construct(
+        public readonly string $name,
+        public readonly string $email,
+        public readonly string $password,
+        public readonly string $status = 'active',
+        public readonly ?array $roles = null
+    ) {}
+}</span></code></pre>
+
+              <!-- Repository Code -->
+              <pre id="code-repository" class="code-block hidden"><code><span class="text-slate-500">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Domains\User\Repositories\Eloquent;
+
+use App\Domains\User\Models\User;
+use App\Domains\User\Repositories\Contracts\UserRepositoryInterface;
+use App\Shared\Services\BaseRepository;
+
+class UserRepository extends BaseRepository implements UserRepositoryInterface
+{
+    protected function model(): string
+    {
+        return User::class;
+    }
+
+    public function findActiveByEmail(string $email): ?User
+    {
+        return $this->model->newQuery()
+            ->where('email', $email)
+            ->where('status', 'active')
+            ->first();
+    }
+}</span></code></pre>
+
+              <!-- Controller Code -->
+              <pre id="code-controller" class="code-block hidden"><code><span class="text-slate-500">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Domains\User\Controllers;
+
+use App\Domains\User\Actions\CreateUserAction;
+use App\Domains\User\DTOs\CreateUserDTO;
+use App\Domains\User\Requests\CreateUserRequest;
+use App\Domains\User\Resources\UserResource;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+
+class UserController extends Controller
+{
+    public function store(CreateUserRequest $request, CreateUserAction $action): JsonResponse
+    {
+        // Requests validated by validation middleware. Map to DTO.
+        $dto = CreateUserDTO::fromRequest($request);
+
+        $user = $action->execute($dto);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User created successfully.',
+            'data' => new UserResource($user)
+        ], 201);
+    }
+}</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Security Section -->
+        <section id="security" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Roles & Auth Security</h2>
+            <p class="text-sm text-slate-500">Security setups and permission workflows explained simply.</p>
+          </div>
+
+          <div class="space-y-6 leading-relaxed">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="space-y-4">
+                <h3 class="font-display font-bold text-lg text-slate-950">1. Role Inheritance (Hierarchical RBAC)</h3>
+                <p>
+                  Roles can inherit permissions from other roles using a parent-child relationship. We use a simple
+                  <code class="font-mono text-xs text-brand-600">parent_id</code> logic:
+                </p>
+                <div class="p-4 rounded-xl bg-slate-900 font-mono text-xs text-slate-300 space-y-1">
+                  Role: administrator (parent_id: null)<br>
+                  └── Role: educator (parent_id: administrator_uuid)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;└── Role: student (parent_id: educator_uuid)
+                </div>
+                <p class="text-sm text-slate-550">
+                  Instead of assigning the same permissions multiple times, parent roles automatically get permissions
+                  of child roles. For example, the <strong class="text-slate-800">administrator</strong> automatically
+                  gets all permissions of <strong class="text-slate-800">educator</strong> and <strong
+                    class="text-slate-800">student</strong>.
+                </p>
+              </div>
+
+              <div class="space-y-4">
+                <h3 class="font-display font-bold text-lg text-slate-955">2. Secure Google 2FA</h3>
+                <p>
+                  Secure login using Google Authenticator codes. It works out-of-the-box without using heavy external
+                  packages. Users scan a QR code and type a 6-digit confirmation code. We also generate encrypted
+                  single-use codes for account recovery.
+                </p>
+                <h3 class="font-display font-bold text-lg text-slate-955">3. Passwordless Magic Links</h3>
+                <p>
+                  Send secure timed login links directly to user emails. Tokens are securely hashed with SHA256 before
+                  being saved, keeping accounts safe even if database records are compromised.
+                </p>
+              </div>
+            </div>
+
+            <!-- Synchronization Guides -->
+            <div class="mt-8 p-6 rounded-xl bg-slate-50 border border-slate-205 space-y-6">
+              <h3 class="font-display font-bold text-xl text-slate-950"><i
+                  class="fa-solid fa-arrows-rotate text-brand-600 mr-2"></i> How to Sync Roles and Permissions</h3>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Database Sync -->
+                <div class="space-y-3">
+                  <h4 class="font-semibold text-slate-900 text-sm uppercase tracking-wide">A. Update Database Roles
+                    (Code to DB)</h4>
+                  <p class="text-sm text-slate-600">
+                    Permissions and role structures are managed inside <code
+                      class="font-mono text-xs text-brand-600">database/seeders/DatabaseSeeder.php</code>.
+                  </p>
+                  <ol class="text-sm text-slate-500 list-decimal list-inside space-y-1">
+                    <li>Add or edit permission names inside the array.</li>
+                    <li>Map permission lists to specific roles.</li>
+                    <li>Update roles using: <code
+                        class="font-mono text-xs text-slate-850 bg-slate-200 px-1 py-0.5 rounded">php artisan db:seed</code>
+                    </li>
+                  </ol>
+                </div>
+
+                <!-- Frontend Sync -->
+                <div class="space-y-3">
+                  <h4 class="font-semibold text-slate-900 text-sm uppercase tracking-wide">B. Sync Frontend Models (API
+                    to Frontend)</h4>
+                  <p class="text-sm text-slate-600">
+                    Keep your frontend portals aligned with API models and role specifications instantly:
+                  </p>
+                  <ol class="text-sm text-slate-500 list-decimal list-inside space-y-1">
+                    <li>Make schema changes in your migrations or models.</li>
+                    <li>Compile configurations using: <code
+                        class="font-mono text-xs text-slate-850 bg-slate-200 px-1 py-0.5 rounded">php artisan typescript:transform</code>
+                    </li>
+                    <li>Nuxt portals automatically pull these schemas from <code
+                        class="font-mono text-xs text-slate-800">shared/types/</code>.</li>
+                  </ol>
+                </div>
+              </div>
+              <!-- How to Activate 2FA in Code -->
+              <div class="mt-6 border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                <div class="flex border-b border-slate-200 bg-slate-100 px-5 py-3">
+                  <span class="text-sm font-semibold text-slate-800">Two-Factor Authentication (2FA) Integration
+                    Guide</span>
+                </div>
+                <div class="p-6 space-y-6">
+                  <!-- Step 1: Enable 2FA -->
+                  <div class="space-y-2">
+                    <h4 class="font-semibold text-slate-900 text-sm uppercase tracking-wide">1. Request 2FA Setup (API
+                      Endpoint)</h4>
+                    <p class="text-sm text-slate-600">
+                      The user requests to set up 2FA. This returns a raw secret key and a formatted QR-code URI string:
+                    </p>
+                    <pre class="bg-slate-900 p-4 rounded-lg font-mono text-xs text-slate-300 leading-normal"><code>// Request 2FA setup details (Headers must contain Bearer Token)
+const response = await fetch('/api/v1/auth/2fa/enable', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer ...', 'Accept': 'application/json' }
+});
+
+const { data } = await response.json();
+// data.secret: "KJSW23MNS76AX29S"
+// data.qr_code_url: "otpauth://totp/LaraforgeX:user@example.com?secret=KJSW23..."</code></pre>
+                    <p class="text-xs text-slate-500">
+                      Display the QR-code on the client frontend using a JS QR builder (e.g. qrcode.js) so the user can
+                      scan it in Google Authenticator.
+                    </p>
+                  </div>
+
+                  <!-- Step 2: Confirm 2FA -->
+                  <div class="space-y-2">
+                    <h4 class="font-semibold text-slate-900 text-sm uppercase tracking-wide">2. Confirm 2FA Verification
+                      Code</h4>
+                    <p class="text-sm text-slate-600">
+                      Prompt the user to enter the 6-digit code displayed in their authenticator app and post it to
+                      verify:
+                    </p>
+                    <pre class="bg-slate-900 p-4 rounded-lg font-mono text-xs text-slate-300 leading-normal"><code>// Verify the 6-digit TOTP code
+const response = await fetch('/api/v1/auth/2fa/verify', {
+  method: 'POST',
+  headers: { 
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ...',
+    'Accept': 'application/json'
+  },
+  body: JSON.stringify({ code: '482931' }) // 6-digit user input code
+});
+
+const result = await response.json();
+if (result.success) {
+  // result.data.recovery_codes contains 8 backup recovery codes
+  console.log("Two factor enabled successfully!", result.data.recovery_codes);
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Settings Store Section -->
+        <section id="settings" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Encrypted Settings Store</h2>
+            <p class="text-sm text-slate-550">Transparent encryption for sensitive platform credentials.</p>
+          </div>
+
+          <div class="space-y-4 leading-relaxed">
+            <p>
+              Sensitive configurations (like SMTP passwords and API tokens) are saved under `settings`. When a setting
+              is updated with <code class="font-mono text-xs text-brand-600">is_encrypted = true</code>, it is encrypted
+              automatically before writing to the database, and decrypted automatically when queried.
+            </p>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-sm font-mono text-slate-400">
+              # Saved in Database:<br>
+              key: <span class="text-emerald-400">"mail_password"</span> | value: <span
+                class="text-brand-405 text-slate-300">"eyJpdiI6Ik9zSmxSR..."</span> | is_encrypted: <span
+                class="text-emerald-400">true</span><br><br>
+              # Loaded in Code:<br>
+              $settingsRepository->get('mail_password'); <span class="text-slate-500">// Output:
+                "VerySecretSmtpPassword123!"</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Cloud Media Manager Section -->
+        <section id="media" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Cloud Media Manager</h2>
+            <p class="text-sm text-slate-500">Upload big files directly to AWS S3, GCP, or Cloudflare R2.</p>
+          </div>
+
+          <div class="space-y-4 leading-relaxed">
+            <p>
+              Normally, uploading files directly to your server slows down pages. LaraforgeX uploads files directly from
+              the browser to AWS S3, Google Cloud Storage (GCP), or Cloudflare R2 using temporary secure links,
+              bypassing web server upload limits.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm pt-4">
+              <div class="p-5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+                <div class="text-xs font-bold text-brand-600 uppercase font-display">Step 1</div>
+                <div class="text-slate-955 font-bold">Request Presigned URL</div>
+                <p class="text-xs text-slate-500">Browser requests an upload link from the API with size and type
+                  metadata.</p>
+              </div>
+              <div class="p-5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+                <div class="text-xs font-bold text-brand-600 uppercase font-display">Step 2</div>
+                <div class="text-slate-955 font-bold">Browser Binary Push</div>
+                <p class="text-xs text-slate-500">Browser uploads the file directly to S3/GCP/R2 storage container.</p>
+              </div>
+              <div class="p-5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+                <div class="text-xs font-bold text-brand-600 uppercase font-display">Step 3</div>
+                <div class="text-slate-955 font-bold">Confirm Upload</div>
+                <p class="text-xs text-slate-555">API confirms the file upload is complete and generates temporary
+                  preview URLs.</p>
+              </div>
+            </div>
+
+            <!-- How to Upload & Access Files in Code -->
+            <div class="mt-6 border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+              <div class="flex border-b border-slate-200 bg-slate-100 px-5 py-3">
+                <span class="text-sm font-semibold text-slate-800">Media Integration Code Guide</span>
+              </div>
+              <div class="p-6 space-y-6">
+                <!-- Javascript Upload -->
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-slate-900 text-sm uppercase tracking-wide">1. Uploading a File (Frontend
+                    JavaScript)</h4>
+                  <p class="text-sm text-slate-600">
+                    First, request a presigned URL from the API, then upload the file binary directly using a PUT
+                    request:
+                  </p>
+                  <pre class="bg-slate-900 p-4 rounded-lg font-mono text-xs text-slate-300 leading-normal"><code>// Step A: Request the presigned URL
+const response = await fetch('/api/v1/media/presign', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ...' },
+  body: JSON.stringify({ name: 'file.mp4', mime_type: 'video/mp4', size: 1024 })
+});
+const { data } = await response.json();
+
+// Step B: Upload file binary directly to S3 / GCP / R2
+await fetch(data.upload_url, {
+  method: 'PUT',
+  headers: { 'Content-Type': 'video/mp4' },
+  body: fileObject // Raw File object from input
+});
+
+// Step C: Confirm completion to API
+await fetch(`/api/v1/media/${data.media.id}/confirm`, {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer ...' }
+});</code></pre>
+                </div>
+
+                <!-- PHP Access -->
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-slate-900 text-sm uppercase tracking-wide">2. Accessing Files (Backend
+                    PHP Code)</h4>
+                  <p class="text-sm text-slate-600">
+                    To read the files or generate secure temporary signed URLs in your PHP controllers or resources:
+                  </p>
+                  <pre class="bg-slate-900 p-4 rounded-lg font-mono text-xs text-slate-300 leading-normal"><code>use App\Domains\Media\Models\Media;
+
+// Find media file record by UUID
+$media = Media::findOrFail($uuid);
+
+// A. Get full public download URL (if disk visibility is set to public)
+$url = $media->getUrl(); 
+// Output: "https://your-bucket.s3.amazonaws.com/media/user_id/..."
+
+// B. Get secure temporary download link (if disk visibility is private)
+$temporaryUrl = $media->getTemporaryUrl(now()->addHour());
+// Output: "https://your-bucket.s3.amazonaws.com/media/...&amp;X-Amz-Signature=..."</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Audit Trails Section -->
+        <section id="audit" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Queued Audit Trails</h2>
+            <p class="text-sm text-slate-500">Track database changes automatically in the background.</p>
+          </div>
+
+          <div class="space-y-4 leading-relaxed">
+            <p>
+              Track edits to your models (created, updated, deleted) automatically. It logs what values changed, when,
+              and who performed the change. The logging task runs in the background using worker queues so it does not
+              slow down API responses.
+            </p>
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-sm font-mono text-slate-400">
+              # User update event detected<br>
+              WriteAuditLogJob::dispatch($auditData); <span class="text-slate-500">// Dispatched to background Redis
+                queue</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interactive API Sandbox Section -->
+        <section id="sandbox" class="space-y-6">
+          <div class="border-b border-slate-200 pb-3">
+            <h2 class="font-display font-bold text-2xl text-slate-955">Interactive API Sandbox</h2>
+            <p class="text-sm text-slate-500">Test core boilerplate endpoints with real-time mock data structures.</p>
+          </div>
+
+          <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
+            <!-- Sandbox Selector and Payload input -->
+            <div class="xl:col-span-1 space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
+              <h4 class="font-display font-bold text-slate-900 text-md">1. Select Endpoint</h4>
+              <div class="space-y-2">
+                <button onclick="selectSandbox('login', this)"
+                  class="w-full text-left px-4 py-2.5 rounded-lg bg-brand-600 text-white font-semibold text-sm transition">
+                  POST /auth/login
+                </button>
+                <button onclick="selectSandbox('magic', this)"
+                  class="w-full text-left px-4 py-2.5 rounded-lg bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition">
+                  POST /auth/magic-link
+                </button>
+                <button onclick="selectSandbox('2fa', this)"
+                  class="w-full text-left px-4 py-2.5 rounded-lg bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition">
+                  POST /auth/2fa/verify
+                </button>
+                <button onclick="selectSandbox('settings', this)"
+                  class="w-full text-left px-4 py-2.5 rounded-lg bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition">
+                  GET /settings?group=smtp
+                </button>
+                <button onclick="selectSandbox('media', this)"
+                  class="w-full text-left px-4 py-2.5 rounded-lg bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition">
+                  POST /media/presign
+                </button>
+              </div>
+
+              <div class="pt-4 space-y-2">
+                <h4 class="font-display font-bold text-slate-955 text-md">Request Body</h4>
+                <textarea id="sandbox-request-body"
+                  class="w-full h-36 bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-brand-500 leading-normal"
+                  readonly>
+{
+  "email": "admin@laraforgex.com",
+  "password": "SecurePassword123!",
+  "remember": true
+}</textarea>
+              </div>
+
+              <button onclick="triggerSandboxSimulator()"
+                class="w-full py-3 mt-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition shadow-md shadow-emerald-600/10">
+                <i class="fa-solid fa-play mr-2"></i> Send Request
+              </button>
+            </div>
+
+            <!-- Response Viewer -->
+            <div class="xl:col-span-2 space-y-4">
+              <div
+                class="flex items-center justify-between border border-slate-200 bg-slate-100 px-5 py-3 rounded-t-xl border-b-0">
+                <span class="text-sm font-semibold text-slate-800">Response JSON</span>
+                <span id="sandbox-status-badge"
+                  class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-650">200
+                  OK</span>
+              </div>
+              <div
+                class="border border-slate-200 bg-slate-900 p-6 rounded-b-xl overflow-x-auto min-h-[300px] max-h-[500px]">
+                <pre class="font-mono text-xs sm:text-sm text-slate-300 leading-normal"><code id="sandbox-response-box">{
+  "success": true,
+  "message": "Logged in successfully.",
+  "data": {
+    "token": "1|zR4FhK8s9xPqT2vW5mN7jY3dL6aB1cE9",
+    "user": {
+      "id": "98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9",
+      "name": "Administrator",
+      "email": "admin@laraforgex.com",
+      "avatar": null,
+      "status": "active",
+      "last_login_at": "2026-07-17T12:00:00Z",
+      "last_login_ip": "127.0.0.1",
+      "email_verified_at": "2026-07-17T11:00:00Z",
+      "two_factor_enabled": false,
+      "roles": [
+        "administrator"
+      ],
+      "permissions": [
+        "users.create",
+        "users.view",
+        "settings.edit"
+      ],
+      "created_at": "2026-07-17T10:00:00Z",
+      "updated_at": "2026-07-17T12:00:00Z"
+    }
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full bg-slate-100 border-t border-slate-205 py-6 text-center text-xs text-slate-500">
+      <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        &copy; 2026 LaraforgeX. Built for Senior Laravel Enterprise Architects. All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Copy code button function
+    function copyToClipboard(icon) {
+      const codeElement = icon.closest('.bg-slate-900').querySelector('.copy-target');
+      if (!codeElement) return;
+      const text = codeElement.innerText.replace(/<br>/g, '\n');
+      navigator.clipboard.writeText(text);
+      icon.className = "fa-solid fa-check text-emerald-450";
+      setTimeout(() => {
+        icon.className = "fa-regular fa-copy cursor-pointer hover:text-white";
+      }, 2000);
+    }
+
+    // Tabs switching
+    function switchCodeTab(type, button) {
+      // Manage buttons
+      const buttons = button.parentNode.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.classList.remove('text-brand-600', 'border-brand-500');
+        btn.classList.add('border-transparent', 'text-slate-500');
+      });
+      button.classList.add('text-brand-600', 'border-brand-500');
+      button.classList.remove('border-transparent', 'text-slate-500');
+
+      // Manage blocks
+      const blocks = button.closest('section').querySelectorAll('.code-block');
+      blocks.forEach(block => {
+        block.classList.add('hidden');
+        block.classList.remove('block');
+      });
+      const target = document.getElementById('code-' + type);
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('block');
+      }
+    }
+
+    // Sandbox Simulator Data
+    const sandboxData = {
+      "login": {
+        body: {
+          email: "admin@laraforgex.com",
+          password: "SecurePassword123!",
+          remember: true
+        },
+        response: {
+          success: true,
+          message: "Logged in successfully.",
+          data: {
+            token: "1|zR4FhK8s9xPqT2vW5mN7jY3dL6aB1cE9",
+            user: {
+              id: "98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9",
+              name: "Administrator",
+              email: "admin@laraforgex.com",
+              avatar: null,
+              status: "active",
+              last_login_at: "2026-07-17T12:00:00Z",
+              last_login_ip: "127.0.0.1",
+              email_verified_at: "2026-07-17T11:00:00Z",
+              two_factor_enabled: false,
+              roles: ["administrator"],
+              permissions: ["users.create", "users.view", "settings.edit"],
+              created_at: "2026-07-17T10:00:00Z",
+              updated_at: "2026-07-17T12:00:00Z"
+            }
+          }
+        },
+        status: "200 OK",
+        statusColor: "text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
+      },
+      "magic": {
+        body: {
+          email: "teacher@laraforgex.com"
+        },
+        response: {
+          success: true,
+          message: "Magic login link generated.",
+          data: {
+            link: "http://localhost/api/v1/auth/magic-login?token=abc123xyz456d788fbc8a61..."
+          }
+        },
+        status: "200 OK",
+        statusColor: "text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
+      },
+      "2fa": {
+        body: {
+          code: "482931"
+        },
+        response: {
+          success: true,
+          message: "Two-factor authentication verified and enabled.",
+          data: {
+            recovery_codes: [
+              "abcde-12345",
+              "fghij-67890",
+              "klmno-11223",
+              "pqrst-44556",
+              "uvwxy-77889",
+              "zabcd-99001",
+              "efghi-22334",
+              "jklmn-55667"
+            ]
+          }
+        },
+        status: "200 OK",
+        statusColor: "text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
+      },
+      "settings": {
+        body: {},
+        response: {
+          success: true,
+          data: {
+            mail_host: "smtp.mailtrap.io",
+            mail_port: "2525",
+            mail_username: "dev_user",
+            mail_password: "DecryptedSecureSmtpKey"
+          }
+        },
+        status: "200 OK",
+        statusColor: "text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
+      },
+      "media": {
+        body: {
+          name: "course_introduction.mp4",
+          mime_type: "video/mp4",
+          size: 154829302,
+          folder_id: null
+        },
+        response: {
+          success: true,
+          data: {
+            media: {
+              id: "87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9",
+              folder_id: null,
+              name: "course_introduction.mp4",
+              file_name: "87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4",
+              mime_type: "video/mp4",
+              disk: "s3",
+              size: 154829302,
+              url: "https://laraforgex-bucket.s3.amazonaws.com/media/98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9/2026/07/17/87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4?AWSAccessKeyId=...",
+              custom_properties: {
+                status: "pending_upload"
+              },
+              created_at: "2026-07-17T12:22:00Z"
+            },
+            upload_url: "https://laraforgex-bucket.s3.us-east-1.amazonaws.com/media/98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9/2026/07/17/87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4?X-Amz-Signature=...",
+            headers: {
+              "Content-Type": "video/mp4"
+            }
+          }
+        },
+        status: "200 OK",
+        statusColor: "text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
+      }
+    };
+
+    let activeSandboxKey = 'login';
+
+    function selectSandbox(key, button) {
+      activeSandboxKey = key;
+
+      // Manage buttons
+      const buttons = button.parentNode.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.className = "w-full text-left px-4 py-2.5 rounded-lg bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition";
+      });
+      button.className = "w-full text-left px-4 py-2.5 rounded-lg bg-brand-600 text-white font-semibold text-sm transition";
+
+      // Populate Request Body
+      const bodyBox = document.getElementById('sandbox-request-body');
+      if (Object.keys(sandboxData[key].body).length === 0) {
+        bodyBox.value = "/* No request body required */";
+      } else {
+        bodyBox.value = JSON.stringify(sandboxData[key].body, null, 2);
+      }
+
+      // Sync Response JSON immediately
+      const responseBox = document.getElementById('sandbox-response-box');
+      const badge = document.getElementById('sandbox-status-badge');
+      const item = sandboxData[key];
+
+      responseBox.innerText = JSON.stringify(item.response, null, 2);
+      badge.innerText = item.status;
+      badge.className = "px-2.5 py-0.5 rounded-full border text-xs font-semibold " + item.statusColor;
+    }
+
+    function triggerSandboxSimulator() {
+      const responseBox = document.getElementById('sandbox-response-box');
+      const badge = document.getElementById('sandbox-status-badge');
+
+      // Add loading effect
+      responseBox.innerText = "Sending request to mock server...";
+      badge.innerText = "Loading...";
+      badge.className = "px-2.5 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-400 animate-pulse";
+
+      setTimeout(() => {
+        const item = sandboxData[activeSandboxKey];
+        responseBox.innerText = JSON.stringify(item.response, null, 2);
+        badge.innerText = item.status;
+        badge.className = "px-2.5 py-0.5 rounded-full border text-xs font-semibold " + item.statusColor;
+      }, 600);
+    }
+  </script>
+</body>
+
+</html>

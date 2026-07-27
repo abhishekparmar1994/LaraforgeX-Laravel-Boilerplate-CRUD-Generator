@@ -1,0 +1,660 @@
+{
+  "info": {
+    "name": "LaraforgeX Enterprise API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Traditional Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@laraforgex.com\",\n  \"password\": \"SecurePassword123!\",\n  \"remember\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticates user credentials and returns a Sanctum bearer access token."
+          },
+          "response": [
+            {
+              "name": "Successful Login Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Logged in successfully.\",\n  \"data\": {\n    \"token\": \"1|zR4FhK8s9xPqT2vW5mN7jY3dL6aB1cE9\",\n    \"user\": {\n      \"id\": \"98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9\",\n      \"name\": \"Administrator\",\n      \"email\": \"admin@laraforgex.com\",\n      \"avatar\": null,\n      \"status\": \"active\",\n      \"last_login_at\": \"2026-07-17T12:00:00Z\",\n      \"last_login_ip\": \"127.0.0.1\",\n      \"email_verified_at\": \"2026-07-17T11:00:00Z\",\n      \"two_factor_enabled\": false,\n      \"roles\": [\n        \"administrator\"\n      ],\n      \"permissions\": [\n        \"users.create\",\n        \"users.view\",\n        \"settings.edit\"\n      ],\n      \"created_at\": \"2026-07-17T10:00:00Z\",\n      \"updated_at\": \"2026-07-17T12:00:00Z\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout Session",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Revokes the active bearer token."
+          },
+          "response": [
+            {
+              "name": "Logout Success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Logged out successfully.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Request Magic Link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teacher@laraforgex.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/magic-link",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "magic-link"
+              ]
+            },
+            "description": "Requests a passwordless entry magic link."
+          },
+          "response": [
+            {
+              "name": "Magic Link Generated Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Magic login link generated.\",\n  \"data\": {\n    \"link\": \"http://localhost/api/v1/auth/magic-login?token=d788fbc8a61...\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Verify Magic Link Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/magic-login?token=d788fbc8a61...",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "magic-login"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "d788fbc8a61..."
+                }
+              ]
+            },
+            "description": "Authenticates a generated magic link token and returns user credentials."
+          },
+          "response": [
+            {
+              "name": "Magic Link Authenticated Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Authenticated successfully via magic link.\",\n  \"data\": {\n    \"token\": \"2|tM8kPqT2vW5mN7jY3dL6aB1cE9zR4FhK\",\n    \"user\": {\n      \"id\": \"1a8fd9a7-e1ba-4f2e-89a1-cb9e8c4e47aa\",\n      \"name\": \"Jane Teacher\",\n      \"email\": \"teacher@laraforgex.com\",\n      \"avatar\": null,\n      \"status\": \"active\",\n      \"last_login_at\": \"2026-07-17T12:15:00Z\",\n      \"last_login_ip\": \"127.0.0.1\",\n      \"email_verified_at\": \"2026-07-17T12:00:00Z\",\n      \"two_factor_enabled\": false,\n      \"roles\": [\n        \"educator\"\n      ],\n      \"permissions\": [\n        \"courses.create\",\n        \"courses.edit\"\n      ],\n      \"created_at\": \"2026-07-17T12:00:00Z\",\n      \"updated_at\": \"2026-07-17T12:15:00Z\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Enable 2FA Setup",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/2fa/enable",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "2fa",
+                "enable"
+              ]
+            },
+            "description": "Initiates 2FA setup and returns a raw TOTP secret and registration QR URL."
+          },
+          "response": [
+            {
+              "name": "2FA Initiated Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Two-factor authentication initiated. Scan the QR code to proceed.\",\n  \"data\": {\n    \"secret\": \"KJSW23MNS76AX29S\",\n    \"qr_code_url\": \"otpauth://totp/LaraforgeX:admin@laraforgex.com?secret=KJSW23MNS76AX29S&issuer=LaraforgeX\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Confirm 2FA Code",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"482931\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/2fa/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "2fa",
+                "verify"
+              ]
+            },
+            "description": "Validates a 6-digit OTP code to complete 2FA activation and return recovery keys."
+          },
+          "response": [
+            {
+              "name": "2FA Confirmed Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Two-factor authentication verified and enabled.\",\n  \"data\": {\n    \"recovery_codes\": [\n      \"abcde-12345\",\n      \"fghij-67890\",\n      \"klmno-11223\",\n      \"pqrst-44556\",\n      \"uvwxy-77889\",\n      \"zabcd-99001\",\n      \"efghi-22334\",\n      \"jklmn-55667\"\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users?search=Jane&status=active&role=educator&per_page=15",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Jane"
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "role",
+                  "value": "educator"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15"
+                }
+              ]
+            },
+            "description": "Lists users matching search and filtering criteria."
+          },
+          "response": [
+            {
+              "name": "Paginated Users Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": \"1a8fd9a7-e1ba-4f2e-89a1-cb9e8c4e47aa\",\n      \"name\": \"Jane Teacher\",\n      \"email\": \"teacher@laraforgex.com\",\n      \"avatar\": null,\n      \"status\": \"active\",\n      \"last_login_at\": \"2026-07-17T12:15:00Z\",\n      \"last_login_ip\": \"127.0.0.1\",\n      \"email_verified_at\": \"2026-07-17T12:00:00Z\",\n      \"two_factor_enabled\": false,\n      \"roles\": [\n        \"educator\"\n      ],\n      \"permissions\": [\n        \"courses.create\",\n        \"courses.edit\"\n      ],\n      \"created_at\": \"2026-07-17T12:00:00Z\",\n      \"updated_at\": \"2026-07-17T12:15:00Z\"\n    }\n  ],\n  \"meta\": {\n    \"current_page\": 1,\n    \"last_page\": 1,\n    \"per_page\": 15,\n    \"total\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@laraforgex.com\",\n  \"password\": \"PasswordX99!\",\n  \"status\": \"active\",\n  \"roles\": [\"educator\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Creates a new user record."
+          },
+          "response": [
+            {
+              "name": "Created User Response",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"User created successfully.\",\n  \"data\": {\n    \"id\": \"98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9\",\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@laraforgex.com\",\n    \"avatar\": null,\n    \"status\": \"active\",\n    \"last_login_at\": null,\n    \"last_login_ip\": null,\n    \"email_verified_at\": null,\n    \"two_factor_enabled\": false,\n    \"roles\": [\n      \"educator\"\n    ],\n    \"permissions\": [\n      \"courses.create\",\n      \"courses.edit\"\n    ],\n    \"created_at\": \"2026-07-17T12:22:00Z\",\n    \"updated_at\": \"2026-07-17T12:22:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Suspend User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9/suspend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9",
+                "suspend"
+              ]
+            },
+            "description": "Suspends a user account."
+          },
+          "response": [
+            {
+              "name": "User Suspended Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"User account suspended successfully.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "item": [
+        {
+          "name": "Get Settings by Group",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/settings?group=smtp",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings"
+              ],
+              "query": [
+                {
+                  "key": "group",
+                  "value": "smtp"
+                }
+              ]
+            },
+            "description": "Retrieves Settings by group."
+          },
+          "response": [
+            {
+              "name": "SMTP Settings Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"mail_host\": \"smtp.mailtrap.io\",\n    \"mail_port\": \"2525\",\n    \"mail_username\": \"dev_user\",\n    \"mail_password\": \"DecryptedSecureSmtpKey\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Save Settings",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settings\": [\n    {\n      \"key\": \"mail_password\",\n      \"value\": \"VerySecretSmtpPassword123!\",\n      \"group\": \"smtp\",\n      \"is_encrypted\": true\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/settings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "settings"
+              ]
+            },
+            "description": "Saves settings items (and auto-encrypts passwords/secrets)."
+          },
+          "response": [
+            {
+              "name": "Settings Saved Response",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Settings saved successfully.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "item": [
+        {
+          "name": "Request Presigned Upload URL",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"course_introduction.mp4\",\n  \"mime_type\": \"video/mp4\",\n  \"size\": 154829302,\n  \"folder_id\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/media/presign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "presign"
+              ]
+            },
+            "description": "Generates a S3/R2 direct-to-cloud presigned PUT URL."
+          },
+          "response": [
+            {
+              "name": "Presigned URL Output",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"media\": {\n      \"id\": \"87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9\",\n      \"folder_id\": null,\n      \"name\": \"course_introduction.mp4\",\n      \"file_name\": \"87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4\",\n      \"mime_type\": \"video/mp4\",\n      \"disk\": \"s3\",\n      \"size\": 154829302,\n      \"url\": \"https://laraforgex-bucket.s3.amazonaws.com/media/98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9/2026/07/17/87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4?AWSAccessKeyId=...\",\n      \"custom_properties\": {\n        \"status\": \"pending_upload\"\n      },\n      \"created_at\": \"2026-07-17T12:22:00Z\"\n    },\n    \"upload_url\": \"https://laraforgex-bucket.s3.us-east-1.amazonaws.com/media/98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9/2026/07/17/87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4?X-Amz-Signature=...\",\n    \"headers\": {\n      \"Content-Type\": \"video/mp4\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Confirm Upload Success",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9",
+                "confirm"
+              ]
+            },
+            "description": "Verifies and updates media status to ready."
+          },
+          "response": [
+            {
+              "name": "Media Verified",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewtype": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Media file upload confirmed.\",\n  \"data\": {\n    \"id\": \"87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9\",\n    \"folder_id\": null,\n    \"name\": \"course_introduction.mp4\",\n    \"file_name\": \"87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4\",\n    \"mime_type\": \"video/mp4\",\n    \"disk\": \"s3\",\n    \"size\": 154829302,\n    \"url\": \"https://laraforgex-bucket.s3.amazonaws.com/media/98fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9/2026/07/17/87fd9a76-e1ba-4f2e-89a1-cb9e8c4e47a9.mp4?AWSAccessKeyId=...\",\n    \"custom_properties\": {\n      \"status\": \"ready\"\n    },\n    \"created_at\": \"2026-07-17T12:22:00Z\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "bearer_token",
+      "value": "YOUR_SANCTUM_TOKEN_HERE",
+      "type": "string"
+    }
+  ]
+}
