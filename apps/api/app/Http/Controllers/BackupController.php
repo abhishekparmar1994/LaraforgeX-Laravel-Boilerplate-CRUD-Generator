@@ -130,7 +130,6 @@ class BackupController extends Controller
      */
     public function download(string $filename): BinaryFileResponse|JsonResponse
     {
-        $filePath = $this->backupDir . '/' => basename($filename);
         $fullPath = $this->backupDir . '/' . basename($filename);
 
         if (!File::exists($fullPath)) {
