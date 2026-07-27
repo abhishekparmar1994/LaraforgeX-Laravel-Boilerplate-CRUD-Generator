@@ -14,7 +14,7 @@
   <!-- ApexCharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>
-    (function() {
+    (function () {
       var savedColor = localStorage.getItem('laraforgex_theme_color');
       if (savedColor) {
         var styleEl = document.createElement('style');

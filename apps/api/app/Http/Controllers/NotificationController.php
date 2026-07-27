@@ -52,17 +52,17 @@ class NotificationController extends Controller
     }
 
     /**
-     * Get system notifications.
+     * Get system notifications (defaults to unread only).
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $notifications = json_decode(File::get($this->storageFile), true) ?? [];
-        $unreadCount = count(array_filter($notifications, fn($n) => !$n['read']));
+        $allNotifications = json_decode(File::get($this->storageFile), true) ?? [];
+        $unreadNotifications = array_values(array_filter($allNotifications, fn($n) => empty($n['read'])));
 
         return response()->json([
             'success' => true,
-            'unread_count' => $unreadCount,
-            'data' => $notifications,
+            'unread_count' => count($unreadNotifications),
+            'data' => $unreadNotifications,
         ]);
     }
 
