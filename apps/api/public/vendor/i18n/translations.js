@@ -166,7 +166,7 @@
       var savedDir = localStorage.getItem('laraforgex_lang_dir') || 'ltr';
 
       document.documentElement.setAttribute('dir', savedDir);
-
+      
       var flagEl = document.getElementById('current-lang-flag');
       var codeEl = document.getElementById('current-lang-code');
       if (flagEl) flagEl.textContent = savedFlag;
