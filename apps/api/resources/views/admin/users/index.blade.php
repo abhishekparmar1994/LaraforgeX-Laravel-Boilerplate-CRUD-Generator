@@ -117,24 +117,31 @@ $(document).ready(function () {
   // ── Row renderer ─────────────────────────────────────────────
   function userRow(user) {
     const isMe = user.id === currentUser.id;
+    const isSuperAdmin = (user.roles || []).includes('administrator') || user.email === 'admin@laraforgex.com';
     const roles = (user.roles || []).map(r =>
       `<span class="px-2 py-0.5 rounded-full bg-brand-50 border border-brand-100 text-xs font-semibold text-brand-600">${r}</span>`
     ).join(' ') || '<span class="text-slate-400 italic text-xs">No roles</span>';
 
     let actionButtons = '';
+    let editBtn = '';
     
-    if (!isMe) {
-      if (canSuspend) {
-        actionButtons += user.status === 'active'
-          ? `<button onclick="suspendUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-amber-50 hover:bg-amber-100 border border-amber-100 text-amber-600 font-semibold text-xs transition">Suspend</button> `
-          : `<button onclick="activateUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 text-emerald-600 font-semibold text-xs transition">Activate</button> `;
+    if (!isSuperAdmin) {
+      if (canEdit) {
+        editBtn = `<button onclick="editUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs transition">Edit</button>`;
       }
-      if (canDelete) {
-        actionButtons += `<button onclick="deleteUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-rose-50 hover:bg-rose-100 border border-rose-100 text-rose-600 font-semibold text-xs transition">Delete</button>`;
+      if (!isMe) {
+        if (canSuspend) {
+          actionButtons += user.status === 'active'
+            ? `<button onclick="suspendUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-amber-50 hover:bg-amber-100 border border-amber-100 text-amber-600 font-semibold text-xs transition">Suspend</button> `
+            : `<button onclick="activateUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-600 font-semibold text-xs transition">Activate</button> `;
+        }
+        if (canDelete) {
+          actionButtons += `<button onclick="deleteUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-rose-50 hover:bg-rose-100 border border-rose-100 text-rose-600 font-semibold text-xs transition">Delete</button>`;
+        }
       }
+    } else {
+      actionButtons = `<span class="px-2.5 py-1 rounded bg-slate-100 border border-slate-200 text-slate-400 font-mono font-semibold text-[10px] uppercase tracking-wider">System Admin</span>`;
     }
-
-    const editBtn = canEdit ? `<button onclick="editUser('${user.id}')" class="px-2.5 py-1.5 rounded bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs transition">Edit</button>` : '';
 
     return `
       <tr class="hover:bg-slate-50/60 transition">
