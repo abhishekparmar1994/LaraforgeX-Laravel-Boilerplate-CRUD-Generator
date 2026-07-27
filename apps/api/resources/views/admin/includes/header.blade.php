@@ -45,36 +45,36 @@
     <!-- Language Switcher Dropdown -->
     <div class="relative" id="lang-dropdown-wrapper">
       <button id="lang-dropdown-toggle"
-        class="h-9 px-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer text-xs font-bold gap-1.5"
+        class="h-9 px-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer text-xs font-bold gap-2"
         onclick="toggleLangDropdown()"
         title="Language Selector">
-        <span id="current-lang-flag">🇺🇸</span>
+        <img id="current-lang-flag-img" src="https://flagcdn.com/w40/us.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US">
         <span id="current-lang-code" class="uppercase font-mono">EN</span>
         <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
       </button>
 
       <div id="lang-dropdown-panel"
-        class="hidden absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs">
+        class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs">
         <div class="py-1">
-          <button onclick="setLanguage('en', '🇺🇸', 'EN', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span>🇺🇸 English</span>
-            <span class="text-[10px] text-slate-400">LTR</span>
+          <button onclick="setLanguage('en', 'https://flagcdn.com/w40/us.png', 'EN', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/us.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US"> English</span>
+            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('es', '🇪🇸', 'ES', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span>🇪🇸 Español</span>
-            <span class="text-[10px] text-slate-400">LTR</span>
+          <button onclick="setLanguage('es', 'https://flagcdn.com/w40/es.png', 'ES', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/es.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="ES"> Español</span>
+            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('fr', '🇫🇷', 'FR', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span>🇫🇷 Français</span>
-            <span class="text-[10px] text-slate-400">LTR</span>
+          <button onclick="setLanguage('fr', 'https://flagcdn.com/w40/fr.png', 'FR', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/fr.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="FR"> Français</span>
+            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('de', '🇩🇪', 'DE', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span>🇩🇪 Deutsch</span>
-            <span class="text-[10px] text-slate-400">LTR</span>
+          <button onclick="setLanguage('de', 'https://flagcdn.com/w40/de.png', 'DE', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/de.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="DE"> Deutsch</span>
+            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('ar', '🇸🇦', 'AR', 'rtl')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span>🇸🇦 العربية</span>
-            <span class="text-[10px] text-brand-600 font-bold">RTL</span>
+          <button onclick="setLanguage('ar', 'https://flagcdn.com/w40/sa.png', 'AR', 'rtl')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/sa.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="SA"> العربية</span>
+            <span class="text-[10px] text-brand-600 font-bold font-mono">RTL</span>
           </button>
         </div>
       </div>
@@ -611,13 +611,13 @@
     $('#lang-dropdown-panel').toggleClass('hidden');
   }
 
-  function setLanguage(code, flag, label, dir) {
+  function setLanguage(code, flagImgUrl, label, dir) {
     localStorage.setItem('laraforgex_lang_code', code);
-    localStorage.setItem('laraforgex_lang_flag', flag);
+    localStorage.setItem('laraforgex_lang_flag_img', flagImgUrl);
     localStorage.setItem('laraforgex_lang_label', label);
     localStorage.setItem('laraforgex_lang_dir', dir);
 
-    $('#current-lang-flag').text(flag);
+    $('#current-lang-flag-img').attr('src', flagImgUrl);
     $('#current-lang-code').text(label);
     $('html').attr('dir', dir);
     $('#lang-dropdown-panel').addClass('hidden');
@@ -633,17 +633,21 @@
 
   $(document).ready(function() {
     const savedCode = localStorage.getItem('laraforgex_lang_code');
-    const savedFlag = localStorage.getItem('laraforgex_lang_flag');
+    const savedFlagImg = localStorage.getItem('laraforgex_lang_flag_img');
     const savedLabel = localStorage.getItem('laraforgex_lang_label');
     const savedDir = localStorage.getItem('laraforgex_lang_dir');
 
-    if (savedFlag && savedLabel && savedDir) {
-      $('#current-lang-flag').text(savedFlag);
+    if (savedFlagImg) {
+      $('#current-lang-flag-img').attr('src', savedFlagImg);
+    }
+    if (savedLabel) {
       $('#current-lang-code').text(savedLabel);
+    }
+    if (savedDir) {
       $('html').attr('dir', savedDir);
-      if (typeof window.translatePage === 'function' && savedCode) {
-        window.translatePage(savedCode);
-      }
+    }
+    if (typeof window.translatePage === 'function' && savedCode) {
+      window.translatePage(savedCode);
     }
   });
 
