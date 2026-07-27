@@ -22,10 +22,6 @@ class CheckInstalledMiddleware
         $isInstalled = file_exists($installedFilePath);
         $isInstallRoute = $request->is('install*') || $request->is('api/v1/install*');
 
-        if ($isInstalled && $isInstallRoute) {
-            return redirect('/admin/login');
-        }
-
         if (!$isInstalled && !$isInstallRoute && !$request->is('vendor/*') && !$request->is('css/*') && !$request->is('js/*')) {
             return redirect('/install');
         }

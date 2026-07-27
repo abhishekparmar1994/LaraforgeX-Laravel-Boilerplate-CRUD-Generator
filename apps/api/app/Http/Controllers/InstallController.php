@@ -112,7 +112,7 @@ class InstallController extends Controller
     }
 
     /**
-     * Step 3: Test Database Connection credentials.
+     * Step 3: Test Database Connection credentials with auto database creation.
      */
     public function testDatabase(Request $request): JsonResponse
     {
@@ -130,24 +130,13 @@ class InstallController extends Controller
         $username = $request->input('db_user');
         $password = (string) $request->input('db_pass', '');
 
-        Config::set('database.connections.installer_test', [
-            'driver' => 'mysql',
-            'host' => $host,
-            'port' => $port,
-            'database' => $database,
-            'username' => $username,
-            'password' => $password,
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-        ]);
-
         try {
-            DB::connection('installer_test')->getPdo();
+            $result = $this->ensureDatabaseExists($host, $port, $username, $password, $database);
+
             return response()->json([
                 'success' => true,
-                'message' => 'Database connection established successfully!',
+                'message' => $result['message'],
+                'created' => $result['created'],
             ]);
         } catch (Throwable $e) {
             return response()->json([
@@ -176,6 +165,15 @@ class InstallController extends Controller
         ]);
 
         try {
+            // 0. Ensure target database exists (auto-create if missing)
+            $this->ensureDatabaseExists(
+                $request->input('db_host'),
+                (int) $request->input('db_port'),
+                $request->input('db_user'),
+                (string) $request->input('db_pass', ''),
+                $request->input('db_name')
+            );
+
             // 1. Update .env settings
             $this->updateEnvFile([
                 'APP_NAME' => '"' . $request->input('app_name') . '"',
@@ -233,6 +231,67 @@ class InstallController extends Controller
                 'success' => false,
                 'message' => 'Installation failed: ' . $e->getMessage(),
             ], 500);
+        }
+    }
+
+    /**
+     * Helper to verify database connection and auto-create the database if it doesn't exist.
+     *
+     * @return array{created: bool, message: string}
+     */
+    private function ensureDatabaseExists(string $host, int $port, string $username, string $password, string $database): array
+    {
+        // 1. First attempt to connect to the database directly
+        Config::set('database.connections.installer_check', [
+            'driver' => 'mysql',
+            'host' => $host,
+            'port' => $port,
+            'database' => $database,
+            'username' => $username,
+            'password' => $password,
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+        ]);
+
+        try {
+            DB::connection('installer_check')->getPdo();
+            return [
+                'created' => false,
+                'message' => "Database '{$database}' connection established successfully!",
+            ];
+        } catch (Throwable $e) {
+            $errorMsg = $e->getMessage();
+            $isUnknownDb = str_contains(strtolower($errorMsg), 'unknown database') || str_contains($errorMsg, '1049');
+
+            if (!$isUnknownDb) {
+                throw $e;
+            }
+
+            // 2. Connect to MySQL server without selecting a specific database to create it
+            Config::set('database.connections.installer_root', [
+                'driver' => 'mysql',
+                'host' => $host,
+                'port' => $port,
+                'database' => null,
+                'username' => $username,
+                'password' => $password,
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'prefix' => '',
+                'strict' => true,
+            ]);
+
+            DB::connection('installer_root')->statement("CREATE DATABASE IF NOT EXISTS `{$database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+
+            // 3. Re-verify connection to the newly created database
+            DB::connection('installer_check')->getPdo();
+
+            return [
+                'created' => true,
+                'message' => "Database '{$database}' did not exist and was created automatically! Connection successful.",
+            ];
         }
     }
 
