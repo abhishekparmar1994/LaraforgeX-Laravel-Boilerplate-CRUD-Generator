@@ -74,17 +74,26 @@
   });
 
   async function clearLogs() {
-      if (confirm('Clear all audit logs?')) {
-          try {
-              const res = await axios.delete('/activity-logs');
-              if (res.data.success) {
-                  showToast('success', res.data.message);
-                  logsTable.reload();
+      Swal.fire({
+          title: 'Clear Audit Trail?',
+          text: 'Are you sure you want to permanently clear all activity logs?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ef4444',
+          confirmButtonText: 'Yes, Clear All Logs'
+      }).then(async (result) => {
+          if (result.isConfirmed) {
+              try {
+                  const res = await axios.delete('/activity-logs');
+                  if (res.data.success) {
+                      window.showToast('success', res.data.message);
+                      logsTable.reload();
+                  }
+              } catch (err) {
+                  window.handleAjaxError(err, 'Failed to clear logs.');
               }
-          } catch (err) {
-              handleAjaxError(err, 'Failed to clear logs.');
           }
-      }
+      });
   }
 </script>
 @endsection
