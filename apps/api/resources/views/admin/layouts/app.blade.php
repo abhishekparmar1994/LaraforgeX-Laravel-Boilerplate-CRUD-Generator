@@ -113,25 +113,15 @@
         /* keep icon visible */
       }
 
-      /* Sidebar Collapsed Popovers (Desktop only) */
-      @keyframes popoverFadeIn {
-        from {
-          opacity: 0;
-        }
-
-        to {
-          opacity: 1;
-        }
-      }
-
-      .sidebar-popover {
-        display: none !important;
-      }
-
       #admin-sidebar.sidebar-collapsed .sidebar-group:hover .sidebar-popover {
         display: block !important;
         animation: popoverFadeIn 0.15s ease-out forwards;
       }
+    }
+
+    /* Sidebar Popovers: Hidden on mobile & standard desktop mode by default */
+    .sidebar-popover {
+      display: none !important;
     }
   </style>
 </head>

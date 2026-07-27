@@ -10,7 +10,9 @@
       <i class="fa-solid fa-bars text-sm"></i>
     </button>
 
-    @yield('breadcrumbs')
+    <div class="hidden md:block min-w-0">
+      @yield('breadcrumbs')
+    </div>
   </div>
 
   <!-- Right: notification + user dropdown -->
