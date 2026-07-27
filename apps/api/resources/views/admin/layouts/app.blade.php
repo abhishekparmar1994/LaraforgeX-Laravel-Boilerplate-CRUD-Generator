@@ -267,6 +267,9 @@
     <i class="fa-solid fa-arrow-up text-sm"></i>
   </button>
 
+  <!-- Universal i18n Translations -->
+  <script src="{{ asset('vendor/i18n/translations.js') }}"></script>
+
   {{-- Universal DataTable — also consumable by student/teacher portals via the same public URL --}}
   <script src="{{ asset('vendor/datatable/datatable.js') }}"></script>
 

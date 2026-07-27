@@ -31,10 +31,10 @@
                   {{ request()->is('admin/dashboard') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i
             class="fa-solid fa-chart-line w-4 text-center {{ request()->is('admin/dashboard') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-          <span>Dashboard</span>
+          <span data-i18n="dashboard">Dashboard</span>
         </a>
         <!-- Popover tooltip -->
-        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50" data-i18n="dashboard">
           Dashboard
         </div>
       </div>
@@ -49,10 +49,10 @@
                   {{ request()->is('admin/users*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i
             class="fa-solid fa-users w-4 text-center {{ request()->is('admin/users*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-          <span>User Accounts</span>
+          <span data-i18n="users">User Accounts</span>
         </a>
         <!-- Popover tooltip -->
-        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50" data-i18n="users">
           User Accounts
         </div>
       </div>
@@ -67,7 +67,7 @@
             <span class="flex items-center gap-3">
               <i
                 class="fa-solid fa-shield-halved w-4 text-center {{ request()->is('admin/roles*') || request()->is('admin/permissions*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-              <span>Access Control</span>
+              <span data-i18n="roles">Access Control</span>
             </span>
             <i id="chevron-rbac"
               class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-200 {{ request()->is('admin/roles*') || request()->is('admin/permissions*') ? 'rotate-90' : '' }}"></i>
@@ -80,13 +80,13 @@
               class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                       {{ request()->is('admin/roles') && !request()->is('admin/permissions') ? 'bg-brand-50 text-brand-600' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50' }}">
               <i class="fa-regular fa-circle-dot w-4 text-center text-slate-300 text-[10px]"></i>
-              <span>Roles Matrix</span>
+              <span data-i18n="roles">Roles Matrix</span>
             </a>
             <a href="/admin/permissions"
               class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                       {{ request()->is('admin/permissions*') ? 'bg-brand-50 text-brand-600' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50' }}">
               <i class="fa-regular fa-circle-dot w-4 text-center text-slate-300 text-[10px]"></i>
-              <span>Permissions Map</span>
+              <span data-i18n="permissions">Permissions Map</span>
             </a>
           </div>
         </div>
@@ -118,7 +118,7 @@
             <span class="flex items-center gap-3">
               <i
                 class="fa-solid fa-folder-open w-4 text-center {{ request()->is('admin/media*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-              <span>Media Cloud</span>
+              <span data-i18n="media">Media Cloud</span>
             </span>
             <i id="chevron-media"
               class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-200 {{ request()->is('admin/media*') ? 'rotate-90' : '' }}"></i>
@@ -156,10 +156,10 @@
                   {{ request()->is('admin/settings*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i
             class="fa-solid fa-sliders w-4 text-center {{ request()->is('admin/settings*') ? 'text-brand-500' : 'text-amber-400' }}"></i>
-          <span>Config Settings</span>
+          <span data-i18n="settings">Config Settings</span>
         </a>
         <!-- Popover tooltip -->
-        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50" data-i18n="settings">
           Config Settings
         </div>
       </div>
@@ -171,10 +171,10 @@
                   {{ request()->is('admin/crud-generator*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i
             class="fa-solid fa-wand-magic-sparkles w-4 text-center {{ request()->is('admin/crud-generator*') ? 'text-brand-500' : 'text-violet-500' }}"></i>
-          <span>CRUD Generator</span>
+          <span data-i18n="crud_generator">CRUD Generator</span>
         </a>
         <!-- Popover tooltip -->
-        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50" data-i18n="crud_generator">
           CRUD Generator
         </div>
       </div>

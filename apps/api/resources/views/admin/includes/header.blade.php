@@ -553,12 +553,17 @@
     $('html').attr('dir', dir);
     $('#lang-dropdown-panel').addClass('hidden');
 
+    if (typeof window.translatePage === 'function') {
+      window.translatePage(code);
+    }
+
     if (typeof showToast === 'function') {
       showToast('success', `Language set to ${label} (${dir.toUpperCase()})`);
     }
   }
 
   $(document).ready(function() {
+    const savedCode = localStorage.getItem('laraforgex_lang_code');
     const savedFlag = localStorage.getItem('laraforgex_lang_flag');
     const savedLabel = localStorage.getItem('laraforgex_lang_label');
     const savedDir = localStorage.getItem('laraforgex_lang_dir');
@@ -567,6 +572,9 @@
       $('#current-lang-flag').text(savedFlag);
       $('#current-lang-code').text(savedLabel);
       $('html').attr('dir', savedDir);
+      if (typeof window.translatePage === 'function' && savedCode) {
+        window.translatePage(savedCode);
+      }
     }
   });
 
