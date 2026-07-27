@@ -11,6 +11,8 @@
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
   <!-- Universal i18n Translations -->
   <script src="{{ asset('vendor/i18n/translations.js') }}"></script>
+  <!-- ApexCharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>
     tailwind.config = {
       theme: {

@@ -14,6 +14,22 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/process', [\App\Http\Controllers\InstallController::class, 'install']);
     });
 
+    // Outgoing Webhooks API routes
+    Route::prefix('webhooks')->group(function (): void {
+        Route::get('/', [\App\Http\Controllers\WebhookController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\WebhookController::class, 'store']);
+        Route::post('/test', [\App\Http\Controllers\WebhookController::class, 'test']);
+        Route::delete('/{id}', [\App\Http\Controllers\WebhookController::class, 'destroy']);
+    });
+
+    // Database Backups API routes
+    Route::prefix('backups')->group(function (): void {
+        Route::get('/', [\App\Http\Controllers\BackupController::class, 'index']);
+        Route::post('/generate', [\App\Http\Controllers\BackupController::class, 'generate']);
+        Route::get('/download/{filename}', [\App\Http\Controllers\BackupController::class, 'download']);
+        Route::delete('/{filename}', [\App\Http\Controllers\BackupController::class, 'destroy']);
+    });
+
     // CRUD Generator API routes
     Route::prefix('crud-generator')->group(function (): void {
         Route::get('/connections', [CrudGeneratorController::class, 'connections']);

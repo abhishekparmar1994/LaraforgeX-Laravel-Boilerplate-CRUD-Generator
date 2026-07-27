@@ -8,73 +8,99 @@
   <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
   <a href="/admin/setting" class="hover:text-brand-600 transition">Setting</a>
   <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
-  <span class="text-slate-700">Create</span>
+  <span class="text-slate-700">Create Setting</span>
 </nav>
 @endsection
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6 font-sans">
+<div class="space-y-6 font-sans w-full">
+
+  <!-- Page Header -->
   <div class="flex items-center justify-between gap-4">
     <div>
-      <h2 class="text-xl font-bold text-slate-900">Create New Setting</h2>
-      <p class="text-xs text-slate-500 mt-0.5 font-medium">Fill in the fields below to create a new Setting record.</p>
+      <h2 class="text-xl font-bold text-slate-900">Create Setting</h2>
+      <p class="text-xs text-slate-500 mt-0.5 font-medium">Add a new record to Setting.</p>
     </div>
-    <a href="/admin/setting" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 font-semibold text-xs hover:bg-slate-200 transition inline-flex items-center gap-1.5">
+    <a href="/admin/setting" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-600 font-semibold text-xs hover:bg-slate-200 transition inline-flex items-center gap-1.5">
       <i class="fa-solid fa-arrow-left"></i> Back to List
     </a>
   </div>
 
-  <form action="/admin/setting" method="POST" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-    @csrf
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-      <div class="space-y-1.5">
-        <label for="input-key" class="block text-xs font-bold uppercase tracking-wider text-slate-500">
-          Key 
-        </label>
-        <input type="text" name="key" id="input-key" value="{{ old('key', '') }}" class="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition" placeholder="Enter Key" >
-        @error('key')
-          <p class="text-[11px] font-semibold text-rose-500 mt-1">{{ $message }}</p>
-        @enderror
+  <!-- Profile Style Card Container -->
+  <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+    
+    <!-- Cover gradient header bar -->
+    <div class="h-28 bg-gradient-to-r from-brand-500 via-indigo-600 to-violet-500"></div>
+
+    <!-- Header Avatar / Icon Badge -->
+    <div class="px-6 pb-6">
+      <div class="flex items-end justify-between -mt-10 mb-4">
+        <div class="h-20 w-20 rounded-2xl bg-gradient-to-tr from-brand-500 to-violet-500 border-4 border-white shadow-lg flex items-center justify-center text-white font-extrabold text-2xl uppercase shrink-0">
+          <i class="fa-solid fa-plus"></i>
+        </div>
       </div>
-      <div class="space-y-1.5">
-        <label for="input-value" class="block text-xs font-bold uppercase tracking-wider text-slate-500">
-          Value 
-        </label>
-        <textarea name="value" id="input-value" rows="3" class="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition" placeholder="Enter Value" >{{ old('value', '') }}</textarea>
-        @error('value')
-          <p class="text-[11px] font-semibold text-rose-500 mt-1">{{ $message }}</p>
-        @enderror
+
+      <div class="space-y-1 mb-6">
+        <h3 class="text-2xl font-extrabold text-slate-900 leading-tight">New Setting Entry</h3>
+        <p class="text-xs font-semibold text-slate-500">Fill in attribute details below to create a record.</p>
       </div>
-      <div class="space-y-1.5">
-        <label for="input-group" class="block text-xs font-bold uppercase tracking-wider text-slate-500">
-          Group 
-        </label>
-        <input type="text" name="group" id="input-group" value="{{ old('group', '') }}" class="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-xs font-semibold focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition" placeholder="Enter Group" >
-        @error('group')
-          <p class="text-[11px] font-semibold text-rose-500 mt-1">{{ $message }}</p>
-        @enderror
-      </div>
-      <div class="space-y-1.5">
-        <label for="input-is_encrypted" class="block text-xs font-bold uppercase tracking-wider text-slate-500">
-          Is Encrypted 
-        </label>
-        
-        <label class="inline-flex items-center gap-2 cursor-pointer mt-1">
-          <input type="checkbox" name="is_encrypted" value="1" {{ old('is_encrypted') ? 'checked' : '' }} class="rounded border-slate-300 text-brand-600 focus:ring-brand-500 h-4 w-4">
-          <span class="text-xs font-semibold text-slate-700">Enable Is Encrypted</span>
-        </label>
-        @error('is_encrypted')
-          <p class="text-[11px] font-semibold text-rose-500 mt-1">{{ $message }}</p>
-        @enderror
-      </div>
+
+      <!-- Form Body -->
+      <form action="/admin/setting" method="POST" class="space-y-4">
+        @csrf
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <label for="input-key" class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Key 
+          </label>
+          <input type="text" name="key" id="input-key" value="{{ old('key', '') }}" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-brand-500 transition" placeholder="Enter Key" >
+          @error('key')
+            <p class="text-xs font-medium text-rose-500 mt-1">{{ $message }}</p>
+          @enderror
+        </div>
+        <div class="space-y-1">
+          <label for="input-value" class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Value 
+          </label>
+          <textarea name="value" id="input-value" rows="3" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-brand-500 transition" placeholder="Enter Value" >{{ old('value', '') }}</textarea>
+          @error('value')
+            <p class="text-xs font-medium text-rose-500 mt-1">{{ $message }}</p>
+          @enderror
+        </div>
+        <div class="space-y-1">
+          <label for="input-group" class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Group 
+          </label>
+          <input type="text" name="group" id="input-group" value="{{ old('group', '') }}" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-brand-500 transition" placeholder="Enter Group" >
+          @error('group')
+            <p class="text-xs font-medium text-rose-500 mt-1">{{ $message }}</p>
+          @enderror
+        </div>
+        <div class="space-y-1">
+          <label for="input-is_encrypted" class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Is Encrypted 
+          </label>
+          
+          <label class="inline-flex items-center gap-2 cursor-pointer mt-1">
+            <input type="checkbox" name="is_encrypted" value="1" {{ old('is_encrypted') ? 'checked' : '' }} class="rounded border-slate-300 text-brand-600 focus:ring-brand-500 h-4 w-4">
+            <span class="text-xs font-semibold text-slate-700">Enable Is Encrypted</span>
+          </label>
+          @error('is_encrypted')
+            <p class="text-xs font-medium text-rose-500 mt-1">{{ $message }}</p>
+          @enderror
+        </div>
+        </div>
+
+        <div class="flex justify-end pt-3">
+          <button type="submit"
+                  class="px-6 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition shadow-sm shadow-brand-600/20 inline-flex items-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i>Save Setting
+          </button>
+        </div>
+      </form>
     </div>
 
-    <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-      <a href="/admin/setting" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-semibold text-xs hover:bg-slate-200 transition">Cancel</a>
-      <button type="submit" class="px-6 py-2.5 rounded-xl bg-brand-600 text-white font-bold text-xs hover:bg-brand-500 transition shadow-md shadow-brand-600/20 inline-flex items-center gap-1.5">
-        <i class="fa-solid fa-check"></i> Save Setting
-      </button>
-    </div>
-  </form>
+  </div>
+
 </div>
 @endsection

@@ -25,4 +25,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/forgot-password', [\App\Http\Controllers\AdminController::class, 'forgotPassword']);
     Route::get('/reset-password', [\App\Http\Controllers\AdminController::class, 'resetPassword']);
     Route::get('/crud-generator', [\App\Http\Controllers\AdminController::class, 'crudGenerator']);
+    Route::get('/backups', [\App\Http\Controllers\AdminController::class, 'backups']);
+    Route::get('/health', [\App\Http\Controllers\AdminController::class, 'health']);
+    Route::get('/webhooks', [\App\Http\Controllers\AdminController::class, 'webhooks']);
+    Route::get('/docs', [\App\Http\Controllers\AdminController::class, 'docs']);
 });

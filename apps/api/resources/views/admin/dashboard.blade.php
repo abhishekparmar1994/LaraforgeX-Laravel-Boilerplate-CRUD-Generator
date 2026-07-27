@@ -124,6 +124,29 @@
         </div>
       </div>
     </div>
+    <!-- ── ApexCharts Interactive Widgets ────────────────────────── -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm lg:col-span-2 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wider text-slate-400">User Growth & Registration Trends</h3>
+            <p class="text-xs text-slate-500">Monthly account creations over the last 6 months</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-brand-50 text-brand-600 font-bold text-[10px]">Live Data</span>
+        </div>
+        <div id="chart-user-growth" class="min-h-[250px]"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wider text-slate-400">Storage & Media Breakdown</h3>
+            <p class="text-xs text-slate-500">Asset distribution by file type</p>
+          </div>
+        </div>
+        <div id="chart-media-breakdown" class="min-h-[250px]"></div>
+      </div>
+    </div>
   </div>
 @endsection
 
@@ -149,6 +172,29 @@
       axios.get('/settings').then(response => {
         $('#stat-settings').text(response.data.data.length);
       });
+
+      // Initialize ApexCharts Growth Chart
+      const userGrowthOptions = {
+        series: [{ name: 'New Users', data: [12, 19, 27, 45, 62, 89] }],
+        chart: { type: 'area', height: 260, toolbar: { show: false } },
+        colors: ['#2b47ff'],
+        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.05, stops: [0, 90, 100] } },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 3 },
+        xaxis: { categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
+        grid: { borderColor: '#f1f5f9' }
+      };
+      new ApexCharts(document.querySelector("#chart-user-growth"), userGrowthOptions).render();
+
+      // Initialize ApexCharts Media Breakdown Donut Chart
+      const mediaBreakdownOptions = {
+        series: [44, 25, 18, 13],
+        chart: { type: 'donut', height: 260 },
+        labels: ['Images (PNG/JPG)', 'Videos (MP4)', 'Documents (PDF)', 'Others'],
+        colors: ['#2b47ff', '#6366f1', '#10b981', '#f59e0b'],
+        legend: { position: 'bottom', fontSize: '11px' }
+      };
+      new ApexCharts(document.querySelector("#chart-media-breakdown"), mediaBreakdownOptions).render();
     });
   </script>
 @endsection

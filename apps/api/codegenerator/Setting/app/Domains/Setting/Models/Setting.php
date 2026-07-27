@@ -26,8 +26,8 @@ class Setting extends Model
         'is_encrypted' => 'boolean'
     ];
 
-    public function id(): \Illuminate\Database\Eloquent\Relations\hasOne
+    public function id(): \Illuminate\Database\Eloquent\Relations\belongsTo
     {
-        return $this->hasOne(App\Domains\RoleHasPermission\Models\RoleHasPermission::class, 'id', 'role_id');
+        return $this->belongsTo(App\Domains\Media\Models\Media::class, 'id', 'folder_id');
     }
 }

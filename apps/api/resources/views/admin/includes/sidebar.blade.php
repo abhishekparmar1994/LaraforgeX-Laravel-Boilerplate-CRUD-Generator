@@ -179,6 +179,45 @@
         </div>
       </div>
 
+      <!-- Database Backups Group -->
+      <div id="menu-backups" class="relative group sidebar-group">
+        <a href="/admin/backups"
+          class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
+                  {{ request()->is('admin/backups*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i class="fa-solid fa-database w-4 text-center {{ request()->is('admin/backups*') ? 'text-brand-500' : 'text-emerald-500' }}"></i>
+          <span>Database Backups</span>
+        </a>
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+          Database Backups
+        </div>
+      </div>
+
+      <!-- Outgoing Webhooks Group -->
+      <div id="menu-webhooks" class="relative group sidebar-group">
+        <a href="/admin/webhooks"
+          class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
+                  {{ request()->is('admin/webhooks*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i class="fa-solid fa-satellite-dish w-4 text-center {{ request()->is('admin/webhooks*') ? 'text-brand-500' : 'text-sky-500' }}"></i>
+          <span>Webhooks Engine</span>
+        </a>
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+          Webhooks Engine
+        </div>
+      </div>
+
+      <!-- API Docs Group -->
+      <div id="menu-docs" class="relative group sidebar-group">
+        <a href="/admin/docs"
+          class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
+                  {{ request()->is('admin/docs*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i class="fa-solid fa-code w-4 text-center {{ request()->is('admin/docs*') ? 'text-brand-500' : 'text-indigo-500' }}"></i>
+          <span>API Documentation</span>
+        </a>
+        <div class="sidebar-popover absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg shadow-lg whitespace-nowrap pointer-events-none z-50">
+          API Documentation
+        </div>
+      </div>
+
     </nav>
   </div>
 </aside>

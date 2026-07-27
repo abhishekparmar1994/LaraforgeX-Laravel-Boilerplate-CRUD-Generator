@@ -103,4 +103,24 @@ class AdminController extends Controller
     {
         return view('admin.crud_generator.index');
     }
+
+    public function backups(): View
+    {
+        return view('admin.backups.index');
+    }
+
+    public function health(): View
+    {
+        return view('admin.health.index');
+    }
+
+    public function webhooks(): View
+    {
+        return view('admin.webhooks.index');
+    }
+
+    public function docs(): View
+    {
+        return view('admin.docs.index');
+    }
 }
