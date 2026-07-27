@@ -76,6 +76,10 @@
             <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/sa.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="SA"> العربية</span>
             <span class="text-[10px] text-brand-600 font-bold font-mono">RTL</span>
           </button>
+          <button onclick="setLanguage('hi', 'https://flagcdn.com/w40/in.png', 'HI', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/in.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="IN"> हिंदी</span>
+            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
+          </button>
         </div>
       </div>
     </div>
