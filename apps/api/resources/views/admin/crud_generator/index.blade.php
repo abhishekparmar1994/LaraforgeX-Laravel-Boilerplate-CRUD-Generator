@@ -4,9 +4,9 @@
 
 @section('breadcrumbs')
   <nav class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-    <a href="/admin/dashboard" class="hover:text-brand-600 transition">Dashboard</a>
+    <a href="/admin/dashboard" class="hover:text-brand-600 transition" data-i18n="dashboard">Dashboard</a>
     <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
-    <span class="text-slate-700">CRUD Generator</span>
+    <span class="text-slate-700" data-i18n="crud_generator">CRUD Generator</span>
   </nav>
 @endsection
 

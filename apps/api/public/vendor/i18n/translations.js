@@ -161,8 +161,17 @@
   if (typeof document !== 'undefined') {
     var initTranslation = function () {
       var savedCode = localStorage.getItem('laraforgex_lang_code') || 'en';
+      var savedFlag = localStorage.getItem('laraforgex_lang_flag') || '🇺🇸';
+      var savedLabel = localStorage.getItem('laraforgex_lang_label') || 'EN';
       var savedDir = localStorage.getItem('laraforgex_lang_dir') || 'ltr';
+
       document.documentElement.setAttribute('dir', savedDir);
+
+      var flagEl = document.getElementById('current-lang-flag');
+      var codeEl = document.getElementById('current-lang-code');
+      if (flagEl) flagEl.textContent = savedFlag;
+      if (codeEl) codeEl.textContent = savedLabel;
+
       global.translatePage(savedCode);
     };
 
