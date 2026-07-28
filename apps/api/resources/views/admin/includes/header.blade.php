@@ -227,8 +227,9 @@
           <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5">
             <span id="2fa-secret-key" class="font-mono text-sm font-bold text-emerald-600 tracking-wider">——</span>
             <button type="button"
-              onclick="navigator.clipboard.writeText(document.getElementById('2fa-secret-key').textContent); showToast('success', 'Secret key copied!')"
+              onclick="navigator.clipboard.writeText($('#2fa-secret-key').text()); showToast('success', 'Secret key copied!')"
               class="text-slate-400 hover:text-slate-700 transition ml-3">
+
               <i class="fa-regular fa-copy text-sm"></i>
             </button>
           </div>
@@ -392,10 +393,10 @@
     _2faEnabled = !!user.two_factor_enabled;
 
     const initial = (user.name || 'U').charAt(0).toUpperCase();
-    document.getElementById('header-avatar').textContent = initial;
-    document.getElementById('header-user-name').textContent = user.name || 'Administrator';
-    document.getElementById('dropdown-user-name').textContent = user.name || 'Administrator';
-    document.getElementById('dropdown-user-email').textContent = user.email || '';
+    $('#header-avatar').text(initial);
+    $('#header-user-name').text(user.name || 'Administrator');
+    $('#dropdown-user-name').text(user.name || 'Administrator');
+    $('#dropdown-user-email').text(user.email || '');
 
     refresh2FADropdownState();
   })();
@@ -405,88 +406,84 @@
    * to reflect whether 2FA is currently enabled or disabled.
    */
   function refresh2FADropdownState() {
-    const badge = document.getElementById('header-2fa-badge');
-    const label = document.getElementById('btn-header-2fa-label');
+    const $badge = $('#header-2fa-badge');
+    const $label = $('#btn-header-2fa-label');
 
     if (_2faEnabled) {
-      badge.innerHTML = '<span class="inline-flex items-center gap-1 text-emerald-600 font-bold"><i class="fa-solid fa-shield-halved text-[9px]"></i> 2FA On</span>';
-      label.textContent = 'Disable 2FA';
+      $badge.html('<span class="inline-flex items-center gap-1 text-emerald-600 font-bold"><i class="fa-solid fa-shield-halved text-[9px]"></i> 2FA On</span>');
+      $label.text('Disable 2FA');
     } else {
-      badge.innerHTML = '<span class="text-slate-400 font-semibold">2FA Off</span>';
-      label.textContent = 'Enable 2FA';
+      $badge.html('<span class="text-slate-400 font-semibold">2FA Off</span>');
+      $label.text('Enable 2FA');
     }
   }
 
   // ── Dropdown toggle ──────────────────────────────────────────────
   function toggleUserDropdown() {
-    const panel = document.getElementById('user-dropdown-panel');
-    const chevron = document.getElementById('header-chevron');
-    const isHidden = panel.classList.contains('hidden');
-    panel.classList.toggle('hidden', !isHidden);
-    chevron.classList.toggle('rotate-180', isHidden);
+    $('#user-dropdown-panel').toggleClass('hidden');
+    $('#header-chevron').toggleClass('rotate-180');
   }
 
-  document.addEventListener('click', function (e) {
-    const wrapper = document.getElementById('user-dropdown-wrapper');
-    if (wrapper && !wrapper.contains(e.target)) {
-      document.getElementById('user-dropdown-panel').classList.add('hidden');
-      document.getElementById('header-chevron').classList.remove('rotate-180');
+  $(document).on('click', function (e) {
+    if (!$(e.target).closest('#user-dropdown-wrapper').length) {
+      $('#user-dropdown-panel').addClass('hidden');
+      $('#header-chevron').removeClass('rotate-180');
     }
   });
 
   // ── 2FA Enable modal helpers ─────────────────────────────────────
   function open2FAEnableModal() {
-    document.getElementById('2fa-step-scan').classList.remove('hidden');
-    document.getElementById('2fa-step-recovery').classList.add('hidden');
-    document.getElementById('2fa-setup-code').value = '';
-    document.getElementById('modal-2fa-enable').classList.remove('hidden');
-    document.getElementById('user-dropdown-panel').classList.add('hidden');
-    document.getElementById('header-chevron').classList.remove('rotate-180');
+    $('#2fa-step-scan').removeClass('hidden');
+    $('#2fa-step-recovery').addClass('hidden');
+    $('#2fa-setup-code').val('');
+    $('#modal-2fa-enable').removeClass('hidden');
+    $('#user-dropdown-panel').addClass('hidden');
+    $('#header-chevron').removeClass('rotate-180');
   }
 
   function close2FAModal() {
-    document.getElementById('modal-2fa-enable').classList.add('hidden');
-    document.getElementById('2fa-setup-code').value = '';
+    $('#modal-2fa-enable').addClass('hidden');
+    $('#2fa-setup-code').val('');
   }
 
   // ── 2FA Disable modal helpers ────────────────────────────────────
   function open2FADisableModal() {
-    document.getElementById('2fa-disable-password').value = '';
-    document.getElementById('modal-2fa-disable').classList.remove('hidden');
-    document.getElementById('user-dropdown-panel').classList.add('hidden');
-    document.getElementById('header-chevron').classList.remove('rotate-180');
+    $('#2fa-disable-password').val('');
+    $('#modal-2fa-disable').removeClass('hidden');
+    $('#user-dropdown-panel').addClass('hidden');
+    $('#header-chevron').removeClass('rotate-180');
   }
 
   function close2FADisableModal() {
-    document.getElementById('modal-2fa-disable').classList.add('hidden');
-    document.getElementById('2fa-disable-password').value = '';
+    $('#modal-2fa-disable').addClass('hidden');
+    $('#2fa-disable-password').val('');
   }
 
   // ── Change Password modal helpers ────────────────────────────────
   window.openChangePasswordModal = function () {
-    document.getElementById('modal-change-password').classList.remove('hidden');
-    document.getElementById('user-dropdown-panel').classList.add('hidden');
-    document.getElementById('header-chevron').classList.remove('rotate-180');
+    $('#modal-change-password').removeClass('hidden');
+    $('#user-dropdown-panel').addClass('hidden');
+    $('#header-chevron').removeClass('rotate-180');
   };
 
   window.closeChangePasswordModal = function () {
-    document.getElementById('modal-change-password').classList.add('hidden');
-    document.getElementById('form-change-password').reset();
+    $('#modal-change-password').addClass('hidden');
+    $('#form-change-password')[0]?.reset();
   };
 
   // ── Wire up all handlers after DOM ready ─────────────────────────
-  document.addEventListener('DOMContentLoaded', function () {
+  $(document).ready(function () {
 
     // Header logout
-    document.getElementById('header-logout-btn').addEventListener('click', async function () {
+    $(document).on('click', '#header-logout-btn', async function () {
       try { await axios.post('/auth/logout'); } catch (_) { }
-      localStorage.removeItem('laraforgex_auth_token');
-      localStorage.removeItem('laraforgex_user');
+      localStorage.clear();
+      sessionStorage.clear();
       window.location.href = '/admin/login';
     });
 
     // 2FA toggle button — routes to enable or disable based on current state
-    document.getElementById('btn-header-2fa').addEventListener('click', async function () {
+    $(document).on('click', '#btn-header-2fa', async function () {
       if (_2faEnabled) {
         open2FADisableModal();
       } else {
@@ -495,10 +492,10 @@
           const response = await axios.post('/auth/2fa/enable');
           if (response.data.success) {
             const data = response.data.data;
-            document.getElementById('2fa-secret-key').textContent = data.secret;
+            $('#2fa-secret-key').text(data.secret);
 
             new QRious({
-              element: document.getElementById('2fa-qr-canvas'),
+              element: $('#2fa-qr-canvas')[0],
               value: data.qr_code_url,
               size: 180
             });
@@ -512,8 +509,8 @@
     });
 
     // Verify TOTP code and complete 2FA enable
-    document.getElementById('btn-verify-2fa').addEventListener('click', async function () {
-      const code = document.getElementById('2fa-setup-code').value.trim();
+    $(document).on('click', '#btn-verify-2fa', async function () {
+      const code = $('#2fa-setup-code').val().trim();
       if (!code || code.length !== 6) {
         window.showToast('warning', 'Please enter the 6-digit code from your authenticator app.');
         return;
@@ -523,7 +520,7 @@
         const response = await axios.post('/auth/2fa/verify', { code });
         if (response.data.success) {
           const codes = response.data.data.recovery_codes;
-          document.getElementById('2fa-recovery-codes-text').value = codes.join('\n');
+          $('#2fa-recovery-codes-text').val(codes.join('\n'));
 
           // Update local session state
           const session = JSON.parse(localStorage.getItem('laraforgex_user') || '{}');
@@ -532,8 +529,8 @@
           _2faEnabled = true;
           refresh2FADropdownState();
 
-          document.getElementById('2fa-step-scan').classList.add('hidden');
-          document.getElementById('2fa-step-recovery').classList.remove('hidden');
+          $('#2fa-step-scan').addClass('hidden');
+          $('#2fa-step-recovery').removeClass('hidden');
           window.showToast('success', '2FA enabled! Save your recovery codes.');
         }
       } catch (e) {
@@ -542,13 +539,13 @@
     });
 
     // Finish 2FA setup (dismiss recovery codes screen)
-    document.getElementById('btn-finish-2fa').addEventListener('click', function () {
+    $(document).on('click', '#btn-finish-2fa', function () {
       close2FAModal();
     });
 
     // Confirm 2FA disable
-    document.getElementById('btn-confirm-disable-2fa').addEventListener('click', async function () {
-      const password = document.getElementById('2fa-disable-password').value;
+    $(document).on('click', '#btn-confirm-disable-2fa', async function () {
+      const password = $('#2fa-disable-password').val();
       if (!password) {
         window.showToast('warning', 'Please enter your current password to confirm.');
         return;
@@ -572,11 +569,11 @@
     });
 
     // Change password form
-    document.getElementById('form-change-password').addEventListener('submit', async function (e) {
+    $(document).on('submit', '#form-change-password', async function (e) {
       e.preventDefault();
-      const current = document.getElementById('cp-current').value;
-      const newPwd = document.getElementById('cp-new').value;
-      const confirm = document.getElementById('cp-confirm').value;
+      const current = $('#cp-current').val();
+      const newPwd = $('#cp-new').val();
+      const confirm = $('#cp-confirm').val();
 
       if (newPwd !== confirm) {
         window.showToast('warning', 'New passwords do not match.');
@@ -610,11 +607,9 @@
 
   function applyAccentColor(color) {
     if (!color) return;
-    let styleEl = document.getElementById('dynamic-accent-style');
-    if (!styleEl) {
-      styleEl = document.createElement('style');
-      styleEl.id = 'dynamic-accent-style';
-      document.head.appendChild(styleEl);
+    let $styleEl = $('#dynamic-accent-style');
+    if (!$styleEl.length) {
+      $styleEl = $('<style id="dynamic-accent-style"></style>').appendTo('head');
     }
 
     const gradientMap = {
@@ -626,7 +621,7 @@
     };
     const gradient = gradientMap[color.toLowerCase()] || `linear-gradient(135deg, ${color} 0%, ${color} 100%)`;
 
-    styleEl.textContent = `
+    $styleEl.text(`
       .bg-brand-600, .bg-brand-500, .bg-brand-400 { background-color: ${color} !important; }
       .text-brand-600, .text-brand-500, .text-brand-400 { color: ${color} !important; }
       .border-brand-500, .border-brand-600, .border-l-brand-500, .border-l-brand-400 { border-color: ${color} !important; }
@@ -639,7 +634,7 @@
       .bg-gradient-to-r.from-brand-500 {
         background: ${gradient} !important;
       }
-    `;
+    `);
   }
 
   function setAccentTheme(color) {

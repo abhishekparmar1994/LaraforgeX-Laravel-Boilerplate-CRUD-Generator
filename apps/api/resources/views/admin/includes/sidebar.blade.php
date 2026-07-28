@@ -318,16 +318,11 @@
    * @param {string} chevronId - ID of the chevron icon to rotate
    */
   function toggleSubmenu(menuId, chevronId) {
-    const menu = document.getElementById(menuId);
-    const chevron = document.getElementById(chevronId);
-
-    if (menu.classList.contains('hidden')) {
-      menu.classList.remove('hidden');
-      chevron.classList.add('rotate-90');
-    } else {
-      menu.classList.add('hidden');
-      chevron.classList.remove('rotate-90');
-    }
+    const $menu = $('#' + menuId);
+    const $chevron = $('#' + chevronId);
+    const isHidden = $menu.hasClass('hidden');
+    $menu.toggleClass('hidden', !isHidden);
+    $chevron.toggleClass('rotate-90', isHidden);
   }
 
   function renderSidebarPermissions() {
@@ -336,14 +331,7 @@
     const hasPermission = (p) => permissions.includes(p);
 
     const toggle = (id, allowed) => {
-      const el = document.getElementById(id);
-      if (el) {
-        if (allowed) {
-          el.classList.remove('hidden');
-        } else {
-          el.classList.add('hidden');
-        }
-      }
+      $('#' + id).toggleClass('hidden', !allowed);
       return allowed;
     };
 
@@ -366,22 +354,15 @@
     toggle('header-system', showSystem);
   }
 
-
   window.renderSidebarPermissions = renderSidebarPermissions;
-  document.addEventListener('DOMContentLoaded', function () {
+  $(document).ready(function () {
     renderSidebarPermissions();
 
     // Auto-minimize sidebar on mobile when navigating links
-    const sidebar = document.getElementById('admin-sidebar');
-    if (!sidebar) return;
-
-    const links = sidebar.querySelectorAll('nav a');
-    links.forEach(function (el) {
-      el.addEventListener('click', function () {
-        if (window.innerWidth < 1024 && typeof window.closeSidebar === 'function') {
-          window.closeSidebar();
-        }
-      });
+    $(document).on('click', '#admin-sidebar nav a', function () {
+      if ($(window).width() < 1024 && typeof window.closeSidebar === 'function') {
+        window.closeSidebar();
+      }
     });
   });
 </script>

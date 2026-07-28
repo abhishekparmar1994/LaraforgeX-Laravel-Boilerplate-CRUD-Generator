@@ -14,7 +14,8 @@ class SettingsController extends Controller
 {
     public function __construct(
         protected SettingsRepositoryInterface $repository
-    ) {}
+    ) {
+    }
 
     /**
      * Get settings list.
@@ -23,18 +24,24 @@ class SettingsController extends Controller
     {
         $group = $request->query('group');
         $query = \App\Domains\Settings\Models\Settings::query();
-        
+
         if ($group) {
             $query->where('group', $group);
         }
-        
-        $settings = $query->get();
+
+        $settings = $query->get()->map(function ($setting) {
+            if (!auth('sanctum')->check() && ($setting->is_encrypted || in_array($setting->key, ['recaptcha_secret_key', 'smtp_password', 'mail_password'], true))) {
+                $setting->value = '********';
+            }
+            return $setting;
+        });
 
         return response()->json([
             'success' => true,
             'data' => $settings
         ]);
     }
+
 
     /**
      * Update a setting configuration value.
@@ -60,8 +67,8 @@ class SettingsController extends Controller
             $val = $request->input('value');
             $isEnabled = filter_var($val, FILTER_VALIDATE_BOOLEAN) || in_array($val, ['1', 1, 'true'], true);
             if ($isEnabled) {
-                $siteKey = trim((string)\App\Domains\Settings\Models\Settings::get('recaptcha_site_key', ''));
-                $secretKey = trim((string)\App\Domains\Settings\Models\Settings::get('recaptcha_secret_key', ''));
+                $siteKey = trim((string) \App\Domains\Settings\Models\Settings::get('recaptcha_site_key', ''));
+                $secretKey = trim((string) \App\Domains\Settings\Models\Settings::get('recaptcha_secret_key', ''));
                 if (empty($siteKey) || empty($secretKey)) {
                     return response()->json([
                         'success' => false,
@@ -103,13 +110,13 @@ class SettingsController extends Controller
 
         // Validation: Require non-empty Site Key and Secret Key when submitting reCAPTCHA config
         if ($settingsByKey->has('recaptcha_site_key') || $settingsByKey->has('recaptcha_secret_key') || $settingsByKey->has('recaptcha_enabled')) {
-            $siteKey = $settingsByKey->has('recaptcha_site_key') 
-                ? trim((string)($settingsByKey->get('recaptcha_site_key')['value'] ?? ''))
-                : trim((string)\App\Domains\Settings\Models\Settings::get('recaptcha_site_key', ''));
+            $siteKey = $settingsByKey->has('recaptcha_site_key')
+                ? trim((string) ($settingsByKey->get('recaptcha_site_key')['value'] ?? ''))
+                : trim((string) \App\Domains\Settings\Models\Settings::get('recaptcha_site_key', ''));
 
-            $secretKey = $settingsByKey->has('recaptcha_secret_key') 
-                ? trim((string)($settingsByKey->get('recaptcha_secret_key')['value'] ?? ''))
-                : trim((string)\App\Domains\Settings\Models\Settings::get('recaptcha_secret_key', ''));
+            $secretKey = $settingsByKey->has('recaptcha_secret_key')
+                ? trim((string) ($settingsByKey->get('recaptcha_secret_key')['value'] ?? ''))
+                : trim((string) \App\Domains\Settings\Models\Settings::get('recaptcha_secret_key', ''));
 
             if (empty($siteKey) || empty($secretKey)) {
                 return response()->json([

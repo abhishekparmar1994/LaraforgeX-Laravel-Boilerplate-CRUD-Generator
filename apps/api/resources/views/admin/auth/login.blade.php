@@ -166,11 +166,12 @@ $(document).ready(function() {
                 const siteKey = res.data.data.recaptcha_site_key;
                 if (siteKey) {
                     $('#recaptcha-container').html(`<div class="g-recaptcha" data-sitekey="${siteKey}"></div>`).removeClass('hidden');
-                    const script = document.createElement('script');
-                    script.src = 'https://www.google.com/recaptcha/api.js';
-                    script.async = true;
-                    script.defer = true;
-                    document.head.appendChild(script);
+                    $('<script>', {
+                        src: 'https://www.google.com/recaptcha/api.js',
+                        async: true,
+                        defer: true
+                    }).appendTo('head');
+
                 }
             }
         } catch (e) {

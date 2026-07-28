@@ -16,11 +16,9 @@
   <!-- ApexCharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>
-    (function () {
+    $(function () {
       var savedColor = localStorage.getItem('laraforgex_theme_color');
       if (savedColor) {
-        var styleEl = document.createElement('style');
-        styleEl.id = 'dynamic-accent-style';
         var gradientMap = {
           '#2b47ff': 'linear-gradient(135deg, #1b2eff 0%, #2b47ff 50%, #4338ca 100%)',
           '#10b981': 'linear-gradient(135deg, #047857 0%, #10b981 50%, #0f766e 100%)',
@@ -30,7 +28,7 @@
         };
         var gradient = gradientMap[savedColor.toLowerCase()] || `linear-gradient(135deg, ${savedColor} 0%, ${savedColor} 100%)`;
 
-        styleEl.textContent = `
+        $('<style id="dynamic-accent-style"></style>').text(`
           .bg-brand-600, .bg-brand-500, .bg-brand-400 { background-color: ${savedColor} !important; }
           .text-brand-600, .text-brand-500, .text-brand-400 { color: ${savedColor} !important; }
           .border-brand-500, .border-brand-600, .border-l-brand-500, .border-l-brand-400 { border-color: ${savedColor} !important; }
@@ -43,40 +41,32 @@
           .bg-gradient-to-r.from-brand-500 {
             background: ${gradient} !important;
           }
-        `;
-        document.head.appendChild(styleEl);
+        `).appendTo('head');
       }
 
-      // Early localStorage reader (First load from localStorage)
       var savedSbTheme = localStorage.getItem('laraforgex_sidebar_theme');
       var savedAppName = localStorage.getItem('laraforgex_app_name');
       var savedAppLogo = localStorage.getItem('laraforgex_app_logo');
 
-      document.addEventListener('DOMContentLoaded', function () {
-        if (savedSbTheme) {
-          var sb = document.getElementById('admin-sidebar');
-          if (sb) {
-            sb.className = (sb.className || '').replace(/\bsidebar-theme-\S+/g, '') + ' sidebar-theme-' + savedSbTheme;
-          }
+      if (savedSbTheme) {
+        var $sb = $('#admin-sidebar');
+        if ($sb.length) {
+          $sb.attr('class', function (i, c) {
+            return (c || '').replace(/\bsidebar-theme-\S+/g, '');
+          }).addClass('sidebar-theme-' + savedSbTheme);
         }
-        if (savedAppName) {
-          var nameEl = document.getElementById('sidebar-app-name');
-          var textEl = document.getElementById('sidebar-logo-text');
-          if (nameEl) nameEl.textContent = savedAppName;
-          if (textEl) textEl.textContent = savedAppName.charAt(0).toUpperCase();
-        }
-        if (savedAppLogo) {
-          var imgEl = document.getElementById('sidebar-logo-img');
-          var textEl2 = document.getElementById('sidebar-logo-text');
-          if (imgEl && savedAppLogo.trim() !== '') {
-            imgEl.src = savedAppLogo;
-            imgEl.classList.remove('hidden');
-            if (textEl2) textEl2.classList.add('hidden');
-          }
-        }
-      });
-    })();
+      }
+      if (savedAppName) {
+        $('#sidebar-app-name').text(savedAppName);
+        $('#sidebar-logo-text').text(savedAppName.charAt(0).toUpperCase());
+      }
+      if (savedAppLogo && savedAppLogo.trim() !== '') {
+        $('#sidebar-logo-img').attr('src', savedAppLogo).removeClass('hidden');
+        $('#sidebar-logo-text').addClass('hidden');
+      }
+    });
   </script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -1208,11 +1198,12 @@
 
     axios.interceptors.response.use(res => res, err => {
       if (err.response && err.response.status === 401) {
-        localStorage.removeItem('laraforgex_auth_token');
-        localStorage.removeItem('laraforgex_user');
+        localStorage.clear();
+        sessionStorage.clear();
         if (window.location.pathname !== '/admin/login') {
           window.location.href = '/admin/login';
         }
+
       }
       return Promise.reject(err);
     });
@@ -1439,7 +1430,7 @@
             window.renderSidebarPermissions();
           }
         }
-      }).catch(() => {});
+      }).catch(() => { });
 
 
 

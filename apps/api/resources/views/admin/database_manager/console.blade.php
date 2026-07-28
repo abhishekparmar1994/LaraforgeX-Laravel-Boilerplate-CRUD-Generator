@@ -567,11 +567,14 @@
           return;
         }
         const blob = new Blob([sql], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `query_${Date.now()}.sql`;
-        a.click();
+        const $a = $('<a>', {
+          href: URL.createObjectURL(blob),
+          download: `query_${Date.now()}.sql`
+        }).appendTo('body');
+        $a[0].click();
+        $a.remove();
       }
+
 
       /**
        * Update Row Selection Highlighting (Navicat Blue Style)
@@ -670,13 +673,14 @@
 
       function downloadFile(content, fileName, mimeType) {
         const blob = new Blob([content], { type: mimeType });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const $link = $('<a>', {
+          href: URL.createObjectURL(blob),
+          download: fileName
+        }).appendTo('body');
+        $link[0].click();
+        $link.remove();
       }
+
 
       /**
        * Execute SQL Query via jQuery AJAX

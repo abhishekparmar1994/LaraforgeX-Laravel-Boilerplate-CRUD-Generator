@@ -184,7 +184,7 @@
         xaxis: { categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
         grid: { borderColor: '#f1f5f9' }
       };
-      new ApexCharts(document.querySelector("#chart-user-growth"), userGrowthOptions).render();
+      new ApexCharts($('#chart-user-growth')[0], userGrowthOptions).render();
 
       // Initialize ApexCharts Media Breakdown Donut Chart
       const mediaBreakdownOptions = {
@@ -194,7 +194,8 @@
         colors: ['#2b47ff', '#6366f1', '#10b981', '#f59e0b'],
         legend: { position: 'bottom', fontSize: '11px' }
       };
-      new ApexCharts(document.querySelector("#chart-media-breakdown"), mediaBreakdownOptions).render();
+      new ApexCharts($('#chart-media-breakdown')[0], mediaBreakdownOptions).render();
+
     });
   </script>
 @endsection

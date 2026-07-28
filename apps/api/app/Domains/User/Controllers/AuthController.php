@@ -80,11 +80,20 @@ class AuthController extends Controller
             $action->execute($user);
         }
 
+        if ($request->hasSession()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
+        $cookieSession = cookie()->forget(config('session.cookie', 'laraforgex_session'));
+        $cookieXsrf = cookie()->forget('XSRF-TOKEN');
+
         return response()->json([
             'success' => true,
             'message' => 'Logged out successfully.'
-        ]);
+        ])->withCookie($cookieSession)->withCookie($cookieXsrf);
     }
+
 
     /**
      * Request a passwordless magic login link.
