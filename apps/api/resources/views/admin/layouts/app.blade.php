@@ -44,6 +44,35 @@
         `;
         document.head.appendChild(styleEl);
       }
+
+      // Early localStorage reader (First load from localStorage)
+      var savedSbTheme = localStorage.getItem('laraforgex_sidebar_theme');
+      var savedAppName = localStorage.getItem('laraforgex_app_name');
+      var savedAppLogo = localStorage.getItem('laraforgex_app_logo');
+
+      document.addEventListener('DOMContentLoaded', function() {
+        if (savedSbTheme) {
+          var sb = document.getElementById('admin-sidebar');
+          if (sb) {
+            sb.className = (sb.className || '').replace(/\bsidebar-theme-\S+/g, '') + ' sidebar-theme-' + savedSbTheme;
+          }
+        }
+        if (savedAppName) {
+          var nameEl = document.getElementById('sidebar-app-name');
+          var textEl = document.getElementById('sidebar-logo-text');
+          if (nameEl) nameEl.textContent = savedAppName;
+          if (textEl) textEl.textContent = savedAppName.charAt(0).toUpperCase();
+        }
+        if (savedAppLogo) {
+          var imgEl = document.getElementById('sidebar-logo-img');
+          var textEl2 = document.getElementById('sidebar-logo-text');
+          if (imgEl && savedAppLogo.trim() !== '') {
+            imgEl.src = savedAppLogo;
+            imgEl.classList.remove('hidden');
+            if (textEl2) textEl2.classList.add('hidden');
+          }
+        }
+      });
     })();
   </script>
   <script>
@@ -118,6 +147,178 @@
       right: auto !important;
       flex-direction: column-reverse !important;
       transform: none !important;
+    }
+
+    /* ── SIDEBAR THEME ENGINE ───────────────────────────────────── */
+    /* 1. Theme: clean_light (Default) */
+    #admin-sidebar.sidebar-theme-clean_light {
+      background-color: #ffffff;
+      border-color: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* 2. Theme: obsidian_dark */
+    #admin-sidebar.sidebar-theme-obsidian_dark {
+      background-color: #0b0f19;
+      border-color: #1e293b;
+      color: #ffffff;
+    }
+    #admin-sidebar.sidebar-theme-obsidian_dark #sidebar-app-name { color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-obsidian_dark p.text-\[10px\] { color: #64748b !important; }
+    #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link { color: #cbd5e1; }
+    #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link:hover { background-color: rgba(30, 41, 59, 0.7); color: #ffffff; }
+    #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link.bg-brand-50 {
+      background-color: rgba(79, 70, 229, 0.2) !important;
+      color: #818cf8 !important;
+      border-left-color: #6366f1 !important;
+    }
+    #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link i { color: #818cf8; }
+    #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-user-card { background-color: #111827; border-color: #1f2937; color: #ffffff; }
+
+    /* 3. Theme: royal_glass */
+    #admin-sidebar.sidebar-theme-royal_glass {
+      background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%);
+      border-color: rgba(99, 102, 241, 0.25);
+      color: #ffffff;
+    }
+    #admin-sidebar.sidebar-theme-royal_glass #sidebar-app-name { color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-royal_glass p.text-\[10px\] { color: #818cf8 !important; }
+    #admin-sidebar.sidebar-theme-royal_glass .sidebar-link { color: #c7d2fe; }
+    #admin-sidebar.sidebar-theme-royal_glass .sidebar-link:hover { background-color: rgba(255, 255, 255, 0.1); color: #ffffff; }
+    #admin-sidebar.sidebar-theme-royal_glass .sidebar-link.bg-brand-50 {
+      background-color: rgba(99, 102, 241, 0.3) !important;
+      color: #a5b4fc !important;
+      border-left-color: #818cf8 !important;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+    #admin-sidebar.sidebar-theme-royal_glass .sidebar-link i { color: #a5b4fc; }
+    #admin-sidebar.sidebar-theme-royal_glass .sidebar-user-card { background-color: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.12); color: #ffffff; }
+
+    /* 4. Theme: nordic_emerald */
+    #admin-sidebar.sidebar-theme-nordic_emerald {
+      background-color: #064e3b;
+      border-color: #065f46;
+      color: #ffffff;
+    }
+    #admin-sidebar.sidebar-theme-nordic_emerald #sidebar-app-name { color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-nordic_emerald p.text-\[10px\] { color: #34d399 !important; }
+    #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link { color: #a7f3d0; }
+    #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link:hover { background-color: rgba(255, 255, 255, 0.1); color: #ffffff; }
+    #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link.bg-brand-50 {
+      background-color: rgba(16, 185, 129, 0.25) !important;
+      color: #6ee7b7 !important;
+      border-left-color: #10b981 !important;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+    #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link i { color: #6ee7b7; }
+    #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-user-card { background-color: rgba(0, 0, 0, 0.25); border-color: rgba(16, 185, 129, 0.3); color: #ecfdf5; }
+
+    /* 5. Theme: sunset_crimson */
+    #admin-sidebar.sidebar-theme-sunset_crimson {
+      background: linear-gradient(180deg, #4c0519 0%, #111827 100%);
+      border-color: rgba(244, 63, 94, 0.25);
+      color: #ffffff;
+    }
+    #admin-sidebar.sidebar-theme-sunset_crimson #sidebar-app-name { color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-sunset_crimson p.text-\[10px\] { color: #fb7185 !important; }
+    #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link { color: #fecdd3; }
+    #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link:hover { background-color: rgba(255, 255, 255, 0.1); color: #ffffff; }
+    #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link.bg-brand-50 {
+      background-color: rgba(244, 63, 94, 0.25) !important;
+      color: #fda4af !important;
+      border-left-color: #f43f5e !important;
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
+    }
+    #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link i { color: #fda4af; }
+    #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-user-card { background-color: rgba(0, 0, 0, 0.3); border-color: rgba(244, 63, 94, 0.3); color: #ffe4e6; }
+
+    /* 6. Theme: cyber_neon */
+    #admin-sidebar.sidebar-theme-cyber_neon {
+      background-color: #050508;
+      border-color: rgba(56, 189, 248, 0.25);
+      color: #ffffff;
+    }
+    #admin-sidebar.sidebar-theme-cyber_neon #sidebar-app-name { color: #00f0ff !important; }
+    #admin-sidebar.sidebar-theme-cyber_neon p.text-\[10px\] { color: #38bdf8 !important; }
+    #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link { color: #e2e8f0; }
+    #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link:hover { background-color: rgba(56, 189, 248, 0.12); color: #ffffff; }
+    #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link.bg-brand-50 {
+      background-color: rgba(56, 189, 248, 0.2) !important;
+      color: #38bdf8 !important;
+      border-left-color: #00f0ff !important;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    }
+    #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link i { color: #38bdf8; }
+    #admin-sidebar.sidebar-theme-cyber_neon .sidebar-user-card { background-color: rgba(15, 23, 42, 0.8); border-color: rgba(56, 189, 248, 0.3); color: #f0f9ff; }
+
+    /* 7. Theme: amber_gold */
+    #admin-sidebar.sidebar-theme-amber_gold {
+      background: linear-gradient(180deg, #1c1917 0%, #09090b 100%);
+      border-color: rgba(245, 158, 11, 0.25);
+      color: #ffffff;
+    }
+    #admin-sidebar.sidebar-theme-amber_gold #sidebar-app-name { color: #fef08a !important; }
+    #admin-sidebar.sidebar-theme-amber_gold p.text-\[10px\] { color: #fbbf24 !important; }
+    #admin-sidebar.sidebar-theme-amber_gold .sidebar-link { color: #e7e5e4; }
+    #admin-sidebar.sidebar-theme-amber_gold .sidebar-link:hover { background-color: rgba(245, 158, 11, 0.12); color: #ffffff; }
+    #admin-sidebar.sidebar-theme-amber_gold .sidebar-link.bg-brand-50 {
+      background-color: rgba(245, 158, 11, 0.2) !important;
+      color: #fde047 !important;
+      border-left-color: #eab308 !important;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+    }
+    #admin-sidebar.sidebar-theme-amber_gold .sidebar-link i { color: #fde047; }
+    #admin-sidebar.sidebar-theme-amber_gold .sidebar-user-card { background-color: rgba(44, 36, 22, 0.6); border-color: rgba(245, 158, 11, 0.3); color: #fefce8; }
+
+    /* 8. Theme: minimal_slate */
+    #admin-sidebar.sidebar-theme-minimal_slate {
+      background-color: #1e293b;
+      border-color: #334155;
+      color: #ffffff;
+    }
+    #admin-sidebar.sidebar-theme-minimal_slate #sidebar-app-name { color: #f8fafc !important; }
+    #admin-sidebar.sidebar-theme-minimal_slate p.text-\[10px\] { color: #94a3b8 !important; }
+    #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link { color: #cbd5e1; }
+    #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link:hover { background-color: #0f172a; color: #ffffff; }
+    #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link.bg-brand-50 {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+      border-left-color: #38bdf8 !important;
+    }
+    #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link i { color: #38bdf8; }
+    #admin-sidebar.sidebar-theme-minimal_slate .sidebar-user-card { background-color: #0f172a; border-color: #334155; color: #f8fafc; }
+
+    /* ── SweetAlert2 Modal Clean Overrides (No Scrollbars) ── */
+    .swal2-popup {
+      border-radius: 1.25rem !important;
+      padding: 1.5rem 1.75rem !important;
+      overflow: visible !important;
+      max-height: none !important;
+    }
+
+    .swal2-html-container {
+      overflow: visible !important;
+      max-height: none !important;
+      margin: 0.75rem 0 1rem 0 !important;
+      padding: 0 !important;
+    }
+
+    .swal2-input {
+      margin: 0.75rem auto 0 auto !important;
+      box-shadow: none !important;
+      border-color: #cbd5e1 !important;
+      border-radius: 0.75rem !important;
+      height: 2.75rem !important;
+      font-size: 0.875rem !important;
+    }
+
+    .swal2-input:focus {
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+    }
+
+    .swal2-actions {
+      margin-top: 1.25rem !important;
     }
 
     /* Base Toast Card */
@@ -665,37 +866,81 @@
       return Promise.reject(err);
     });
 
-    // ── Global Dynamic Settings Engine (App Name, Logo, Toast Theme) ────
-    window.currentToastTheme = 'obsidian';
-    window.currentToastPosition = 'top-right';
+    // ── Global Dynamic Settings Engine (App Name, Logo, Toast, Sidebar) ────
+    window.currentToastTheme = localStorage.getItem('laraforgex_toast_theme') || 'obsidian';
+    window.currentToastPosition = localStorage.getItem('laraforgex_toast_position') || 'top-right';
 
     window.loadGlobalAppSettingsFromDB = function () {
+      // 1. Immediately apply cached local storage if available (Zero-FOUC)
+      const cachedSbTheme = localStorage.getItem('laraforgex_sidebar_theme');
+      const cachedToastTheme = localStorage.getItem('laraforgex_toast_theme');
+      const cachedToastPos = localStorage.getItem('laraforgex_toast_position');
+      const cachedAppName = localStorage.getItem('laraforgex_app_name');
+      const cachedAppLogo = localStorage.getItem('laraforgex_app_logo');
+
+      if (cachedToastTheme) window.currentToastTheme = cachedToastTheme;
+      if (cachedToastPos) window.currentToastPosition = cachedToastPos;
+
+      const $sidebar = $('#admin-sidebar');
+      if ($sidebar.length && cachedSbTheme) {
+        $sidebar.attr('class', function(i, c) {
+          return (c || '').replace(/\bsidebar-theme-\S+/g, '');
+        }).addClass(`sidebar-theme-${cachedSbTheme}`);
+      }
+
+      if (cachedAppName) {
+        $('#sidebar-app-name').text(cachedAppName);
+        $('#sidebar-logo-text').text(cachedAppName.charAt(0).toUpperCase());
+      }
+      if (cachedAppLogo && cachedAppLogo.trim() !== '') {
+        $('#sidebar-logo-img').attr('src', cachedAppLogo).removeClass('hidden');
+        $('#sidebar-logo-text').addClass('hidden');
+      }
+
+      // 2. Fetch fresh settings from DB table & sync with localStorage + UI
       axios.get('/settings').then(res => {
         const appSettings = res.data.data || [];
         
-        // 1. Toast settings
         const themeSet = appSettings.find(s => s.key === 'toast_theme');
         const posSet = appSettings.find(s => s.key === 'toast_position');
-
-        if (themeSet && themeSet.value) window.currentToastTheme = themeSet.value;
-        if (posSet && posSet.value) window.currentToastPosition = posSet.value;
-
-        // 2. App Name & Logo Branding Settings
         const appNameSet = appSettings.find(s => s.key === 'app_name');
         const appLogoSet = appSettings.find(s => s.key === 'app_logo');
+        const sbThemeSet = appSettings.find(s => s.key === 'sidebar_theme');
+
+        if (themeSet && themeSet.value) {
+          window.currentToastTheme = themeSet.value;
+          localStorage.setItem('laraforgex_toast_theme', themeSet.value);
+        }
+        if (posSet && posSet.value) {
+          window.currentToastPosition = posSet.value;
+          localStorage.setItem('laraforgex_toast_position', posSet.value);
+        }
 
         if (appNameSet && appNameSet.value) {
           const appName = appNameSet.value;
+          localStorage.setItem('laraforgex_app_name', appName);
           $('#sidebar-app-name').text(appName);
           $('#sidebar-logo-text').text(appName.charAt(0).toUpperCase());
         }
 
-        if (appLogoSet && appLogoSet.value && appLogoSet.value.trim() !== '') {
-          $('#sidebar-logo-img').attr('src', appLogoSet.value).removeClass('hidden');
-          $('#sidebar-logo-text').addClass('hidden');
-        } else {
-          $('#sidebar-logo-img').addClass('hidden');
-          $('#sidebar-logo-text').removeClass('hidden');
+        if (appLogoSet && appLogoSet.value !== undefined) {
+          localStorage.setItem('laraforgex_app_logo', appLogoSet.value || '');
+          if (appLogoSet.value && appLogoSet.value.trim() !== '') {
+            $('#sidebar-logo-img').attr('src', appLogoSet.value).removeClass('hidden');
+            $('#sidebar-logo-text').addClass('hidden');
+          } else {
+            $('#sidebar-logo-img').addClass('hidden');
+            $('#sidebar-logo-text').removeClass('hidden');
+          }
+        }
+
+        if (sbThemeSet && sbThemeSet.value) {
+          localStorage.setItem('laraforgex_sidebar_theme', sbThemeSet.value);
+          if ($sidebar.length) {
+            $sidebar.attr('class', function(i, c) {
+              return (c || '').replace(/\bsidebar-theme-\S+/g, '');
+            }).addClass(`sidebar-theme-${sbThemeSet.value}`);
+          }
         }
       }).catch(() => {});
     };

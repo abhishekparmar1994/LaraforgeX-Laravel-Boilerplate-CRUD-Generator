@@ -376,13 +376,13 @@
       Swal.fire({
         title: `Truncate Table '${tableName}'?`,
         html: `
-          <div class="text-left space-y-3 font-sans text-xs text-slate-600">
+          <div class="text-left space-y-2.5 font-sans text-xs text-slate-600">
             <p class="font-semibold text-slate-800 text-sm">Are you sure you want to erase all records in table <b class="font-mono text-amber-600">${tableName}</b>?</p>
-            <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs">
+            <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs">
               <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-600"></i>
               <b>Warning:</b> All rows will be permanently deleted and auto-increment sequences reset.
             </div>
-            <p class="text-[11px] font-bold text-slate-500">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> below to confirm:</p>
+            <p class="text-[11px] font-bold text-slate-500 pt-1">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> below to confirm:</p>
           </div>
         `,
         input: 'text',
@@ -420,13 +420,13 @@
       Swal.fire({
         title: `DROP TABLE '${tableName}'?`,
         html: `
-          <div class="text-left space-y-3 font-sans text-xs text-slate-600">
+          <div class="text-left space-y-2.5 font-sans text-xs text-slate-600">
             <p class="font-semibold text-slate-800 text-sm">You are about to permanently delete table <b class="font-mono text-rose-600">${tableName}</b>!</p>
-            <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs">
+            <div class="p-2.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs">
               <i class="fa-solid fa-radiation mr-1 text-rose-600"></i>
               <b>Critical Warning:</b> The table structure, all columns, indexes, and records will be deleted forever.
             </div>
-            <p class="text-[11px] font-bold text-slate-500">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> to confirm drop:</p>
+            <p class="text-[11px] font-bold text-slate-500 pt-1">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> to confirm drop:</p>
           </div>
         `,
         input: 'text',

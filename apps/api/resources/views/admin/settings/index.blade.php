@@ -116,6 +116,115 @@
     </form>
   </div>
 
+  <!-- Dedicated Sidebar Navigation Theme Customizer Card -->
+  <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600">
+          <i class="fa-solid fa-bars-staggered text-base"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Sidebar Navigation Theme</h3>
+          <p class="text-xs text-slate-500 font-medium">Select dynamic admin sidebar aesthetic, background color, and active link highlights saved in Database.</p>
+        </div>
+      </div>
+      <span class="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-600">Appearance UI</span>
+    </div>
+
+    <form id="form-sidebar-settings" class="space-y-5">
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2.5">Select Sidebar Theme Aesthetic</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- Clean Light Theme Radio -->
+          <label class="sidebar-theme-option relative border-2 border-brand-500 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-white text-slate-900 shadow-sm">
+            <input type="radio" name="sidebar_theme_input" value="clean_light" class="sr-only" checked>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Clean Modern Light</span>
+              <i class="fa-solid fa-circle-check text-brand-500 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-snug">Crisp pure white background with soft slate borders & indigo accents.</p>
+          </label>
+
+          <!-- Obsidian Midnight Theme Radio -->
+          <label class="sidebar-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-slate-900 text-white">
+            <input type="radio" name="sidebar_theme_input" value="obsidian_dark" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Obsidian Midnight</span>
+              <i class="fa-solid fa-circle-check text-slate-400 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">Dark midnight charcoal background with glowing brand accents.</p>
+          </label>
+
+          <!-- Royal Indigo Glass Theme Radio -->
+          <label class="sidebar-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-gradient-to-b from-indigo-950 to-slate-900 text-white">
+            <input type="radio" name="sidebar_theme_input" value="royal_glass" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Royal Indigo Glass</span>
+              <i class="fa-solid fa-circle-check text-indigo-400 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-indigo-200/80 leading-snug">Deep indigo glass gradient background with pastel neon badges.</p>
+          </label>
+
+          <!-- Nordic Emerald Theme Radio -->
+          <label class="sidebar-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-emerald-950 text-white">
+            <input type="radio" name="sidebar_theme_input" value="nordic_emerald" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Nordic Emerald</span>
+              <i class="fa-solid fa-circle-check text-emerald-400 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-emerald-200/80 leading-snug">Rich dark forest emerald slate card with neon green highlights.</p>
+          </label>
+
+          <!-- Sunset Crimson Theme Radio -->
+          <label class="sidebar-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-gradient-to-b from-rose-950 to-zinc-900 text-white">
+            <input type="radio" name="sidebar_theme_input" value="sunset_crimson" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Sunset Crimson</span>
+              <i class="fa-solid fa-circle-check text-rose-400 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-rose-200/80 leading-snug">Deep crimson velvet gradient background with glowing rose badges.</p>
+          </label>
+
+          <!-- Cyber Neon Theme Radio -->
+          <label class="sidebar-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-zinc-950 text-white">
+            <input type="radio" name="sidebar_theme_input" value="cyber_neon" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Cyberpunk Neon</span>
+              <i class="fa-solid fa-circle-check text-cyan-400 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-cyan-200/80 leading-snug">Matte pitch black with high-voltage cyan neon border highlights.</p>
+          </label>
+
+          <!-- Amber Gold Theme Radio -->
+          <label class="sidebar-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-gradient-to-b from-stone-900 to-zinc-950 text-white">
+            <input type="radio" name="sidebar_theme_input" value="amber_gold" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Luxury Amber Gold</span>
+              <i class="fa-solid fa-circle-check text-amber-400 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-amber-200/80 leading-snug">Rich dark charcoal card with metallic gold active link badges.</p>
+          </label>
+
+          <!-- Minimal Titanium Slate Theme Radio -->
+          <label class="sidebar-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-slate-800 text-white">
+            <input type="radio" name="sidebar_theme_input" value="minimal_slate" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Titanium Slate</span>
+              <i class="fa-solid fa-circle-check text-slate-300 sidebar-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-slate-300/80 leading-snug">Compact matte titanium slate card with clean white active pills.</p>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-1">
+        <button type="submit" class="px-5 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5 border-0 cursor-pointer">
+          <i class="fa-solid fa-floppy-disk"></i> Save Sidebar Theme to Database
+        </button>
+      </div>
+    </form>
+  </div>
+
   <!-- Dedicated Google reCAPTCHA v2 Configuration Card -->
   <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -368,14 +477,95 @@ $(document).ready(function() {
             await axios.post('/settings', payload);
             window.currentToastTheme = selectedTheme;
             window.currentToastPosition = selectedPos;
-            showToast('success', `Toast preferences saved to settings table! (Theme: ${selectedTheme}, Position: ${selectedPos})`);
+            localStorage.setItem('laraforgex_toast_theme', selectedTheme);
+            localStorage.setItem('laraforgex_toast_position', selectedPos);
+            showToast('success', `Toast preferences saved to settings table & cache! (Theme: ${selectedTheme}, Position: ${selectedPos})`);
             settingsTable.reload();
         } catch (err) {
             handleAjaxError(err);
         }
     });
 
+    // ── Load & Sync Sidebar Theme Config ──────────────────────────────
+    async function loadSidebarConfig() {
+        try {
+            const cachedSbTheme = localStorage.getItem('laraforgex_sidebar_theme');
+            if (cachedSbTheme) {
+                $(`input[name="sidebar_theme_input"][value="${cachedSbTheme}"]`).prop('checked', true);
+                updateSidebarThemeCardBorders(cachedSbTheme);
+                applySidebarThemeLive(cachedSbTheme);
+            }
+
+            const res = await axios.get('/settings');
+            const appSettings = res.data.data || [];
+            const sbThemeSet = appSettings.find(s => s.key === 'sidebar_theme');
+            const savedSbTheme = (sbThemeSet && sbThemeSet.value) ? sbThemeSet.value : 'clean_light';
+
+            localStorage.setItem('laraforgex_sidebar_theme', savedSbTheme);
+            $(`input[name="sidebar_theme_input"][value="${savedSbTheme}"]`).prop('checked', true);
+            updateSidebarThemeCardBorders(savedSbTheme);
+            applySidebarThemeLive(savedSbTheme);
+        } catch (e) {
+            console.error('Failed to load sidebar theme settings', e);
+        }
+    }
+
+    function updateSidebarThemeCardBorders(selectedTheme) {
+        $('.sidebar-theme-option').removeClass('border-2 border-brand-500 ring-2 ring-brand-500 shadow-md').addClass('border border-slate-200');
+        const $activeCard = $(`input[name="sidebar_theme_input"][value="${selectedTheme}"]`).closest('.sidebar-theme-option');
+        $activeCard.addClass('border-2 border-brand-500 ring-2 ring-brand-500 shadow-md').removeClass('border-slate-200');
+    }
+
+    function applySidebarThemeLive(themeKey) {
+        const $sidebar = $('#admin-sidebar');
+        if ($sidebar.length) {
+            $sidebar.attr('class', function(i, c) {
+                return (c || '').replace(/\bsidebar-theme-\S+/g, '');
+            }).addClass(`sidebar-theme-${themeKey}`);
+        }
+    }
+
+    $(document).on('change click', '.sidebar-theme-option, input[name="sidebar_theme_input"]', function() {
+        setTimeout(function() {
+            const val = $('input[name="sidebar_theme_input"]:checked').val();
+            if (val) {
+                updateSidebarThemeCardBorders(val);
+                applySidebarThemeLive(val);
+            }
+        }, 10);
+    });
+
+    $('#form-sidebar-settings').submit(async function(e) {
+        e.preventDefault();
+        const selectedSbTheme = $('input[name="sidebar_theme_input"]:checked').val() || 'clean_light';
+
+        const payload = {
+            settings: [
+                {
+                    key: 'sidebar_theme',
+                    value: selectedSbTheme,
+                    group: 'appearance',
+                    is_encrypted: false
+                }
+            ]
+        };
+
+        try {
+            await axios.post('/settings', payload);
+            localStorage.setItem('laraforgex_sidebar_theme', selectedSbTheme);
+            applySidebarThemeLive(selectedSbTheme);
+            showToast('success', `Sidebar theme '${selectedSbTheme}' saved to database table & cache!`);
+            settingsTable.reload();
+            if (typeof window.loadGlobalAppSettingsFromDB === 'function') {
+                window.loadGlobalAppSettingsFromDB();
+            }
+        } catch (err) {
+            handleAjaxError(err);
+        }
+    });
+
     loadToastConfig();
+    loadSidebarConfig();
     loadReCaptchaConfig();
 
     $('#recaptcha-enable-switch').change(function() {
@@ -443,15 +633,23 @@ $(document).ready(function() {
     $('#form-setting').submit(async function(e) {
         e.preventDefault();
         const id = $('#setting-edit-id').val();
+        const key = $('#setting-key').val();
+        const value = $('#setting-value').val();
         const payload = {
-            key: $('#setting-key').val(),
-            value: $('#setting-value').val(),
+            key: key,
+            value: value,
             group: $('#setting-group').val(),
             is_encrypted: $('#setting-encrypted').is(':checked')
         };
 
         try {
             await axios.put(`/settings/${id}`, payload);
+            if (key === 'app_name') localStorage.setItem('laraforgex_app_name', value);
+            if (key === 'app_logo') localStorage.setItem('laraforgex_app_logo', value);
+            if (key === 'sidebar_theme') localStorage.setItem('laraforgex_sidebar_theme', value);
+            if (key === 'toast_theme') localStorage.setItem('laraforgex_toast_theme', value);
+            if (key === 'toast_position') localStorage.setItem('laraforgex_toast_position', value);
+
             showToast('success', 'Configuration updated successfully.');
             $('#modal-setting').addClass('hidden');
             settingsTable.reload();

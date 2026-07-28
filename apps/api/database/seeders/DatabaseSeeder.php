@@ -129,6 +129,7 @@ class DatabaseSeeder extends Seeder
         $settings = [
             ['key' => 'app_name', 'value' => 'LaraforgeX', 'group' => 'general', 'is_encrypted' => false],
             ['key' => 'app_logo', 'value' => '', 'group' => 'general', 'is_encrypted' => false],
+            ['key' => 'sidebar_theme', 'value' => 'clean_light', 'group' => 'appearance', 'is_encrypted' => false],
             ['key' => 'theme', 'value' => 'dark', 'group' => 'general', 'is_encrypted' => false],
             ['key' => 'mail_host', 'value' => 'smtp.mailtrap.io', 'group' => 'smtp', 'is_encrypted' => false],
             ['key' => 'mail_port', 'value' => '2525', 'group' => 'smtp', 'is_encrypted' => false],
