@@ -9,6 +9,8 @@
 
   <!-- Tailwind CDN (offline vendor) -->
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
+  <!-- jQuery (vendor) -->
+  <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
   <!-- Universal i18n Translations -->
   <script src="{{ asset('vendor/i18n/translations.js') }}"></script>
   <!-- ApexCharts CDN -->
@@ -50,7 +52,7 @@
       var savedAppName = localStorage.getItem('laraforgex_app_name');
       var savedAppLogo = localStorage.getItem('laraforgex_app_logo');
 
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         if (savedSbTheme) {
           var sb = document.getElementById('admin-sidebar');
           if (sb) {
@@ -156,6 +158,7 @@
       border-color: #e2e8f0;
       color: #0f172a;
     }
+
     #admin-sidebar.sidebar-theme-clean_light .sidebar-accordion-btn,
     #admin-sidebar.sidebar-theme-clean_light .submenu-wrapper a,
     #admin-sidebar.sidebar-theme-clean_light .sidebar-link:not(.bg-brand-50) span,
@@ -163,6 +166,7 @@
     #admin-sidebar.sidebar-theme-clean_light .submenu-wrapper a:not(.bg-brand-50) span {
       color: #334155 !important;
     }
+
     #admin-sidebar.sidebar-theme-clean_light .bg-brand-50,
     #admin-sidebar.sidebar-theme-clean_light .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-clean_light .submenu-wrapper a.bg-brand-50 {
@@ -170,11 +174,13 @@
       color: #1b2eff !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-clean_light .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-clean_light .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-clean_light .submenu-wrapper a.bg-brand-50 span {
       color: #1b2eff !important;
     }
+
     #admin-sidebar.sidebar-theme-clean_light .bg-brand-50 i,
     #admin-sidebar.sidebar-theme-clean_light .sidebar-link.bg-brand-50 i,
     #admin-sidebar.sidebar-theme-clean_light .submenu-wrapper a.bg-brand-50 i {
@@ -187,8 +193,15 @@
       border-color: #1e293b;
       color: #ffffff;
     }
-    #admin-sidebar.sidebar-theme-obsidian_dark #sidebar-app-name { color: #ffffff !important; }
-    #admin-sidebar.sidebar-theme-obsidian_dark p.text-\[10px\] { color: #94a3b8 !important; }
+
+    #admin-sidebar.sidebar-theme-obsidian_dark #sidebar-app-name {
+      color: #ffffff !important;
+    }
+
+    #admin-sidebar.sidebar-theme-obsidian_dark p.text-\[10px\] {
+      color: #94a3b8 !important;
+    }
+
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-accordion-btn:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-obsidian_dark button:not(.bg-brand-50),
@@ -196,7 +209,10 @@
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-accordion-btn:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-obsidian_dark button:not(.bg-brand-50) span,
-    #admin-sidebar.sidebar-theme-obsidian_dark .submenu-wrapper a:not(.bg-brand-50) span { color: #e2e8f0 !important; }
+    #admin-sidebar.sidebar-theme-obsidian_dark .submenu-wrapper a:not(.bg-brand-50) span {
+      color: #e2e8f0 !important;
+    }
+
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link:hover,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-accordion-btn:hover,
     #admin-sidebar.sidebar-theme-obsidian_dark button:hover,
@@ -204,7 +220,11 @@
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link:hover span,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-accordion-btn:hover span,
     #admin-sidebar.sidebar-theme-obsidian_dark button:hover span,
-    #admin-sidebar.sidebar-theme-obsidian_dark .submenu-wrapper a:hover span { background-color: rgba(30, 41, 59, 0.7) !important; color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-obsidian_dark .submenu-wrapper a:hover span {
+      background-color: rgba(30, 41, 59, 0.7) !important;
+      color: #ffffff !important;
+    }
+
     #admin-sidebar.sidebar-theme-obsidian_dark .bg-brand-50,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-accordion-btn.bg-brand-50,
@@ -214,6 +234,7 @@
       color: #ffffff !important;
       border-left-color: #6366f1 !important;
     }
+
     #admin-sidebar.sidebar-theme-obsidian_dark .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-accordion-btn.bg-brand-50 span,
@@ -222,11 +243,19 @@
       color: #ffffff !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-link i,
     #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-accordion-btn i,
     #admin-sidebar.sidebar-theme-obsidian_dark button i,
-    #admin-sidebar.sidebar-theme-obsidian_dark .submenu-wrapper a i { color: #818cf8 !important; }
-    #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-user-card { background-color: #111827; border-color: #1f2937; color: #ffffff; }
+    #admin-sidebar.sidebar-theme-obsidian_dark .submenu-wrapper a i {
+      color: #818cf8 !important;
+    }
+
+    #admin-sidebar.sidebar-theme-obsidian_dark .sidebar-user-card {
+      background-color: #111827;
+      border-color: #1f2937;
+      color: #ffffff;
+    }
 
     /* 3. Theme: royal_glass */
     #admin-sidebar.sidebar-theme-royal_glass {
@@ -234,20 +263,34 @@
       border-color: rgba(99, 102, 241, 0.25);
       color: #ffffff;
     }
-    #admin-sidebar.sidebar-theme-royal_glass #sidebar-app-name { color: #ffffff !important; }
-    #admin-sidebar.sidebar-theme-royal_glass p.text-\[10px\] { color: #a5b4fc !important; }
+
+    #admin-sidebar.sidebar-theme-royal_glass #sidebar-app-name {
+      color: #ffffff !important;
+    }
+
+    #admin-sidebar.sidebar-theme-royal_glass p.text-\[10px\] {
+      color: #a5b4fc !important;
+    }
+
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-link:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-accordion-btn:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-link:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-accordion-btn:not(.bg-brand-50) span,
-    #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a:not(.bg-brand-50) span { color: #e0e7ff !important; }
+    #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a:not(.bg-brand-50) span {
+      color: #e0e7ff !important;
+    }
+
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-link:hover,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-accordion-btn:hover,
     #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a:hover,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-link:hover span,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-accordion-btn:hover span,
-    #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a:hover span { background-color: rgba(255, 255, 255, 0.12) !important; color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a:hover span {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+    }
+
     #admin-sidebar.sidebar-theme-royal_glass .bg-brand-50,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-accordion-btn.bg-brand-50,
@@ -257,6 +300,7 @@
       border-left-color: #818cf8 !important;
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
     }
+
     #admin-sidebar.sidebar-theme-royal_glass .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-accordion-btn.bg-brand-50 span,
@@ -264,10 +308,18 @@
       color: #ffffff !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-link i,
     #admin-sidebar.sidebar-theme-royal_glass .sidebar-accordion-btn i,
-    #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a i { color: #a5b4fc !important; }
-    #admin-sidebar.sidebar-theme-royal_glass .sidebar-user-card { background-color: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.12); color: #ffffff; }
+    #admin-sidebar.sidebar-theme-royal_glass .submenu-wrapper a i {
+      color: #a5b4fc !important;
+    }
+
+    #admin-sidebar.sidebar-theme-royal_glass .sidebar-user-card {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
 
     /* 4. Theme: nordic_emerald */
     #admin-sidebar.sidebar-theme-nordic_emerald {
@@ -275,20 +327,34 @@
       border-color: #065f46;
       color: #ffffff;
     }
-    #admin-sidebar.sidebar-theme-nordic_emerald #sidebar-app-name { color: #ffffff !important; }
-    #admin-sidebar.sidebar-theme-nordic_emerald p.text-\[10px\] { color: #34d399 !important; }
+
+    #admin-sidebar.sidebar-theme-nordic_emerald #sidebar-app-name {
+      color: #ffffff !important;
+    }
+
+    #admin-sidebar.sidebar-theme-nordic_emerald p.text-\[10px\] {
+      color: #34d399 !important;
+    }
+
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-accordion-btn:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-accordion-btn:not(.bg-brand-50) span,
-    #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a:not(.bg-brand-50) span { color: #d1fae5 !important; }
+    #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a:not(.bg-brand-50) span {
+      color: #d1fae5 !important;
+    }
+
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link:hover,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-accordion-btn:hover,
     #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a:hover,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link:hover span,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-accordion-btn:hover span,
-    #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a:hover span { background-color: rgba(255, 255, 255, 0.12) !important; color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a:hover span {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+    }
+
     #admin-sidebar.sidebar-theme-nordic_emerald .bg-brand-50,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-accordion-btn.bg-brand-50,
@@ -298,6 +364,7 @@
       border-left-color: #10b981 !important;
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
     }
+
     #admin-sidebar.sidebar-theme-nordic_emerald .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-accordion-btn.bg-brand-50 span,
@@ -305,10 +372,18 @@
       color: #ffffff !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-link i,
     #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-accordion-btn i,
-    #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a i { color: #6ee7b7 !important; }
-    #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-user-card { background-color: rgba(0, 0, 0, 0.25); border-color: rgba(16, 185, 129, 0.3); color: #ecfdf5; }
+    #admin-sidebar.sidebar-theme-nordic_emerald .submenu-wrapper a i {
+      color: #6ee7b7 !important;
+    }
+
+    #admin-sidebar.sidebar-theme-nordic_emerald .sidebar-user-card {
+      background-color: rgba(0, 0, 0, 0.25);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #ecfdf5;
+    }
 
     /* 5. Theme: sunset_crimson */
     #admin-sidebar.sidebar-theme-sunset_crimson {
@@ -316,20 +391,34 @@
       border-color: rgba(244, 63, 94, 0.25);
       color: #ffffff;
     }
-    #admin-sidebar.sidebar-theme-sunset_crimson #sidebar-app-name { color: #ffffff !important; }
-    #admin-sidebar.sidebar-theme-sunset_crimson p.text-\[10px\] { color: #fb7185 !important; }
+
+    #admin-sidebar.sidebar-theme-sunset_crimson #sidebar-app-name {
+      color: #ffffff !important;
+    }
+
+    #admin-sidebar.sidebar-theme-sunset_crimson p.text-\[10px\] {
+      color: #fb7185 !important;
+    }
+
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-accordion-btn:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-accordion-btn:not(.bg-brand-50) span,
-    #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a:not(.bg-brand-50) span { color: #ffe4e6 !important; }
+    #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a:not(.bg-brand-50) span {
+      color: #ffe4e6 !important;
+    }
+
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link:hover,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-accordion-btn:hover,
     #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a:hover,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link:hover span,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-accordion-btn:hover span,
-    #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a:hover span { background-color: rgba(255, 255, 255, 0.12) !important; color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a:hover span {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+    }
+
     #admin-sidebar.sidebar-theme-sunset_crimson .bg-brand-50,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-accordion-btn.bg-brand-50,
@@ -339,6 +428,7 @@
       border-left-color: #f43f5e !important;
       box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
     }
+
     #admin-sidebar.sidebar-theme-sunset_crimson .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-accordion-btn.bg-brand-50 span,
@@ -346,10 +436,18 @@
       color: #ffffff !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-link i,
     #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-accordion-btn i,
-    #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a i { color: #fda4af !important; }
-    #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-user-card { background-color: rgba(0, 0, 0, 0.3); border-color: rgba(244, 63, 94, 0.3); color: #ffe4e6; }
+    #admin-sidebar.sidebar-theme-sunset_crimson .submenu-wrapper a i {
+      color: #fda4af !important;
+    }
+
+    #admin-sidebar.sidebar-theme-sunset_crimson .sidebar-user-card {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: #ffe4e6;
+    }
 
     /* 6. Theme: cyber_neon */
     #admin-sidebar.sidebar-theme-cyber_neon {
@@ -357,20 +455,34 @@
       border-color: rgba(56, 189, 248, 0.25);
       color: #ffffff;
     }
-    #admin-sidebar.sidebar-theme-cyber_neon #sidebar-app-name { color: #00f0ff !important; }
-    #admin-sidebar.sidebar-theme-cyber_neon p.text-\[10px\] { color: #38bdf8 !important; }
+
+    #admin-sidebar.sidebar-theme-cyber_neon #sidebar-app-name {
+      color: #00f0ff !important;
+    }
+
+    #admin-sidebar.sidebar-theme-cyber_neon p.text-\[10px\] {
+      color: #38bdf8 !important;
+    }
+
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-accordion-btn:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-accordion-btn:not(.bg-brand-50) span,
-    #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a:not(.bg-brand-50) span { color: #e0f2fe !important; }
+    #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a:not(.bg-brand-50) span {
+      color: #e0f2fe !important;
+    }
+
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link:hover,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-accordion-btn:hover,
     #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a:hover,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link:hover span,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-accordion-btn:hover span,
-    #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a:hover span { background-color: rgba(56, 189, 248, 0.15) !important; color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a:hover span {
+      background-color: rgba(56, 189, 248, 0.15) !important;
+      color: #ffffff !important;
+    }
+
     #admin-sidebar.sidebar-theme-cyber_neon .bg-brand-50,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-accordion-btn.bg-brand-50,
@@ -380,6 +492,7 @@
       border-left-color: #00f0ff !important;
       box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
     }
+
     #admin-sidebar.sidebar-theme-cyber_neon .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-accordion-btn.bg-brand-50 span,
@@ -387,10 +500,18 @@
       color: #00f0ff !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-link i,
     #admin-sidebar.sidebar-theme-cyber_neon .sidebar-accordion-btn i,
-    #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a i { color: #38bdf8 !important; }
-    #admin-sidebar.sidebar-theme-cyber_neon .sidebar-user-card { background-color: rgba(15, 23, 42, 0.8); border-color: rgba(56, 189, 248, 0.3); color: #f0f9ff; }
+    #admin-sidebar.sidebar-theme-cyber_neon .submenu-wrapper a i {
+      color: #38bdf8 !important;
+    }
+
+    #admin-sidebar.sidebar-theme-cyber_neon .sidebar-user-card {
+      background-color: rgba(15, 23, 42, 0.8);
+      border-color: rgba(56, 189, 248, 0.3);
+      color: #f0f9ff;
+    }
 
     /* 7. Theme: amber_gold */
     #admin-sidebar.sidebar-theme-amber_gold {
@@ -398,20 +519,34 @@
       border-color: rgba(245, 158, 11, 0.25);
       color: #ffffff;
     }
-    #admin-sidebar.sidebar-theme-amber_gold #sidebar-app-name { color: #fef08a !important; }
-    #admin-sidebar.sidebar-theme-amber_gold p.text-\[10px\] { color: #fbbf24 !important; }
+
+    #admin-sidebar.sidebar-theme-amber_gold #sidebar-app-name {
+      color: #fef08a !important;
+    }
+
+    #admin-sidebar.sidebar-theme-amber_gold p.text-\[10px\] {
+      color: #fbbf24 !important;
+    }
+
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-link:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-accordion-btn:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-link:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-accordion-btn:not(.bg-brand-50) span,
-    #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a:not(.bg-brand-50) span { color: #fef3c7 !important; }
+    #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a:not(.bg-brand-50) span {
+      color: #fef3c7 !important;
+    }
+
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-link:hover,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-accordion-btn:hover,
     #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a:hover,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-link:hover span,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-accordion-btn:hover span,
-    #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a:hover span { background-color: rgba(245, 158, 11, 0.15) !important; color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a:hover span {
+      background-color: rgba(245, 158, 11, 0.15) !important;
+      color: #ffffff !important;
+    }
+
     #admin-sidebar.sidebar-theme-amber_gold .bg-brand-50,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-accordion-btn.bg-brand-50,
@@ -421,6 +556,7 @@
       border-left-color: #eab308 !important;
       box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
     }
+
     #admin-sidebar.sidebar-theme-amber_gold .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-accordion-btn.bg-brand-50 span,
@@ -428,10 +564,18 @@
       color: #fef08a !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-link i,
     #admin-sidebar.sidebar-theme-amber_gold .sidebar-accordion-btn i,
-    #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a i { color: #fde047 !important; }
-    #admin-sidebar.sidebar-theme-amber_gold .sidebar-user-card { background-color: rgba(44, 36, 22, 0.6); border-color: rgba(245, 158, 11, 0.3); color: #fefce8; }
+    #admin-sidebar.sidebar-theme-amber_gold .submenu-wrapper a i {
+      color: #fde047 !important;
+    }
+
+    #admin-sidebar.sidebar-theme-amber_gold .sidebar-user-card {
+      background-color: rgba(44, 36, 22, 0.6);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fefce8;
+    }
 
     /* 8. Theme: minimal_slate */
     #admin-sidebar.sidebar-theme-minimal_slate {
@@ -439,20 +583,34 @@
       border-color: #334155;
       color: #ffffff;
     }
-    #admin-sidebar.sidebar-theme-minimal_slate #sidebar-app-name { color: #f8fafc !important; }
-    #admin-sidebar.sidebar-theme-minimal_slate p.text-\[10px\] { color: #cbd5e1 !important; }
+
+    #admin-sidebar.sidebar-theme-minimal_slate #sidebar-app-name {
+      color: #f8fafc !important;
+    }
+
+    #admin-sidebar.sidebar-theme-minimal_slate p.text-\[10px\] {
+      color: #cbd5e1 !important;
+    }
+
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-accordion-btn:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a:not(.bg-brand-50),
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link:not(.bg-brand-50) span,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-accordion-btn:not(.bg-brand-50) span,
-    #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a:not(.bg-brand-50) span { color: #f1f5f9 !important; }
+    #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a:not(.bg-brand-50) span {
+      color: #f1f5f9 !important;
+    }
+
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link:hover,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-accordion-btn:hover,
     #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a:hover,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link:hover span,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-accordion-btn:hover span,
-    #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a:hover span { background-color: #0f172a !important; color: #ffffff !important; }
+    #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a:hover span {
+      background-color: #0f172a !important;
+      color: #ffffff !important;
+    }
+
     #admin-sidebar.sidebar-theme-minimal_slate .bg-brand-50,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link.bg-brand-50,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-accordion-btn.bg-brand-50,
@@ -461,6 +619,7 @@
       color: #ffffff !important;
       border-left-color: #38bdf8 !important;
     }
+
     #admin-sidebar.sidebar-theme-minimal_slate .bg-brand-50 span,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link.bg-brand-50 span,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-accordion-btn.bg-brand-50 span,
@@ -468,10 +627,18 @@
       color: #ffffff !important;
       font-weight: 700 !important;
     }
+
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-link i,
     #admin-sidebar.sidebar-theme-minimal_slate .sidebar-accordion-btn i,
-    #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a i { color: #38bdf8 !important; }
-    #admin-sidebar.sidebar-theme-minimal_slate .sidebar-user-card { background-color: #0f172a; border-color: #334155; color: #f8fafc; }
+    #admin-sidebar.sidebar-theme-minimal_slate .submenu-wrapper a i {
+      color: #38bdf8 !important;
+    }
+
+    #admin-sidebar.sidebar-theme-minimal_slate .sidebar-user-card {
+      background-color: #0f172a;
+      border-color: #334155;
+      color: #f8fafc;
+    }
 
     /* ── SweetAlert2 Modal Clean Overrides (No Scrollbars) ── */
     .swal2-popup {
@@ -1019,7 +1186,6 @@
   </div>
 
   <!-- ── Vendor JS ─────────────────────────────────────────────── -->
-  <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{ asset('vendor/axios/axios.min.js') }}"></script>
   <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
   <script src="{{ asset('vendor/dropzone/dropzone.min.js') }}"></script>
@@ -1068,7 +1234,7 @@
 
       const $sidebar = $('#admin-sidebar');
       if ($sidebar.length && cachedSbTheme) {
-        $sidebar.attr('class', function(i, c) {
+        $sidebar.attr('class', function (i, c) {
           return (c || '').replace(/\bsidebar-theme-\S+/g, '');
         }).addClass(`sidebar-theme-${cachedSbTheme}`);
       }
@@ -1085,7 +1251,7 @@
       // 2. Fetch fresh settings from DB table & sync with localStorage + UI
       axios.get('/settings').then(res => {
         const appSettings = res.data.data || [];
-        
+
         const themeSet = appSettings.find(s => s.key === 'toast_theme');
         const posSet = appSettings.find(s => s.key === 'toast_position');
         const appNameSet = appSettings.find(s => s.key === 'app_name');
@@ -1122,12 +1288,12 @@
         if (sbThemeSet && sbThemeSet.value) {
           localStorage.setItem('laraforgex_sidebar_theme', sbThemeSet.value);
           if ($sidebar.length) {
-            $sidebar.attr('class', function(i, c) {
+            $sidebar.attr('class', function (i, c) {
               return (c || '').replace(/\bsidebar-theme-\S+/g, '');
             }).addClass(`sidebar-theme-${sbThemeSet.value}`);
           }
         }
-      }).catch(() => {});
+      }).catch(() => { });
     };
     window.loadGlobalAppSettingsFromDB();
 

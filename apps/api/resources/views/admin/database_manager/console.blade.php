@@ -490,14 +490,14 @@
               (item.category === 'FLOW' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'));
 
           html += `
-            <div data-sql="${encodeURIComponent(item.sql)}" class="snippet-card-item p-3 bg-slate-50 hover:bg-slate-100/90 border border-slate-200/80 hover:border-brand-300 rounded-xl transition cursor-pointer space-y-1 group">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-800 text-xs font-mono group-hover:text-brand-600">${item.name}</span>
-                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase font-mono border ${catColor}">${item.category}</span>
+              <div data-sql="${encodeURIComponent(item.sql)}" class="snippet-card-item p-3 bg-slate-50 hover:bg-slate-100/90 border border-slate-200/80 hover:border-brand-300 rounded-xl transition cursor-pointer space-y-1 group">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-slate-800 text-xs font-mono group-hover:text-brand-600">${item.name}</span>
+                  <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase font-mono border ${catColor}">${item.category}</span>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-tight">${item.desc}</p>
               </div>
-              <p class="text-[11px] text-slate-400 leading-tight">${item.desc}</p>
-            </div>
-          `;
+            `;
         });
 
         $container.html(html);
@@ -751,11 +751,11 @@
                 _activeQueryResult = null;
                 updateRowSelectionHighlighting();
                 $resultBox.html(`
-                  <div class="p-5 bg-emerald-50/70 text-emerald-800 text-xs font-sans font-medium flex items-center gap-3">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
-                    <span class="font-bold text-sm">${d.message}</span>
-                  </div>
-                `);
+                    <div class="p-5 bg-emerald-50/70 text-emerald-800 text-xs font-sans font-medium flex items-center gap-3">
+                      <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
+                      <span class="font-bold text-sm">${d.message}</span>
+                    </div>
+                  `);
               }
             }
           },
@@ -768,14 +768,14 @@
 
             const errMsg = xhr.responseJSON?.message || 'Database query error.';
             $resultBox.html(`
-              <div class="p-5 bg-rose-50 text-rose-700 text-xs font-mono leading-relaxed flex items-start gap-3">
-                <i class="fa-solid fa-circle-exclamation text-rose-600 text-xl mt-0.5"></i>
-                <div>
-                  <b class="font-bold text-sm block mb-1 font-sans">SQL Execution Error</b>
-                  <span>${errMsg}</span>
+                <div class="p-5 bg-rose-50 text-rose-700 text-xs font-mono leading-relaxed flex items-start gap-3">
+                  <i class="fa-solid fa-circle-exclamation text-rose-600 text-xl mt-0.5"></i>
+                  <div>
+                    <b class="font-bold text-sm block mb-1 font-sans">SQL Execution Error</b>
+                    <span>${errMsg}</span>
+                  </div>
                 </div>
-              </div>
-            `);
+              `);
           }
         });
       }
