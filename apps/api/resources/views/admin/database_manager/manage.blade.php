@@ -69,6 +69,12 @@
           <i class="fa-solid fa-key text-xs"></i> Add Index on Fields
         </button>
 
+        <!-- Modify Column: only shown when exactly 1 column is selected -->
+        <button type="button" id="btn-bulk-modify-col"
+          class="hidden px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs border border-indigo-200 transition cursor-pointer inline-flex items-center gap-1.5">
+          <i class="fa-solid fa-pen-to-square text-xs"></i> Modify Column
+        </button>
+
         <button type="button" id="btn-bulk-drop-cols"
           class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs border border-rose-200 transition cursor-pointer inline-flex items-center gap-1.5">
           <i class="fa-solid fa-trash-can text-xs"></i> Drop Selected Fields
@@ -225,6 +231,37 @@
 
           <!-- Spacer -->
           <div class="flex-1"></div>
+
+          <!-- Export Dropdown -->
+          <div class="relative flex-shrink-0" id="export-dropdown-wrapper">
+            <button type="button" id="btn-export-dropdown"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition cursor-pointer"
+              title="Export filtered results">
+              <i class="fa-solid fa-file-arrow-down text-xs"></i>
+              Export
+              <i class="fa-solid fa-chevron-down text-[9px]"></i>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="export-dropdown-menu"
+              class="hidden absolute right-0 top-full mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden">
+              <button type="button" id="btn-export-csv"
+                class="w-full flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition cursor-pointer border-b border-slate-100">
+                <i class="fa-solid fa-file-csv text-base text-emerald-600"></i>
+                <div class="text-left">
+                  <div class="font-bold">Export as CSV</div>
+                  <div class="text-[10px] text-slate-400 font-normal">All filtered rows · UTF-8</div>
+                </div>
+              </button>
+              <button type="button" id="btn-export-excel"
+                class="w-full flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition cursor-pointer">
+                <i class="fa-solid fa-file-excel text-base text-green-600"></i>
+                <div class="text-left">
+                  <div class="font-bold">Export as Excel</div>
+                  <div class="text-[10px] text-slate-400 font-normal">All filtered rows · XLS</div>
+                </div>
+              </button>
+            </div>
+          </div>
 
           <!-- Pagination info -->
           <span id="data-pagination-info" class="text-xs font-semibold text-slate-500 flex-shrink-0">Loading data…</span>
@@ -407,6 +444,141 @@
       </form>
     </div>
   </div>
+
+  <!-- ═══ Modify Column Modal ═══ -->
+  <div id="modal-modify-col" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen px-4 py-8">
+      <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" id="btn-close-mc-bg"></div>
+      <form id="form-modify-col"
+        class="relative bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 font-sans">
+
+        <!-- Header -->
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">Modify Column</h3>
+            <p class="text-xs text-slate-400">Alter definition of <code id="mc-col-label" class="font-mono font-bold text-indigo-700"></code> on <code class="font-mono text-slate-600">`{{ $table }}`</code></p>
+          </div>
+        </div>
+
+        <!-- Hidden original column name -->
+        <input type="hidden" id="mc-original-name">
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Rename column -->
+          <div class="col-span-2">
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Rename To <span class="text-slate-300 font-normal">(leave blank to keep)</span></label>
+            <input type="text" id="mc-new-name" pattern="[a-zA-Z0-9_]*"
+              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:outline-none focus:border-indigo-400"
+              placeholder="new_column_name">
+          </div>
+
+          <!-- Data Type -->
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Data Type *</label>
+            <select id="mc-type"
+              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-400">
+              <optgroup label="String">
+                <option value="VARCHAR">VARCHAR</option>
+                <option value="CHAR">CHAR</option>
+                <option value="TEXT">TEXT</option>
+                <option value="TINYTEXT">TINYTEXT</option>
+                <option value="MEDIUMTEXT">MEDIUMTEXT</option>
+                <option value="LONGTEXT">LONGTEXT</option>
+              </optgroup>
+              <optgroup label="Numeric">
+                <option value="INT">INT</option>
+                <option value="BIGINT">BIGINT</option>
+                <option value="TINYINT">TINYINT</option>
+                <option value="SMALLINT">SMALLINT</option>
+                <option value="MEDIUMINT">MEDIUMINT</option>
+                <option value="DECIMAL">DECIMAL</option>
+                <option value="FLOAT">FLOAT</option>
+                <option value="DOUBLE">DOUBLE</option>
+                <option value="BOOLEAN">BOOLEAN</option>
+              </optgroup>
+              <optgroup label="Date / Time">
+                <option value="DATE">DATE</option>
+                <option value="DATETIME">DATETIME</option>
+                <option value="TIMESTAMP">TIMESTAMP</option>
+                <option value="TIME">TIME</option>
+                <option value="YEAR">YEAR</option>
+              </optgroup>
+              <optgroup label="Binary / Blob">
+                <option value="BLOB">BLOB</option>
+                <option value="MEDIUMBLOB">MEDIUMBLOB</option>
+                <option value="LONGBLOB">LONGBLOB</option>
+                <option value="BINARY">BINARY</option>
+                <option value="VARBINARY">VARBINARY</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="JSON">JSON</option>
+                <option value="ENUM">ENUM</option>
+                <option value="SET">SET</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- Length / Precision — shown/hidden based on data type -->
+          <div id="mc-length-wrap">
+            <label id="mc-length-label" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Length / Precision</label>
+            <input type="text" id="mc-length" pattern="[0-9,]*"
+              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:outline-none focus:border-indigo-400"
+              placeholder="e.g. 255 or 10,2">
+          </div>
+
+          <!-- Default Value -->
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Default Value</label>
+            <input type="text" id="mc-default"
+              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:outline-none focus:border-indigo-400"
+              placeholder="Leave blank for none">
+          </div>
+
+          <!-- Comment -->
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Comment</label>
+            <input type="text" id="mc-comment" maxlength="255"
+              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-400"
+              placeholder="Optional comment">
+          </div>
+
+          <!-- Toggles -->
+          <div class="col-span-2 flex items-center gap-6 pt-1">
+            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+              <input type="checkbox" id="mc-nullable" class="h-4 w-4 rounded border-slate-300 text-indigo-600 cursor-pointer">
+              <span class="text-xs font-bold text-slate-700">Allow NULL</span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+              <input type="checkbox" id="mc-unsigned" class="h-4 w-4 rounded border-slate-300 text-indigo-600 cursor-pointer">
+              <span class="text-xs font-bold text-slate-700">UNSIGNED</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5 flex-shrink-0"></i>
+          <span><b>Warning:</b> Changing a column's type may truncate or transform existing data. Always backup before modifying production tables.</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-3">
+          <button type="button" id="btn-cancel-mc"
+            class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition cursor-pointer">
+            Cancel
+          </button>
+          <button type="submit"
+            class="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs transition shadow-sm shadow-indigo-600/20 inline-flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-pen-to-square text-xs"></i> Apply Modification
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 @endsection
 
 @section('scripts')
@@ -424,6 +596,71 @@
       });
 
       loadTableSchema();
+
+      /* ─── Type-Aware Length Rules (Modify Column Modal) ─────────────
+       * Determines whether the Length/Precision field is applicable
+       * for a given MySQL data type.
+       * ─────────────────────────────────────────────────────────────── */
+      const TYPE_LENGTH_RULES = {
+        // Types that have NO length parameter
+        JSON:       { mode: 'none' },
+        TEXT:       { mode: 'none' },
+        TINYTEXT:   { mode: 'none' },
+        MEDIUMTEXT: { mode: 'none' },
+        LONGTEXT:   { mode: 'none' },
+        BOOLEAN:    { mode: 'none' },
+        DATE:       { mode: 'none' },
+        DATETIME:   { mode: 'none' },
+        TIMESTAMP:  { mode: 'none' },
+        TIME:       { mode: 'none' },
+        YEAR:       { mode: 'none' },
+        BLOB:       { mode: 'none' },
+        TINYBLOB:   { mode: 'none' },
+        MEDIUMBLOB: { mode: 'none' },
+        LONGBLOB:   { mode: 'none' },
+        // String — single length
+        VARCHAR:    { mode: 'length',    label: 'Length',           placeholder: '255'       },
+        CHAR:       { mode: 'length',    label: 'Length',           placeholder: '36'        },
+        BINARY:     { mode: 'length',    label: 'Length',           placeholder: '16'        },
+        VARBINARY:  { mode: 'length',    label: 'Length',           placeholder: '255'       },
+        // Numeric — optional display width
+        INT:        { mode: 'width',     label: 'Display Width',    placeholder: '11'        },
+        INTEGER:    { mode: 'width',     label: 'Display Width',    placeholder: '11'        },
+        BIGINT:     { mode: 'width',     label: 'Display Width',    placeholder: '20'        },
+        TINYINT:    { mode: 'width',     label: 'Display Width',    placeholder: '4'         },
+        SMALLINT:   { mode: 'width',     label: 'Display Width',    placeholder: '6'         },
+        MEDIUMINT:  { mode: 'width',     label: 'Display Width',    placeholder: '9'         },
+        FLOAT:      { mode: 'width',     label: 'Precision',        placeholder: ''          },
+        DOUBLE:     { mode: 'width',     label: 'Precision',        placeholder: ''          },
+        // Precision + Scale
+        DECIMAL:    { mode: 'precision', label: 'Precision, Scale', placeholder: '10,2'      },
+        // Enum / Set values
+        ENUM:       { mode: 'values',    label: 'Values',           placeholder: "'a','b','c'" },
+        SET:        { mode: 'values',    label: 'Values',           placeholder: "'x','y','z'" },
+      };
+
+      /**
+       * Update the Length/Precision field in the Modify Column modal
+       * based on the currently selected data type.
+       * @param {jQuery} $select  The #mc-type select element
+       */
+      function applyModalLengthRules($select) {
+        const type   = ($select.val() || '').toUpperCase();
+        const rule   = TYPE_LENGTH_RULES[type] || { mode: 'length', label: 'Length / Precision', placeholder: '' };
+        const $wrap  = $('#mc-length-wrap');
+        const $label = $('#mc-length-label');
+        const $input = $('#mc-length');
+
+        if (rule.mode === 'none') {
+          $wrap.addClass('opacity-40 pointer-events-none');
+          $input.val('').prop('disabled', true).attr('placeholder', 'N/A \u2014 not applicable for this type');
+          $label.text('Length / Precision');
+        } else {
+          $wrap.removeClass('opacity-40 pointer-events-none');
+          $input.prop('disabled', false).attr('placeholder', rule.placeholder);
+          $label.text(rule.label);
+        }
+      }
 
       // Check URL params for initial tab
       const params = new URLSearchParams(window.location.search);
@@ -455,12 +692,50 @@
         openAddIndexModal(checked);
       });
 
+      // Modify Column — from bulk bar (1 column selected)
+      $('#btn-bulk-modify-col').on('click', function () {
+        const checked = $('.col-cb:checked').map(function () { return $(this).val(); }).get();
+        if (checked.length !== 1) return;
+        const colName = checked[0];
+        // Find the column data from _tableDetails
+        const colData = $.grep(_tableDetails.columns || [], function (c) { return c.name === colName; })[0] || {};
+        openModifyColModal(colName, colData);
+      });
+
+      // Modify Column — from per-row Edit button
+      $(document).on('click', '.btn-edit-single-col', function () {
+        const $btn    = $(this);
+        const colName = $btn.data('col');
+        const colData = {
+          type:     $btn.data('type') || '',
+          nullable: $btn.data('nullable') === 1 || $btn.data('nullable') === '1',
+          default:  $btn.data('default') || '',
+          comment:  $btn.data('comment') || '',
+        };
+        openModifyColModal(colName, colData);
+      });
+
+      // Close modal via backdrop or Cancel
+      $('#btn-close-mc-bg, #btn-cancel-mc').on('click', closeModifyColModal);
+
+      // When type changes in the Modify Column modal, update length field visibility
+      $('#mc-type').on('change', function () {
+        applyModalLengthRules($(this));
+      });
+
+      // Submit Modify Column form
+      $('#form-modify-col').on('submit', function (e) {
+        e.preventDefault();
+        submitModifyCol();
+      });
+
       $('#btn-bulk-drop-cols').on('click', executeBulkDropColumns);
 
       $(document).on('click', '.btn-drop-single-col', function () {
         const col = $(this).data('col');
         confirmSingleDropColumn(col);
       });
+
 
       $(document).on('click', '.btn-drop-index', function () {
         const idx = $(this).data('index');
@@ -544,6 +819,59 @@
         }
       });
 
+      /* ─── Export Dropdown ─── */
+
+      // Toggle export dropdown open/close
+      $('#btn-export-dropdown').on('click', function (e) {
+        e.stopPropagation();
+        $('#export-dropdown-menu').toggleClass('hidden');
+      });
+
+      // Close dropdown when clicking outside
+      $(document).on('click', function (e) {
+        if (!$(e.target).closest('#export-dropdown-wrapper').length) {
+          $('#export-dropdown-menu').addClass('hidden');
+        }
+      });
+
+      /**
+       * Build the export download URL, injecting current search term and active filter rules.
+       * @param {string} format  'csv' or 'excel'
+       * @returns {string} Full URL with query params
+       */
+      function buildExportUrl(format) {
+        const search  = $('#data-search-input').val().trim();
+        const rules   = collectFilterRules();
+        const active  = rules.filter(function (r) { return r.enabled && r.column; });
+
+        const params = new URLSearchParams();
+        params.set('format', format);
+        if (search) params.set('search', search);
+        if (active.length > 0) params.set('filters', JSON.stringify(active));
+
+        return `/api/v1/database-manager/${_tableName}/export?${params.toString()}`;
+      }
+
+      // Export CSV — trigger browser download via hidden anchor
+      $('#btn-export-csv').on('click', function () {
+        $('#export-dropdown-menu').addClass('hidden');
+        const url = buildExportUrl('csv');
+        const $a = $('<a>').attr({ href: url, download: '' }).appendTo('body');
+        $a[0].click();
+        $a.remove();
+        window.showToast('success', 'CSV export started — check your downloads!');
+      });
+
+      // Export Excel — trigger browser download
+      $('#btn-export-excel').on('click', function () {
+        $('#export-dropdown-menu').addClass('hidden');
+        const url = buildExportUrl('excel');
+        const $a = $('<a>').attr({ href: url, download: '' }).appendTo('body');
+        $a[0].click();
+        $a.remove();
+        window.showToast('success', 'Excel export started — check your downloads!');
+      });
+
 
       $('#btn-snippet-select-all').on('click', function () {
         $('#page-sql-editor').val(`SELECT * FROM ${_tableName} LIMIT 25;`);
@@ -624,9 +952,14 @@
               <td class="p-3.5 text-brand-600 font-semibold">${c.extra || '-'}</td>
               <td class="p-3.5 text-slate-400 italic font-sans">${c.comment || '-'}</td>
               <td class="p-3.5 text-right">
-                <button data-col="${c.name}" class="btn-drop-single-col px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition border border-rose-200 cursor-pointer">
-                  <i class="fa-solid fa-trash-can text-[10px]"></i> Drop
-                </button>
+                <div class="flex items-center justify-end gap-1.5">
+                  <button data-col="${c.name}" data-type="${c.type}" data-nullable="${c.nullable ? 1 : 0}" data-default="${c.default !== null ? c.default : ''}" data-comment="${c.comment || ''}" class="btn-edit-single-col px-2.5 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs transition border border-indigo-200 cursor-pointer">
+                    <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
+                  </button>
+                  <button data-col="${c.name}" class="btn-drop-single-col px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition border border-rose-200 cursor-pointer">
+                    <i class="fa-solid fa-trash-can text-[10px]"></i> Drop
+                  </button>
+                </div>
               </td>
             </tr>
           `;
@@ -641,8 +974,15 @@
         if (checked.length > 0) {
           $('#bulk-cols-selected-count').text(checked.length);
           $bulkBar.removeClass('hidden');
+          // Show Modify button only when exactly 1 column is selected
+          if (checked.length === 1) {
+            $('#btn-bulk-modify-col').removeClass('hidden').css('display', 'inline-flex');
+          } else {
+            $('#btn-bulk-modify-col').addClass('hidden').hide();
+          }
         } else {
           $bulkBar.addClass('hidden');
+          $('#btn-bulk-modify-col').addClass('hidden').hide();
         }
       }
 
@@ -710,6 +1050,102 @@
                 window.handleAjaxError(xhr, 'Failed to drop column.');
               }
             });
+          }
+        });
+      }
+
+      /* ─────────────────────────────────────────────────────────────
+       *  MODIFY COLUMN MODAL
+       * ────────────────────────────────────────────────────────────── */
+
+      /**
+       * Open the Modify Column modal and pre-populate all fields from existing column data.
+       * @param {string} colName  The column name to modify
+       * @param {Object} colData  Object with type, nullable, default, comment
+       */
+      function openModifyColModal(colName, colData) {
+        $('#mc-original-name').val(colName);
+        $('#mc-col-label').text('`' + colName + '`');
+        $('#mc-new-name').val('');
+
+        // Parse the raw type string e.g. "varchar(255)" → type=VARCHAR, length=255
+        const rawType  = (colData.type || 'VARCHAR').toUpperCase();
+        const typeMatch = rawType.match(/^([A-Z]+)\(?([^)]*)\)?/);
+        const baseType  = typeMatch ? typeMatch[1] : 'VARCHAR';
+        const baseLen   = typeMatch && typeMatch[2] ? typeMatch[2] : '';
+
+        // Select the matching option (fallback to VARCHAR)
+        const $typeSelect = $('#mc-type');
+        const matchOpt = $typeSelect.find('option').filter(function () {
+          return $(this).val() === baseType;
+        });
+        if (matchOpt.length) {
+          $typeSelect.val(baseType);
+        } else {
+          $typeSelect.val('VARCHAR');
+        }
+
+        $('#mc-length').val(baseLen);
+        $('#mc-nullable').prop('checked', !!colData.nullable);
+        $('#mc-unsigned').prop('checked', false);
+        $('#mc-default').val(colData.default !== null && colData.default !== undefined ? colData.default : '');
+        $('#mc-comment').val(colData.comment || '');
+
+        // Apply type-aware length rules immediately on open
+        applyModalLengthRules($('#mc-type'));
+
+        $('#modal-modify-col').removeClass('hidden');
+        setTimeout(function () { $('#mc-new-name').focus(); }, 100);
+      }
+
+      /**
+       * Close and reset the Modify Column modal.
+       */
+      function closeModifyColModal() {
+        $('#modal-modify-col').addClass('hidden');
+        $('#form-modify-col')[0].reset();
+      }
+
+      /**
+       * Submit the Modify Column form via AJAX PUT to the backend.
+       */
+      function submitModifyCol() {
+        const originalName = $('#mc-original-name').val();
+        const newName      = $('#mc-new-name').val().trim();
+        const $submitBtn   = $('#form-modify-col button[type="submit"]');
+
+        const payload = {
+          type:     $('#mc-type').val(),
+          length:   $('#mc-length').val().trim(),
+          nullable: $('#mc-nullable').is(':checked') ? 1 : 0,
+          unsigned: $('#mc-unsigned').is(':checked') ? 1 : 0,
+          default:  $('#mc-default').val(),
+          comment:  $('#mc-comment').val().trim(),
+        };
+
+        if (newName && newName !== originalName) {
+          payload.new_name = newName;
+        }
+
+        $submitBtn.prop('disabled', true).html('<i class="fa-solid fa-circle-notch fa-spin text-xs"></i> Applying…');
+
+        $.ajax({
+          url: `/api/v1/database-manager/${_tableName}/columns/${originalName}`,
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify(payload),
+          success: function (res) {
+            $submitBtn.prop('disabled', false).html('<i class="fa-solid fa-pen-to-square text-xs"></i> Apply Modification');
+            if (res.success) {
+              window.showToast('success', res.message);
+              closeModifyColModal();
+              clearColumnSelection();
+              loadTableSchema();
+            }
+          },
+          error: function (xhr) {
+            $submitBtn.prop('disabled', false).html('<i class="fa-solid fa-pen-to-square text-xs"></i> Apply Modification');
+            window.handleAjaxError(xhr, 'Failed to modify column.');
           }
         });
       }

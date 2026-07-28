@@ -170,6 +170,93 @@ class DatabaseManagerAgent
     }
 
     /**
+     * Modify an existing column's definition via ALTER TABLE … MODIFY COLUMN.
+     *
+     * @param  string      $tableName   Target table name
+     * @param  string      $columnName  Existing column to modify
+     * @param  array       $definition  New column definition payload:
+     *                                  - new_name: string|null   rename the column
+     *                                  - type: string            SQL data type (e.g. VARCHAR)
+     *                                  - length: int|null        optional length/precision
+     *                                  - nullable: bool          allow NULL
+     *                                  - default: string|null    default value (empty = no default)
+     *                                  - unsigned: bool          UNSIGNED modifier
+     *                                  - comment: string         column comment
+     * @return string  Human-readable confirmation message
+     * @throws Exception  If the table/column is invalid or ALTER fails
+     */
+    public function modifyColumn(string $tableName, string $columnName, array $definition): string
+    {
+        $this->validateTableName($tableName);
+
+        $validColumns = Schema::getColumnListing($tableName);
+        if (!in_array($columnName, $validColumns, true)) {
+            throw new Exception("Column `{$columnName}` does not exist on table `{$tableName}`.");
+        }
+
+        // Sanitize new name (may be same as original)
+        $newName = !empty($definition['new_name'])
+            ? preg_replace('/[^a-zA-Z0-9_]/', '', $definition['new_name'])
+            : $columnName;
+
+        // Sanitize type
+        $allowedTypes = [
+            'TINYINT', 'SMALLINT', 'MEDIUMINT', 'INT', 'INTEGER', 'BIGINT',
+            'DECIMAL', 'FLOAT', 'DOUBLE', 'BOOLEAN', 'BIT',
+            'CHAR', 'VARCHAR', 'TINYTEXT', 'TEXT', 'MEDIUMTEXT', 'LONGTEXT',
+            'BINARY', 'VARBINARY', 'TINYBLOB', 'BLOB', 'MEDIUMBLOB', 'LONGBLOB',
+            'ENUM', 'SET', 'DATE', 'DATETIME', 'TIMESTAMP', 'TIME', 'YEAR',
+            'JSON', 'GEOMETRY', 'POINT', 'LINESTRING', 'POLYGON',
+        ];
+
+        $type = strtoupper(trim($definition['type'] ?? 'VARCHAR'));
+        if (!in_array($type, $allowedTypes, true)) {
+            throw new Exception("Unsupported column type `{$type}`.");
+        }
+
+        // Build length/precision part
+        $length = '';
+        if (!empty($definition['length'])) {
+            $len = preg_replace('/[^0-9,]/', '', (string) $definition['length']);
+            if ($len !== '') {
+                $length = "({$len})";
+            }
+        }
+
+        $unsigned  = !empty($definition['unsigned']) ? ' UNSIGNED' : '';
+        $nullable  = !empty($definition['nullable']) ? ' NULL' : ' NOT NULL';
+        $comment   = !empty($definition['comment'])
+            ? " COMMENT '" . addslashes($definition['comment']) . "'"
+            : '';
+
+        // Default value
+        $default = '';
+        if (array_key_exists('default', $definition) && $definition['default'] !== '' && $definition['default'] !== null) {
+            $val = addslashes((string) $definition['default']);
+            $default = " DEFAULT '{$val}'";
+        }
+
+        $safeCurrent = "`{$tableName}`.`{$columnName}`";
+        $newCol = preg_replace('/[^a-zA-Z0-9_]/', '', $newName);
+        $safeCurrent; // used for logging context only
+
+        // Build ALTER TABLE SQL — use CHANGE if renaming, MODIFY otherwise
+        if ($newCol !== $columnName) {
+            $sql = "ALTER TABLE `{$tableName}` CHANGE `{$columnName}` `{$newCol}` {$type}{$length}{$unsigned}{$nullable}{$default}{$comment}";
+        } else {
+            $sql = "ALTER TABLE `{$tableName}` MODIFY COLUMN `{$columnName}` {$type}{$length}{$unsigned}{$nullable}{$default}{$comment}";
+        }
+
+        DB::statement($sql);
+
+        $label = ($newCol !== $columnName)
+            ? "Column `{$columnName}` renamed to `{$newCol}` and modified"
+            : "Column `{$columnName}` modified";
+
+        return "{$label} on table `{$tableName}` successfully.";
+    }
+
+    /**
      * Fetch paginated records from a specific database table with search capabilities.
      *
      * @param  string $tableName Target table
@@ -296,6 +383,74 @@ class DatabaseManagerAgent
             'current_page' => $page,
             'last_page'    => (int) ceil($total / max($perPage, 1)),
             'rows'         => $items,
+        ];
+    }
+
+    /**
+     * Export ALL rows from a table applying the same search/filter logic as getTableData.
+     * Returns a collection of stdClass rows suitable for streaming to CSV or Excel.
+     *
+     * @param  string      $tableName  Target table
+     * @param  string|null $search     Global text search term
+     * @param  array|null  $filters    Navicat-style filter rules [{column,operator,value,enabled}]
+     * @return array{columns: string[], rows: \Illuminate\Support\Collection}
+     * @throws Exception  If table name is invalid
+     */
+    public function exportTableData(string $tableName, ?string $search = null, ?array $filters = null): array
+    {
+        $this->validateTableName($tableName);
+
+        $query = DB::table($tableName);
+        $validColumns = Schema::getColumnListing($tableName);
+
+        // Apply the same filter rules used in getTableData
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $rule) {
+                if (!is_array($rule)) continue;
+                $enabled = isset($rule['enabled']) ? (bool) $rule['enabled'] : true;
+                if (!$enabled) continue;
+
+                $col = $rule['column'] ?? '';
+                if (!in_array($col, $validColumns, true)) continue;
+
+                $op  = strtolower($rule['operator'] ?? '=');
+                $val = $rule['value'] ?? '';
+
+                switch ($op) {
+                    case '=': case 'equals':               $query->where($col, '=', $val);              break;
+                    case '!=': case 'not_equals':           $query->where($col, '!=', $val);             break;
+                    case '<': case 'less_than':             $query->where($col, '<', $val);              break;
+                    case '<=': case 'less_equal':           $query->where($col, '<=', $val);             break;
+                    case '>': case 'greater_than':          $query->where($col, '>', $val);              break;
+                    case '>=': case 'greater_equal':        $query->where($col, '>=', $val);             break;
+                    case 'contains':                        $query->where($col, 'LIKE', "%{$val}%");     break;
+                    case 'does_not_contain':                $query->where($col, 'NOT LIKE', "%{$val}%"); break;
+                    case 'begins_with': case 'begin with':  $query->where($col, 'LIKE', "{$val}%");      break;
+                    case 'does_not_begin_with':             $query->where($col, 'NOT LIKE', "{$val}%");  break;
+                    case 'ends_with': case 'end with':      $query->where($col, 'LIKE', "%{$val}");      break;
+                    case 'does_not_end_with':               $query->where($col, 'NOT LIKE', "%{$val}");  break;
+                    case 'is_null': case 'is null':         $query->whereNull($col);                     break;
+                    case 'is_not_null': case 'is not null': $query->whereNotNull($col);                  break;
+                    case 'is_empty': case 'is empty':       $query->where($col, '=', '');                break;
+                    case 'is_not_empty': case 'is not empty': $query->where($col, '!=', '');             break;
+                    default:                                $query->where($col, '=', $val);              break;
+                }
+            }
+        }
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($validColumns, $search) {
+                foreach ($validColumns as $i => $col) {
+                    $i === 0 ? $q->where($col, 'LIKE', "%{$search}%") : $q->orWhere($col, 'LIKE', "%{$search}%");
+                }
+            });
+        }
+
+        $rows = $query->get();
+
+        return [
+            'columns' => $validColumns,
+            'rows'    => $rows,
         ];
     }
 

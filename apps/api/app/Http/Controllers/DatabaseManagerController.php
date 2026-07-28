@@ -95,6 +95,91 @@ class DatabaseManagerController extends Controller
     }
 
     /**
+     * Export all filtered table rows as CSV or Excel stream download.
+     *
+     * @param  string  $table    Target table
+     * @param  Request $request  Params: format (csv|excel), search, filters (JSON)
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\Response
+     */
+    public function exportData(string $table, Request $request)
+    {
+        $format = strtolower($request->query('format', 'csv'));
+        $search = $request->query('search');
+
+        $rawFilters = $request->query('filters');
+        $filters = null;
+        if (!empty($rawFilters)) {
+            $decoded = json_decode($rawFilters, true);
+            if (is_array($decoded)) {
+                $filters = $decoded;
+            }
+        }
+
+        try {
+            $export   = $this->agent->exportTableData($table, $search, $filters);
+            $columns  = $export['columns'];
+            $rows     = $export['rows'];
+            $filename = $table . '_export_' . date('Ymd_His');
+
+            if ($format === 'excel') {
+                // XML Spreadsheet — opens natively in Excel & LibreOffice without any package
+                $xml  = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+                $xml .= "<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\"";
+                $xml .= " xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">\n";
+                $xml .= "<Worksheet ss:Name=\"" . htmlspecialchars($table) . "\">\n<Table>\n";
+
+                $xml .= "<Row>";
+                foreach ($columns as $col) {
+                    $xml .= '<Cell><Data ss:Type="String">' . htmlspecialchars($col) . '</Data></Cell>';
+                }
+                $xml .= "</Row>\n";
+
+                foreach ($rows as $row) {
+                    $arr  = (array) $row;
+                    $xml .= "<Row>";
+                    foreach ($columns as $col) {
+                        $val  = $arr[$col] ?? '';
+                        $xml .= '<Cell><Data ss:Type="String">' . htmlspecialchars((string) $val) . '</Data></Cell>';
+                    }
+                    $xml .= "</Row>\n";
+                }
+
+                $xml .= "</Table>\n</Worksheet>\n</Workbook>";
+
+                return response($xml, 200, [
+                    'Content-Type'        => 'application/vnd.ms-excel',
+                    'Content-Disposition' => "attachment; filename=\"{$filename}.xls\"",
+                    'Cache-Control'       => 'max-age=0',
+                ]);
+            }
+
+            // Default: CSV
+            $handle = fopen('php://temp', 'r+');
+            // UTF-8 BOM so Excel auto-detects encoding
+            fwrite($handle, "\xEF\xBB\xBF");
+            fputcsv($handle, $columns);
+            foreach ($rows as $row) {
+                $arr = (array) $row;
+                fputcsv($handle, array_map(fn ($col) => $arr[$col] ?? '', $columns));
+            }
+            rewind($handle);
+            $csv = stream_get_contents($handle);
+            fclose($handle);
+
+            return response($csv, 200, [
+                'Content-Type'        => 'text/csv; charset=UTF-8',
+                'Content-Disposition' => "attachment; filename=\"{$filename}.csv\"",
+                'Cache-Control'       => 'max-age=0',
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * Create a new table via DDL.
      */
     public function store(CreateTableRequest $request): JsonResponse
@@ -246,6 +331,44 @@ class DatabaseManagerController extends Controller
             ], 422);
         }
     }
+
+    /**
+     * Modify an existing column's definition (type, length, nullable, default, rename, comment).
+     *
+     * @param string  $table   Target table name
+     * @param string  $column  Existing column name
+     * @param Request $request Payload: type, length, nullable, default, unsigned, new_name, comment
+     * @return JsonResponse
+     */
+    public function modifyColumn(string $table, string $column, Request $request): JsonResponse
+    {
+        $request->validate([
+            'type'     => ['required', 'string', 'regex:/^[a-zA-Z]+$/'],
+            'length'   => ['nullable', 'string', 'regex:/^[0-9,]+$/'],
+            'nullable' => ['nullable', 'boolean'],
+            'unsigned' => ['nullable', 'boolean'],
+            'default'  => ['nullable', 'string', 'max:500'],
+            'new_name' => ['nullable', 'string', 'regex:/^[a-zA-Z0-9_]+$/'],
+            'comment'  => ['nullable', 'string', 'max:255'],
+        ]);
+
+        try {
+            $msg = $this->agent->modifyColumn($table, $column, $request->only([
+                'type', 'length', 'nullable', 'unsigned', 'default', 'new_name', 'comment',
+            ]));
+
+            return response()->json([
+                'success' => true,
+                'message' => $msg,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
 
     /**
      * Execute custom raw SQL query.

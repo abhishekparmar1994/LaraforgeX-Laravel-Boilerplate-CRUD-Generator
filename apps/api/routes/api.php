@@ -66,10 +66,12 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/create', [\App\Http\Controllers\DatabaseManagerController::class, 'store']);
         Route::get('/{table}', [\App\Http\Controllers\DatabaseManagerController::class, 'show']);
         Route::get('/{table}/data', [\App\Http\Controllers\DatabaseManagerController::class, 'data']);
+        Route::get('/{table}/export', [\App\Http\Controllers\DatabaseManagerController::class, 'exportData']);
         Route::post('/{table}/indexes', [\App\Http\Controllers\DatabaseManagerController::class, 'addIndex']);
         Route::delete('/{table}/indexes/{indexName}', [\App\Http\Controllers\DatabaseManagerController::class, 'dropIndex']);
         Route::post('/bulk-action', [\App\Http\Controllers\DatabaseManagerController::class, 'bulkAction']);
         Route::post('/{table}/drop-columns', [\App\Http\Controllers\DatabaseManagerController::class, 'dropColumns']);
+        Route::put('/{table}/columns/{column}', [\App\Http\Controllers\DatabaseManagerController::class, 'modifyColumn']);
         Route::post('/execute-sql', [\App\Http\Controllers\DatabaseManagerController::class, 'executeSql']);
         Route::post('/{table}/truncate', [\App\Http\Controllers\DatabaseManagerController::class, 'truncate']);
         Route::delete('/{table}', [\App\Http\Controllers\DatabaseManagerController::class, 'destroy']);

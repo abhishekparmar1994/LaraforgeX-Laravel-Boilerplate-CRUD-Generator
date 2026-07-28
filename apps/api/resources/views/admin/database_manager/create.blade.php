@@ -221,6 +221,107 @@
       executeTableCreation();
     });
 
+    /* ─── Type-Aware Length Rules ───────────────────────────────────
+     * Defines which SQL types support a length/precision parameter.
+     * Categories:
+     *   'none'      — no length input (hidden)
+     *   'length'    — single integer length
+     *   'width'     — numeric display width (optional)
+     *   'precision' — "precision,scale" e.g. DECIMAL(10,2)
+     *   'values'    — comma-separated quoted values e.g. ENUM
+     * ─────────────────────────────────────────────────────────────── */
+    const TYPE_LENGTH_RULES = {
+      // No length
+      JSON:       { mode: 'none' },
+      TEXT:       { mode: 'none' },
+      TINYTEXT:   { mode: 'none' },
+      MEDIUMTEXT: { mode: 'none' },
+      LONGTEXT:   { mode: 'none' },
+      BOOLEAN:    { mode: 'none' },
+      DATE:       { mode: 'none' },
+      DATETIME:   { mode: 'none' },
+      TIMESTAMP:  { mode: 'none' },
+      TIME:       { mode: 'none' },
+      YEAR:       { mode: 'none' },
+      BLOB:       { mode: 'none' },
+      TINYBLOB:   { mode: 'none' },
+      MEDIUMBLOB: { mode: 'none' },
+      LONGBLOB:   { mode: 'none' },
+      // Fixed string length
+      VARCHAR:    { mode: 'length',    label: 'Length',           placeholder: '255',   default: '255' },
+      CHAR:       { mode: 'length',    label: 'Length',           placeholder: '36',    default: '36'  },
+      BINARY:     { mode: 'length',    label: 'Length',           placeholder: '16',    default: ''    },
+      VARBINARY:  { mode: 'length',    label: 'Length',           placeholder: '255',   default: ''    },
+      // Numeric (optional display width)
+      INT:        { mode: 'width',     label: 'Display Width',    placeholder: '11',    default: ''    },
+      INTEGER:    { mode: 'width',     label: 'Display Width',    placeholder: '11',    default: ''    },
+      BIGINT:     { mode: 'width',     label: 'Display Width',    placeholder: '20',    default: ''    },
+      TINYINT:    { mode: 'width',     label: 'Display Width',    placeholder: '4',     default: ''    },
+      SMALLINT:   { mode: 'width',     label: 'Display Width',    placeholder: '6',     default: ''    },
+      MEDIUMINT:  { mode: 'width',     label: 'Display Width',    placeholder: '9',     default: ''    },
+      FLOAT:      { mode: 'width',     label: 'Precision',        placeholder: '',      default: ''    },
+      DOUBLE:     { mode: 'width',     label: 'Precision',        placeholder: '',      default: ''    },
+      // Precision + scale
+      DECIMAL:    { mode: 'precision', label: 'Precision, Scale', placeholder: '10,2',  default: '10,2'},
+      // Values list
+      ENUM:       { mode: 'values',    label: 'Values',           placeholder: "'a','b','c'", default: '' },
+      SET:        { mode: 'values',    label: 'Values',           placeholder: "'x','y','z'", default: '' },
+    };
+
+    /**
+     * Apply length-field visibility/label/placeholder rules based on the selected data type.
+     * Works for both Create Table rows (.col-type-select) and the Modify Column modal (#mc-type).
+     *
+     * @param {jQuery} $select  The type <select> element that changed
+     */
+    function applyLengthRules($select) {
+      const type    = ($select.val() || '').toUpperCase();
+      const rule    = TYPE_LENGTH_RULES[type] || { mode: 'length', label: 'Length', placeholder: '', default: '' };
+      const isModal = $select.attr('id') === 'mc-type';
+
+      if (isModal) {
+        // ── Modify Column modal ──────────────────────────────────
+        const $wrap  = $('#mc-length-wrap');
+        const $label = $('#mc-length-label');
+        const $input = $('#mc-length');
+
+        if (rule.mode === 'none') {
+          $wrap.addClass('opacity-40 pointer-events-none');
+          $input.val('').prop('disabled', true).attr('placeholder', 'N/A — not applicable');
+          $label.text('Length / Precision');
+        } else {
+          $wrap.removeClass('opacity-40 pointer-events-none');
+          $input.prop('disabled', false).attr('placeholder', rule.placeholder);
+          $label.text(rule.label);
+        }
+      } else {
+        // ── Create Table row ─────────────────────────────────────
+        const $tr     = $select.closest('tr');
+        const $input  = $tr.find('.col-length-input');
+        const $na     = $tr.find('.col-length-na');
+
+        if (rule.mode === 'none') {
+          $input.hide().prop('disabled', true).val('');
+          $na.removeClass('hidden');
+        } else {
+          $na.addClass('hidden');
+          $input.show().prop('disabled', false).attr('placeholder', rule.placeholder);
+          // Auto-fill default length only when user hasn't typed anything
+          if ($input.val() === '' && rule.default) {
+            $input.val(rule.default);
+          }
+        }
+      }
+    }
+
+    // Delegated change handler — fires for every type select in the column builder rows
+    $(document).on('change', '.col-type-select', function () {
+      applyLengthRules($(this));
+    });
+
+    // Expose applyLengthRules globally so the Modify Column modal can call it too
+    window.applyLengthRules = applyLengthRules;
+
     function fetchExistingTables() {
       $.ajax({
         url: '/api/v1/database-manager',
@@ -248,23 +349,37 @@
               class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white" placeholder="column_name">
           </td>
           <td class="p-3">
-            <select name="col_type" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:bg-white">
+            <select name="col_type" class="col-type-select w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:bg-white">
               <option value="INT" ${type === 'INT' ? 'selected' : ''}>INT (Integer)</option>
               <option value="BIGINT" ${type === 'BIGINT' ? 'selected' : ''}>BIGINT (64-bit Int)</option>
+              <option value="TINYINT" ${type === 'TINYINT' ? 'selected' : ''}>TINYINT</option>
+              <option value="SMALLINT" ${type === 'SMALLINT' ? 'selected' : ''}>SMALLINT</option>
               <option value="VARCHAR" ${type === 'VARCHAR' ? 'selected' : ''}>VARCHAR (String)</option>
-              <option value="TEXT" ${type === 'TEXT' ? 'selected' : ''}>TEXT (Long String)</option>
+              <option value="CHAR" ${type === 'CHAR' ? 'selected' : ''}>CHAR (Fixed String)</option>
+              <option value="TEXT" ${type === 'TEXT' ? 'selected' : ''}>TEXT</option>
+              <option value="TINYTEXT" ${type === 'TINYTEXT' ? 'selected' : ''}>TINYTEXT</option>
+              <option value="MEDIUMTEXT" ${type === 'MEDIUMTEXT' ? 'selected' : ''}>MEDIUMTEXT</option>
               <option value="LONGTEXT" ${type === 'LONGTEXT' ? 'selected' : ''}>LONGTEXT</option>
+              <option value="DECIMAL" ${type === 'DECIMAL' ? 'selected' : ''}>DECIMAL (Fixed Precision)</option>
+              <option value="FLOAT" ${type === 'FLOAT' ? 'selected' : ''}>FLOAT</option>
+              <option value="DOUBLE" ${type === 'DOUBLE' ? 'selected' : ''}>DOUBLE</option>
+              <option value="BOOLEAN" ${type === 'BOOLEAN' ? 'selected' : ''}>BOOLEAN</option>
+              <option value="DATE" ${type === 'DATE' ? 'selected' : ''}>DATE</option>
               <option value="DATETIME" ${type === 'DATETIME' ? 'selected' : ''}>DATETIME</option>
               <option value="TIMESTAMP" ${type === 'TIMESTAMP' ? 'selected' : ''}>TIMESTAMP</option>
-              <option value="BOOLEAN" ${type === 'BOOLEAN' ? 'selected' : ''}>BOOLEAN</option>
-              <option value="ENUM" ${type === 'ENUM' ? 'selected' : ''}>ENUM</option>
+              <option value="TIME" ${type === 'TIME' ? 'selected' : ''}>TIME</option>
+              <option value="YEAR" ${type === 'YEAR' ? 'selected' : ''}>YEAR</option>
               <option value="JSON" ${type === 'JSON' ? 'selected' : ''}>JSON</option>
-              <option value="DECIMAL" ${type === 'DECIMAL' ? 'selected' : ''}>DECIMAL</option>
+              <option value="BLOB" ${type === 'BLOB' ? 'selected' : ''}>BLOB</option>
+              <option value="LONGBLOB" ${type === 'LONGBLOB' ? 'selected' : ''}>LONGBLOB</option>
+              <option value="ENUM" ${type === 'ENUM' ? 'selected' : ''}>ENUM</option>
+              <option value="SET" ${type === 'SET' ? 'selected' : ''}>SET</option>
             </select>
           </td>
-          <td class="p-3">
+          <td class="p-3 col-length-cell">
             <input type="text" name="col_length" value="${length}"
-              class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:bg-white" placeholder="e.g. 255">
+              class="col-length-input w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:bg-white" placeholder="e.g. 255">
+            <span class="col-length-na hidden text-[10px] text-slate-300 font-semibold italic">— N/A</span>
           </td>
           <td class="p-3 text-center">
             <input type="checkbox" name="col_nullable" ${nullable ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
@@ -289,6 +404,10 @@
 
       $('#ct-columns-tbody').append(html);
       updateColumnsBadge();
+
+      // Trigger type-aware length logic for the new row
+      const $newSelect = $('#' + rowId).find('.col-type-select');
+      applyLengthRules($newSelect);
     }
 
     function addBuilderFkRow() {
