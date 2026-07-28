@@ -5,8 +5,7 @@
     <!-- Sidebar Toggle -->
     <button type="button"
       class="h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm cursor-pointer"
-      onclick="toggleSidebar()"
-      title="Toggle Sidebar">
+      onclick="toggleSidebar()" title="Toggle Sidebar">
       <i class="fa-solid fa-bars text-sm"></i>
     </button>
 
@@ -22,8 +21,7 @@
     <div class="relative" id="theme-dropdown-wrapper">
       <button id="theme-dropdown-toggle"
         class="h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer"
-        onclick="toggleThemeDropdown()"
-        title="Theme Customizer">
+        onclick="toggleThemeDropdown()" title="Theme Customizer">
         <i class="fa-solid fa-palette text-sm text-brand-600"></i>
       </button>
 
@@ -32,11 +30,21 @@
         <div>
           <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Accent Color Palette</p>
           <div class="grid grid-cols-5 gap-1.5">
-            <button onclick="setAccentTheme('#2b47ff')" class="h-6 w-6 rounded-full bg-[#2b47ff] border-2 border-white shadow cursor-pointer" title="Royal Blue"></button>
-            <button onclick="setAccentTheme('#10b981')" class="h-6 w-6 rounded-full bg-[#10b981] border-2 border-white shadow cursor-pointer" title="Emerald"></button>
-            <button onclick="setAccentTheme('#8b5cf6')" class="h-6 w-6 rounded-full bg-[#8b5cf6] border-2 border-white shadow cursor-pointer" title="Deep Violet"></button>
-            <button onclick="setAccentTheme('#f59e0b')" class="h-6 w-6 rounded-full bg-[#f59e0b] border-2 border-white shadow cursor-pointer" title="Sunset Amber"></button>
-            <button onclick="setAccentTheme('#f43f5e')" class="h-6 w-6 rounded-full bg-[#f43f5e] border-2 border-white shadow cursor-pointer" title="Crimson Rose"></button>
+            <button onclick="setAccentTheme('#2b47ff')"
+              class="h-6 w-6 rounded-full bg-[#2b47ff] border-2 border-white shadow cursor-pointer"
+              title="Royal Blue"></button>
+            <button onclick="setAccentTheme('#10b981')"
+              class="h-6 w-6 rounded-full bg-[#10b981] border-2 border-white shadow cursor-pointer"
+              title="Emerald"></button>
+            <button onclick="setAccentTheme('#8b5cf6')"
+              class="h-6 w-6 rounded-full bg-[#8b5cf6] border-2 border-white shadow cursor-pointer"
+              title="Deep Violet"></button>
+            <button onclick="setAccentTheme('#f59e0b')"
+              class="h-6 w-6 rounded-full bg-[#f59e0b] border-2 border-white shadow cursor-pointer"
+              title="Sunset Amber"></button>
+            <button onclick="setAccentTheme('#f43f5e')"
+              class="h-6 w-6 rounded-full bg-[#f43f5e] border-2 border-white shadow cursor-pointer"
+              title="Crimson Rose"></button>
           </div>
         </div>
       </div>
@@ -46,9 +54,9 @@
     <div class="relative" id="lang-dropdown-wrapper">
       <button id="lang-dropdown-toggle"
         class="h-9 px-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer text-xs font-bold gap-2"
-        onclick="toggleLangDropdown()"
-        title="Language Selector">
-        <img id="current-lang-flag-img" src="https://flagcdn.com/w40/us.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US">
+        onclick="toggleLangDropdown()" title="Language Selector">
+        <img id="current-lang-flag-img" src="https://flagcdn.com/w40/us.png"
+          class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US">
         <span id="current-lang-code" class="uppercase font-mono">EN</span>
         <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
       </button>
@@ -56,28 +64,40 @@
       <div id="lang-dropdown-panel"
         class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs">
         <div class="py-1">
-          <button onclick="setLanguage('en', 'https://flagcdn.com/w40/us.png', 'EN', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/us.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US"> English</span>
+          <button onclick="setLanguage('en', 'https://flagcdn.com/w40/us.png', 'EN', 'ltr')"
+            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/us.png"
+                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US"> English</span>
             <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('es', 'https://flagcdn.com/w40/es.png', 'ES', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/es.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="ES"> Español</span>
+          <button onclick="setLanguage('es', 'https://flagcdn.com/w40/es.png', 'ES', 'ltr')"
+            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/es.png"
+                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="ES"> Español</span>
             <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('fr', 'https://flagcdn.com/w40/fr.png', 'FR', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/fr.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="FR"> Français</span>
+          <button onclick="setLanguage('fr', 'https://flagcdn.com/w40/fr.png', 'FR', 'ltr')"
+            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/fr.png"
+                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="FR"> Français</span>
             <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('de', 'https://flagcdn.com/w40/de.png', 'DE', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/de.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="DE"> Deutsch</span>
+          <button onclick="setLanguage('de', 'https://flagcdn.com/w40/de.png', 'DE', 'ltr')"
+            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/de.png"
+                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="DE"> Deutsch</span>
             <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
-          <button onclick="setLanguage('ar', 'https://flagcdn.com/w40/sa.png', 'AR', 'rtl')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/sa.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="SA"> العربية</span>
+          <button onclick="setLanguage('ar', 'https://flagcdn.com/w40/sa.png', 'AR', 'rtl')"
+            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/sa.png"
+                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="SA"> العربية</span>
             <span class="text-[10px] text-brand-600 font-bold font-mono">RTL</span>
           </button>
-          <button onclick="setLanguage('hi', 'https://flagcdn.com/w40/in.png', 'HI', 'ltr')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/in.png" class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="IN"> हिंदी</span>
+          <button onclick="setLanguage('hi', 'https://flagcdn.com/w40/in.png', 'HI', 'ltr')"
+            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/in.png"
+                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="IN"> हिंदी</span>
             <span class="text-[10px] text-slate-400 font-mono">LTR</span>
           </button>
         </div>
@@ -88,17 +108,19 @@
     <div class="relative" id="notif-dropdown-wrapper">
       <button id="notif-dropdown-toggle"
         class="relative h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm cursor-pointer"
-        onclick="toggleNotifDropdown()"
-        title="Notifications">
+        onclick="toggleNotifDropdown()" title="Notifications">
         <i class="fa-regular fa-bell text-sm"></i>
-        <span id="notif-badge-dot" class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-white"></span>
+        <span id="notif-badge-dot"
+          class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-white"></span>
       </button>
 
       <div id="notif-dropdown-panel"
         class="hidden absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs font-sans">
         <div class="px-4 py-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
           <span class="font-extrabold text-slate-900">Notifications</span>
-          <button onclick="markAllNotificationsRead()" class="text-[10px] font-bold text-brand-600 hover:underline border-0 bg-transparent cursor-pointer">Mark all as read</button>
+          <button onclick="markAllNotificationsRead()"
+            class="text-[10px] font-bold text-brand-600 hover:underline border-0 bg-transparent cursor-pointer">Mark all
+            as read</button>
         </div>
         <div id="notif-list-container" class="divide-y divide-slate-100 max-h-72 overflow-y-auto">
           <div class="p-4 text-center text-slate-400 text-xs">Loading notifications...</div>
@@ -653,7 +675,7 @@
     }
   }
 
-  $(document).ready(function() {
+  $(document).ready(function () {
     const savedCode = localStorage.getItem('laraforgex_lang_code');
     const savedFlagImg = localStorage.getItem('laraforgex_lang_flag_img');
     const savedLabel = localStorage.getItem('laraforgex_lang_label');
@@ -673,7 +695,7 @@
     }
   });
 
-  $(document).on('click', function(e) {
+  $(document).on('click', function (e) {
     if (!$(e.target).closest('#lang-dropdown-wrapper').length) {
       $('#lang-dropdown-panel').addClass('hidden');
     }
@@ -736,11 +758,11 @@
     } catch (e) { }
   }
 
-  $(document).ready(function() {
+  $(document).ready(function () {
     loadNotifications();
   });
 
-  $(document).on('click', function(e) {
+  $(document).on('click', function (e) {
     if (!$(e.target).closest('#notif-dropdown-wrapper').length) {
       $('#notif-dropdown-panel').addClass('hidden');
     }

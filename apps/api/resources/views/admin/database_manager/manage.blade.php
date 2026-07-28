@@ -202,23 +202,79 @@
       </div>
 
       <!-- Tab 4: Browse Data -->
-      <div id="tab-content-data" class="tab-content hidden space-y-4">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div class="relative w-full sm:w-80">
+      <div id="tab-content-data" class="tab-content hidden space-y-3">
+
+        <!-- Toolbar: Search + Filter Toggle + Pagination Info -->
+        <div class="flex flex-col sm:flex-row items-center gap-3">
+          <!-- Global Search -->
+          <div class="relative w-full sm:w-72 flex-shrink-0">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
             <input type="text" id="data-search-input"
               class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500"
-              placeholder="Search table rows…">
+              placeholder="Quick search all columns…">
           </div>
-          <span id="data-pagination-info" class="text-xs font-semibold text-slate-500">Loading data…</span>
+
+          <!-- Navicat Filter Toggle Button -->
+          <button type="button" id="btn-toggle-navicat-filter"
+            class="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 text-slate-600 hover:text-indigo-700 text-xs font-bold transition cursor-pointer group"
+            title="Toggle Advanced Filters">
+            <i class="fa-solid fa-filter text-xs group-hover:text-indigo-600 transition"></i>
+            <span>Filter</span>
+            <span id="filter-active-badge" class="hidden items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold">0</span>
+          </button>
+
+          <!-- Spacer -->
+          <div class="flex-1"></div>
+
+          <!-- Pagination info -->
+          <span id="data-pagination-info" class="text-xs font-semibold text-slate-500 flex-shrink-0">Loading data…</span>
         </div>
 
-        <div class="border border-slate-200 rounded-xl overflow-x-auto shadow-xs max-h-[500px]">
+        <!-- Navicat Filter Builder Bar (hidden by default) -->
+        <div id="navicat-filter-bar" class="hidden border border-indigo-200 bg-indigo-50/60 rounded-2xl p-4 space-y-3">
+          <!-- Header -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-filter text-indigo-600 text-xs"></i>
+              <span class="text-xs font-extrabold text-indigo-800 uppercase tracking-wider">Advanced Filters</span>
+              <span class="text-[10px] text-indigo-500 font-semibold">(AND logic — all active rules must match)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" id="btn-add-filter-rule"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition cursor-pointer shadow-sm">
+                <i class="fa-solid fa-plus text-[10px]"></i> Add Rule
+              </button>
+              <button type="button" id="btn-apply-filters"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition cursor-pointer shadow-sm">
+                <i class="fa-solid fa-check text-[10px]"></i> Apply
+              </button>
+              <button type="button" id="btn-reset-filters"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-[10px]"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Rules Container -->
+          <div id="filter-rules-container" class="space-y-2">
+            <!-- Filter rule rows injected here by JS -->
+          </div>
+
+          <!-- Empty State -->
+          <div id="filter-rules-empty" class="flex items-center justify-center py-4 text-xs text-indigo-400 font-semibold">
+            <i class="fa-solid fa-circle-plus mr-2 text-indigo-300"></i>
+            Click <strong class="mx-1 text-indigo-600">Add Rule</strong> to build a filter condition
+          </div>
+        </div>
+
+        <!-- Data Grid -->
+        <div class="border border-slate-200 rounded-xl overflow-x-auto shadow-xs" style="max-height:520px; overflow-y:auto;">
           <table class="w-full text-left border-collapse text-xs font-mono" id="data-grid-table">
             <!-- Dynamically populated via JS -->
           </table>
         </div>
 
+        <!-- Pagination Controls -->
         <div class="flex items-center justify-between text-xs font-bold text-slate-600">
           <button type="button" id="btn-data-prev"
             class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition cursor-pointer">
@@ -231,6 +287,7 @@
           </button>
         </div>
       </div>
+
 
       <!-- Tab 5: DDL & SQL Console -->
       <div id="tab-content-sql" class="tab-content hidden space-y-6">
@@ -424,6 +481,69 @@
 
       $('#btn-data-prev').on('click', function () { changeDataPage(-1); });
       $('#btn-data-next').on('click', function () { changeDataPage(1); });
+
+      /* ─── Navicat Filter Bar Events ─── */
+
+      // Toggle filter bar visibility
+      $('#btn-toggle-navicat-filter').on('click', function () {
+        const $bar = $('#navicat-filter-bar');
+        const isHidden = $bar.hasClass('hidden');
+        $bar.toggleClass('hidden', !isHidden);
+        $(this).toggleClass('bg-indigo-100 border-indigo-400 text-indigo-700', isHidden);
+        $(this).find('i.fa-filter').toggleClass('text-indigo-600', isHidden);
+      });
+
+      // Add a new filter rule row
+      $('#btn-add-filter-rule').on('click', function () {
+        addFilterRule();
+      });
+
+      // Remove a filter rule row (event delegation)
+      $(document).on('click', '.btn-remove-filter-rule', function () {
+        $(this).closest('.filter-rule-row').remove();
+        syncFilterBadge();
+        syncFirstRowAndBadge();
+      });
+
+      // When operator changes, show/hide value input
+      $(document).on('change', '.filter-op-select', function () {
+        const $row = $(this).closest('.filter-rule-row');
+        const $selectedOpt = $(this).find('option:selected');
+        const hasValue = $selectedOpt.data('has-value') === true || $selectedOpt.data('has-value') === 'true';
+        const $valWrap = $row.find('.filter-val-wrap');
+        if (hasValue) {
+          $valWrap.css('visibility', 'visible');
+        } else {
+          $valWrap.css('visibility', 'hidden');
+          $row.find('.filter-val-input').val('');
+        }
+      });
+
+      // Update badge when enable checkbox is toggled
+      $(document).on('change', '.filter-rule-enabled', function () {
+        syncFilterBadge();
+      });
+
+      // Apply filters button
+      $('#btn-apply-filters').on('click', function () {
+        loadDataRows(1);
+      });
+
+      // Reset filters button
+      $('#btn-reset-filters').on('click', function () {
+        $('#filter-rules-container').empty();
+        $('#filter-rules-empty').show();
+        syncFilterBadge();
+        loadDataRows(1);
+      });
+
+      // Press Enter in value input to apply
+      $(document).on('keyup', '.filter-val-input', function (e) {
+        if (e.key === 'Enter') {
+          $('#btn-apply-filters').trigger('click');
+        }
+      });
+
 
       $('#btn-snippet-select-all').on('click', function () {
         $('#page-sql-editor').val(`SELECT * FROM ${_tableName} LIMIT 25;`);
@@ -638,40 +758,211 @@
         $tbody.html(html);
       }
 
+      /* ─────────────────────────────────────────────────────────────
+       *  NAVICAT FILTER ENGINE
+       * ────────────────────────────────────────────────────────────── */
+
+      const FILTER_OPERATORS = [
+        { value: 'contains',              label: 'contains',              hasValue: true  },
+        { value: 'does_not_contain',      label: 'does not contain',      hasValue: true  },
+        { value: '=',                     label: '= equals',              hasValue: true  },
+        { value: '!=',                    label: '≠ not equals',          hasValue: true  },
+        { value: 'begins_with',           label: 'begins with',           hasValue: true  },
+        { value: 'does_not_begin_with',   label: 'does not begin with',   hasValue: true  },
+        { value: 'ends_with',             label: 'ends with',             hasValue: true  },
+        { value: 'does_not_end_with',     label: 'does not end with',     hasValue: true  },
+        { value: '<',                     label: '< less than',           hasValue: true  },
+        { value: '<=',                    label: '≤ less or equal',       hasValue: true  },
+        { value: '>',                     label: '> greater than',        hasValue: true  },
+        { value: '>=',                    label: '≥ greater or equal',    hasValue: true  },
+        { value: 'is_null',               label: 'is null',               hasValue: false },
+        { value: 'is_not_null',           label: 'is not null',           hasValue: false },
+        { value: 'is_empty',              label: 'is empty',              hasValue: false },
+        { value: 'is_not_empty',          label: 'is not empty',          hasValue: false },
+      ];
+
+      let _filterRuleCount = 0;
+
+      /**
+       * Build the operator <select> options HTML.
+       * @returns {string} HTML option tags
+       */
+      function buildOperatorOptions(selected) {
+        let html = '';
+        $.each(FILTER_OPERATORS, function (i, op) {
+          const sel = (selected === op.value) ? 'selected' : '';
+          html += `<option value="${op.value}" data-has-value="${op.hasValue}" ${sel}>${op.label}</option>`;
+        });
+        return html;
+      }
+
+      /**
+       * Build the column <select> options HTML from _tableDetails.
+       * @returns {string} HTML option tags
+       */
+      function buildColumnOptions(selected) {
+        if (!_tableDetails || !_tableDetails.columns) return '<option value="">— column —</option>';
+        let html = '';
+        $.each(_tableDetails.columns, function (i, col) {
+          const sel = (selected === col.name) ? 'selected' : '';
+          html += `<option value="${col.name}" ${sel}>${col.name}</option>`;
+        });
+        return html;
+      }
+
+      /**
+       * Append one new filter rule row to the container.
+       */
+      function addFilterRule(preset) {
+        _filterRuleCount++;
+        const ruleId = 'filter-rule-' + _filterRuleCount;
+        const defaultCol  = (preset && preset.column)   || (_tableDetails && _tableDetails.columns && _tableDetails.columns[0] ? _tableDetails.columns[0].name : '');
+        const defaultOp   = (preset && preset.operator)  || 'contains';
+        const defaultVal  = (preset && preset.value)     || '';
+        const isEnabled   = (preset && preset.enabled === false) ? false : true;
+
+        const firstOpObj = FILTER_OPERATORS.find(function (o) { return o.value === defaultOp; }) || FILTER_OPERATORS[0];
+        const valHidden  = !firstOpObj.hasValue ? 'style="visibility:hidden;"' : '';
+
+        const row = `
+          <div class="filter-rule-row flex items-center gap-2 bg-white border border-indigo-100 rounded-xl px-3 py-2 shadow-xs" id="${ruleId}">
+            <!-- Enable toggle -->
+            <input type="checkbox" class="filter-rule-enabled w-3.5 h-3.5 rounded border-indigo-300 text-indigo-600 cursor-pointer flex-shrink-0" ${isEnabled ? 'checked' : ''} title="Enable this rule">
+
+            <!-- AND badge (except first) -->
+            <span class="filter-and-badge text-[9px] font-extrabold uppercase tracking-wider text-indigo-400 w-7 flex-shrink-0 text-center">AND</span>
+
+            <!-- Column select -->
+            <select class="filter-col-select bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-400 min-w-[110px] cursor-pointer">
+              ${buildColumnOptions(defaultCol)}
+            </select>
+
+            <!-- Operator select -->
+            <select class="filter-op-select bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-indigo-400 min-w-[150px] cursor-pointer">
+              ${buildOperatorOptions(defaultOp)}
+            </select>
+
+            <!-- Value input -->
+            <div class="filter-val-wrap flex-1 min-w-[100px]" ${valHidden}>
+              <input type="text" class="filter-val-input w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-400 placeholder-slate-300" value="${defaultVal}" placeholder="&lt;?&gt; value…">
+            </div>
+
+            <!-- Remove rule button -->
+            <button type="button" class="btn-remove-filter-rule flex-shrink-0 w-6 h-6 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-700 flex items-center justify-center transition cursor-pointer border border-rose-200" title="Remove rule">
+              <i class="fa-solid fa-xmark text-[9px]"></i>
+            </button>
+          </div>`;
+
+        $('#filter-rules-container').append(row);
+        $('#filter-rules-empty').hide();
+        syncFilterBadge();
+        syncFirstRowAndBadge();
+      }
+
+      /**
+       * Hide the AND badge on the first visible rule row.
+       */
+      function syncFirstRowAndBadge() {
+        const $rows = $('#filter-rules-container .filter-rule-row');
+        $rows.find('.filter-and-badge').show();
+        $rows.first().find('.filter-and-badge').hide();
+      }
+
+      /**
+       * Count active (checked) rules and update the filter badge count.
+       */
+      function syncFilterBadge() {
+        const total = $('#filter-rules-container .filter-rule-row').length;
+        const active = $('#filter-rules-container .filter-rule-enabled:checked').length;
+        const $badge = $('#filter-active-badge');
+        if (total > 0 && active > 0) {
+          $badge.text(active).removeClass('hidden').css('display', 'inline-flex');
+        } else {
+          $badge.addClass('hidden').hide();
+        }
+        if (total === 0) {
+          $('#filter-rules-empty').show();
+        }
+      }
+
+      /**
+       * Collect all active filter rules into an array of {column, operator, value, enabled}.
+       * @returns {Array}
+       */
+      function collectFilterRules() {
+        const rules = [];
+        $('#filter-rules-container .filter-rule-row').each(function () {
+          const $row    = $(this);
+          const enabled = $row.find('.filter-rule-enabled').is(':checked');
+          const column   = $row.find('.filter-col-select').val();
+          const operator = $row.find('.filter-op-select').val();
+          const value    = $row.find('.filter-val-input').val().trim();
+          rules.push({ enabled: enabled, column: column, operator: operator, value: value });
+        });
+        return rules;
+      }
+
+      /* ─────────────────────────────────────────────────────────────
+       *  DATA LOADING (Filter-Aware)
+       * ────────────────────────────────────────────────────────────── */
+
       function loadDataRows(page = 1) {
         _currentPage = page;
-        const $grid = $('#data-grid-table');
+        const $grid  = $('#data-grid-table');
         const search = $('#data-search-input').val().trim();
+        const rules  = collectFilterRules();
 
-        $grid.html(`<tr><td class="p-6 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading records…</td></tr>`);
+        // Only send active rules
+        const activeFilters = rules.filter(function (r) { return r.enabled && r.column; });
+
+        $grid.html(`<thead><tr><td class="p-6 text-center text-slate-400 font-sans"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Loading records…</td></tr></thead>`);
+
+        const reqData = { page: page, per_page: 25, search: search };
+        if (activeFilters.length > 0) {
+          reqData.filters = JSON.stringify(activeFilters);
+        }
 
         $.ajax({
           url: `/api/v1/database-manager/${_tableName}/data`,
           type: 'GET',
-          data: { page: page, per_page: 15, search: search },
+          data: reqData,
           success: function (res) {
             if (res.success) {
               const d = res.data;
-              $('#data-pagination-info').text(`Total ${d.total} records (Page ${d.current_page} of ${d.last_page})`);
+              const rowCount = (d.rows || []).length;
+              const activeCount = activeFilters.length;
+              const filterHint = activeCount > 0 ? ` · <span class="text-indigo-600 font-extrabold">${activeCount} filter${activeCount > 1 ? 's' : ''} active</span>` : '';
+              $('#data-pagination-info').html(`Total <b>${d.total}</b> records (Page ${d.current_page} of ${d.last_page})${filterHint}`);
               $('#data-current-page-text').text(`Page ${d.current_page} of ${d.last_page}`);
 
               const rows = d.rows || [];
               if (rows.length === 0) {
-                $grid.html(`<tr><td class="p-6 text-center text-slate-400 italic">No records found.</td></tr>`);
+                const emptyMsg = activeCount > 0
+                  ? `<tr><td colspan="999" class="p-8 text-center font-sans"><div class="inline-flex flex-col items-center gap-2 text-slate-400"><i class="fa-solid fa-filter text-2xl text-indigo-200"></i><span class="text-sm font-semibold text-slate-500">No records match your filter criteria</span><span class="text-xs text-slate-400">Try adjusting the filter rules or click Reset.</span></div></td></tr>`
+                  : `<tr><td class="p-6 text-center text-slate-400 italic font-sans">No records found in table \`${_tableName}\`.</td></tr>`;
+                $grid.html(emptyMsg);
                 return;
               }
 
               const cols = Object.keys(rows[0]);
-              let headerHtml = `<thead class="bg-slate-100 border-b border-slate-200 text-[10px] uppercase font-bold text-slate-500"><tr>`;
-              $.each(cols, function (i, c) { headerHtml += `<th class="p-3">${c}</th>`; });
+
+              let headerHtml = `<thead class="bg-slate-100 border-b border-slate-200 text-[10px] uppercase font-bold text-slate-500 sticky top-0 z-10"><tr>`;
+              $.each(cols, function (i, c) {
+                headerHtml += `<th class="p-3 whitespace-nowrap">${c}</th>`;
+              });
               headerHtml += `</tr></thead>`;
 
               let bodyHtml = `<tbody class="divide-y divide-slate-100 text-xs">`;
               $.each(rows, function (i, r) {
-                bodyHtml += `<tr class="hover:bg-slate-50 transition">`;
+                bodyHtml += `<tr class="hover:bg-indigo-50/30 transition">`;
                 $.each(cols, function (j, c) {
                   const val = r[c];
-                  bodyHtml += `<td class="p-3 max-w-xs truncate" title="${val}">${val !== null ? val : '<span class="text-slate-300 font-sans italic">NULL</span>'}</td>`;
+                  const display = (val === null || val === undefined)
+                    ? `<span class="text-slate-300 font-sans italic">NULL</span>`
+                    : String(val).length > 120
+                      ? `<span title="${String(val).replace(/"/g, '&quot;')}">${String(val).substring(0, 120)}…</span>`
+                      : val;
+                  bodyHtml += `<td class="p-3 max-w-[200px] truncate" title="${val !== null ? String(val).replace(/"/g, '&quot;') : 'NULL'}">${display}</td>`;
                 });
                 bodyHtml += `</tr>`;
               });
@@ -692,6 +983,7 @@
           loadDataRows(newPage);
         }
       }
+
 
       function openAddIndexModal(preselectedCols = []) {
         if (!_tableDetails) return;

@@ -69,7 +69,7 @@
       <div id="menu-rbac" class="relative group sidebar-group hidden">
         <div class="space-y-0.5">
           <button type="button" id="submenu-rbac-toggle"
-            class="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
+            class="sidebar-accordion-btn w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                           {{ request()->is('admin/roles*') || request()->is('admin/permissions*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
             onclick="toggleSubmenu('submenu-rbac', 'chevron-rbac')">
             <div class="flex items-center gap-3">
@@ -132,7 +132,7 @@
       <div id="menu-media" class="relative group sidebar-group hidden">
         <div class="space-y-0.5">
           <button type="button" id="submenu-media-toggle"
-            class="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
+            class="sidebar-accordion-btn w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                           {{ request()->is('admin/media*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}"
             onclick="toggleSubmenu('submenu-media', 'chevron-media')">
             <div class="flex items-center gap-3">

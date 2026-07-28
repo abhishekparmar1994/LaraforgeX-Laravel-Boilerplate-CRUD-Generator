@@ -178,16 +178,104 @@ class DatabaseManagerAgent
      * @param  string|null $search Search term
      * @return array  Paginated dataset
      */
-    public function getTableData(string $tableName, int $page = 1, int $perPage = 15, ?string $search = null): array
+    public function getTableData(string $tableName, int $page = 1, int $perPage = 15, ?string $search = null, ?array $filters = null): array
     {
         $this->validateTableName($tableName);
 
         $query = DB::table($tableName);
+        $validColumns = Schema::getColumnListing($tableName);
 
+        // 1. Process Navicat-Style Advanced Filter Rules
+        if (!empty($filters) && is_array($filters)) {
+            foreach ($filters as $rule) {
+                if (!is_array($rule)) continue;
+                
+                $enabled = isset($rule['enabled']) ? (bool) $rule['enabled'] : true;
+                if (!$enabled) continue;
+
+                $col = $rule['column'] ?? '';
+                if (!in_array($col, $validColumns, true)) continue;
+
+                $op = strtolower($rule['operator'] ?? '=');
+                $val = $rule['value'] ?? '';
+
+                switch ($op) {
+                    case '=':
+                    case 'equals':
+                        $query->where($col, '=', $val);
+                        break;
+                    case '!=':
+                    case 'not_equals':
+                        $query->where($col, '!=', $val);
+                        break;
+                    case '<':
+                    case 'less_than':
+                        $query->where($col, '<', $val);
+                        break;
+                    case '<=':
+                    case 'less_equal':
+                        $query->where($col, '<=', $val);
+                        break;
+                    case '>':
+                    case 'greater_than':
+                        $query->where($col, '>', $val);
+                        break;
+                    case '>=':
+                    case 'greater_equal':
+                        $query->where($col, '>=', $val);
+                        break;
+                    case 'contains':
+                        $query->where($col, 'LIKE', "%{$val}%");
+                        break;
+                    case 'does_not_contain':
+                    case 'does not contain':
+                        $query->where($col, 'NOT LIKE', "%{$val}%");
+                        break;
+                    case 'begins_with':
+                    case 'begin with':
+                    case 'begins with':
+                        $query->where($col, 'LIKE', "{$val}%");
+                        break;
+                    case 'does_not_begin_with':
+                    case 'does not begin with':
+                        $query->where($col, 'NOT LIKE', "{$val}%");
+                        break;
+                    case 'ends_with':
+                    case 'end with':
+                    case 'ends with':
+                        $query->where($col, 'LIKE', "%{$val}");
+                        break;
+                    case 'does_not_end_with':
+                    case 'does not end with':
+                        $query->where($col, 'NOT LIKE', "%{$val}");
+                        break;
+                    case 'is_null':
+                    case 'is null':
+                        $query->whereNull($col);
+                        break;
+                    case 'is_not_null':
+                    case 'is not null':
+                        $query->whereNotNull($col);
+                        break;
+                    case 'is_empty':
+                    case 'is empty':
+                        $query->where($col, '=', '');
+                        break;
+                    case 'is_not_empty':
+                    case 'is not empty':
+                        $query->where($col, '!=', '');
+                        break;
+                    default:
+                        $query->where($col, '=', $val);
+                        break;
+                }
+            }
+        }
+
+        // 2. Global Text Search
         if (!empty($search)) {
-            $columns = Schema::getColumnListing($tableName);
-            $query->where(function ($q) use ($columns, $search) {
-                foreach ($columns as $index => $col) {
+            $query->where(function ($q) use ($validColumns, $search) {
+                foreach ($validColumns as $index => $col) {
                     if ($index === 0) {
                         $q->where($col, 'LIKE', "%{$search}%");
                     } else {

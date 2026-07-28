@@ -69,7 +69,18 @@ class DatabaseManagerController extends Controller
             $perPage = (int) $request->query('per_page', 15);
             $search = $request->query('search');
 
-            $data = $this->agent->getTableData($table, $page, $perPage, $search);
+            $rawFilters = $request->query('filters') ?? $request->input('filters');
+            $filters = null;
+
+            if (!empty($rawFilters)) {
+                if (is_string($rawFilters)) {
+                    $filters = json_decode($rawFilters, true);
+                } elseif (is_array($rawFilters)) {
+                    $filters = $rawFilters;
+                }
+            }
+
+            $data = $this->agent->getTableData($table, $page, $perPage, $search, $filters);
 
             return response()->json([
                 'success' => true,
