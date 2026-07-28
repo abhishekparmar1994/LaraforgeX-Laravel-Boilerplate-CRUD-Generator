@@ -30,11 +30,8 @@ class UserResource extends JsonResource
             }, function () {
                 return $this->resource->getRoleNames();
             }),
-            'permissions' => $this->whenLoaded('permissions', function () {
-                return $this->resource->permissions->pluck('name');
-            }, function () {
-                return $this->resource->getPermissionNames();
-            }),
+            'permissions' => $this->resource->getAllPermissions()->pluck('name')->unique()->values()->all(),
+
             'created_at' => $this->resource->created_at?->toIso8601String(),
             'updated_at' => $this->resource->updated_at?->toIso8601String(),
         ];

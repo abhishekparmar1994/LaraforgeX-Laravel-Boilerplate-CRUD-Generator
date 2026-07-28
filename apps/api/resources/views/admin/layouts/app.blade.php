@@ -1431,6 +1431,18 @@
         return;
       }
 
+      // Sync active user profile & Spatie permissions live from server DB
+      axios.get('/auth/me').then(res => {
+        if (res.data && res.data.data) {
+          localStorage.setItem('laraforgex_user', JSON.stringify(res.data.data));
+          if (typeof window.renderSidebarPermissions === 'function') {
+            window.renderSidebarPermissions();
+          }
+        }
+      }).catch(() => {});
+
+
+
       // Global .close-modal helper
       $(document).on('click', '.close-modal', function () {
         $(this).closest('.fixed').addClass('hidden');

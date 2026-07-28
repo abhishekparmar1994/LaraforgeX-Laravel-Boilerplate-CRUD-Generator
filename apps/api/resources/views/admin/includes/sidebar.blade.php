@@ -11,7 +11,9 @@
           <span id="sidebar-logo-text">L</span>
           <img id="sidebar-logo-img" class="h-8 w-8 rounded-lg object-cover hidden" src="" alt="Logo">
         </div>
-        <span id="sidebar-app-name" class="logo-title-span font-display font-bold text-lg text-slate-900 tracking-tight truncate">Laraforge<span class="text-brand-600">X</span></span>
+        <span id="sidebar-app-name"
+          class="logo-title-span font-display font-bold text-lg text-slate-900 tracking-tight truncate">Laraforge<span
+            class="text-brand-600">X</span></span>
       </div>
       <button type="button"
         class="lg:hidden h-8 w-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition shrink-0"
@@ -193,7 +195,7 @@
       </div>
 
       <!-- CRUD Generator Group -->
-      <div id="menu-generator" class="relative group sidebar-group">
+      <div id="menu-generator" class="relative group sidebar-group hidden">
         <a href="/admin/crud-generator"
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/crud-generator*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
@@ -210,7 +212,7 @@
       </div>
 
       <!-- Database Backups Group -->
-      <div id="menu-backups" class="relative group sidebar-group">
+      <div id="menu-backups" class="relative group sidebar-group hidden">
         <a href="/admin/backups"
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/backups*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
@@ -226,7 +228,7 @@
       </div>
 
       <!-- Database Studio / Table Manager Group -->
-      <div id="menu-database-manager" class="relative group sidebar-group">
+      <div id="menu-database-manager" class="relative group sidebar-group hidden">
         <a href="/admin/database-manager"
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/database-manager*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
@@ -242,7 +244,7 @@
       </div>
 
       <!-- Outgoing Webhooks Group -->
-      <div id="menu-webhooks" class="relative group sidebar-group">
+      <div id="menu-webhooks" class="relative group sidebar-group hidden">
         <a href="/admin/webhooks"
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/webhooks*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
@@ -258,7 +260,7 @@
       </div>
 
       <!-- API Docs Group -->
-      <div id="menu-docs" class="relative group sidebar-group">
+      <div id="menu-docs" class="relative group sidebar-group hidden">
         <a href="/admin/docs"
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/docs*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
@@ -274,7 +276,7 @@
       </div>
 
       <!-- Audit Trail Group -->
-      <div id="menu-audit" class="relative group sidebar-group">
+      <div id="menu-audit" class="relative group sidebar-group hidden">
         <a href="/admin/activity-logs"
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/activity-logs*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
@@ -290,7 +292,7 @@
       </div>
 
       <!-- System Health Group -->
-      <div id="menu-health" class="relative group sidebar-group">
+      <div id="menu-health" class="relative group sidebar-group hidden">
         <a href="/admin/health"
           class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150
                   {{ request()->is('admin/health*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
@@ -328,57 +330,46 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function renderSidebarPermissions() {
     const user = JSON.parse(localStorage.getItem('laraforgex_user') || '{}');
     const permissions = user.permissions || [];
-    const roles = user.roles || [];
-    const isAdmin = roles.includes('administrator');
+    const hasPermission = (p) => permissions.includes(p);
 
-    const hasPermission = (p) => permissions.includes(p) || isAdmin;
+    const toggle = (id, allowed) => {
+      const el = document.getElementById(id);
+      if (el) {
+        if (allowed) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      }
+      return allowed;
+    };
 
-    let showIdentityHeader = false;
-    let showSystemHeader = false;
+    let showIdentity = false;
+    let showSystem = false;
 
-    // 1. User Accounts
-    if (hasPermission('users.view')) {
-      const el = document.getElementById('menu-users');
-      if (el) el.classList.remove('hidden');
-      showIdentityHeader = true;
-    }
+    if (toggle('menu-users', hasPermission('users.view'))) showIdentity = true;
+    if (toggle('menu-rbac', hasPermission('roles.view'))) showIdentity = true;
+    if (toggle('menu-media', hasPermission('media.view') || hasPermission('media.upload'))) showSystem = true;
+    if (toggle('menu-settings', hasPermission('settings.view'))) showSystem = true;
+    if (toggle('menu-generator', hasPermission('crud_generator.view'))) showSystem = true;
+    if (toggle('menu-backups', hasPermission('backups.view'))) showSystem = true;
+    if (toggle('menu-database-manager', hasPermission('database_manager.view'))) showSystem = true;
+    if (toggle('menu-webhooks', hasPermission('webhooks.view'))) showSystem = true;
+    if (toggle('menu-docs', hasPermission('docs.view'))) showSystem = true;
+    if (toggle('menu-audit', hasPermission('audit_logs.view'))) showSystem = true;
+    if (toggle('menu-health', hasPermission('system_health.view'))) showSystem = true;
 
-    // 2. Access Control (roles & permissions)
-    if (hasPermission('roles.view')) {
-      const el = document.getElementById('menu-rbac');
-      if (el) el.classList.remove('hidden');
-      showIdentityHeader = true;
-    }
+    toggle('header-identity', showIdentity);
+    toggle('header-system', showSystem);
+  }
 
-    // 3. Media Cloud
-    if (hasPermission('media.view') || hasPermission('media.upload')) {
-      const el = document.getElementById('menu-media');
-      if (el) el.classList.remove('hidden');
-      showSystemHeader = true;
-    }
 
-    // 4. Config Settings
-    if (hasPermission('settings.view')) {
-      const el = document.getElementById('menu-settings');
-      if (el) el.classList.remove('hidden');
-      showSystemHeader = true;
-    }
-
-    // 5. CRUD Generator
-    showSystemHeader = true;
-
-    // Toggle headers
-    if (showIdentityHeader) {
-      const el = document.getElementById('header-identity');
-      if (el) el.classList.remove('hidden');
-    }
-    if (showSystemHeader) {
-      const el = document.getElementById('header-system');
-      if (el) el.classList.remove('hidden');
-    }
+  window.renderSidebarPermissions = renderSidebarPermissions;
+  document.addEventListener('DOMContentLoaded', function () {
+    renderSidebarPermissions();
 
     // Auto-minimize sidebar on mobile when navigating links
     const sidebar = document.getElementById('admin-sidebar');

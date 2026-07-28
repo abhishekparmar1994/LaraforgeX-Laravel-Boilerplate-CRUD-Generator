@@ -270,12 +270,20 @@ $(document).ready(function() {
             if (id) {
                 await axios.put(`/roles/${id}`, payload);
                 showToast('success', 'Role settings updated successfully.');
+                try {
+                    const meRes = await axios.get('/auth/me');
+                    if (meRes.data && meRes.data.data) {
+                        localStorage.setItem('laraforgex_user', JSON.stringify(meRes.data.data));
+                    }
+                } catch (_) {}
             } else {
                 await axios.post('/roles', payload);
                 showToast('success', 'Custom role created successfully.');
             }
             $('#modal-role').addClass('hidden');
             rolesTable.reload();
+            setTimeout(() => { window.location.reload(); }, 500);
+
         } catch (e) {
             handleAjaxError(e);
         }

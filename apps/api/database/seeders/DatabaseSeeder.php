@@ -26,6 +26,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'users.edit', 'group' => 'users', 'description' => 'Modify existing user details'],
             ['name' => 'users.delete', 'group' => 'users', 'description' => 'Delete user profiles'],
             ['name' => 'users.suspend', 'group' => 'users', 'description' => 'Suspend user access permissions'],
+            ['name' => 'roles.view', 'group' => 'roles', 'description' => 'View role matrix and permissions'],
+            ['name' => 'roles.create', 'group' => 'roles', 'description' => 'Create new roles'],
+            ['name' => 'roles.edit', 'group' => 'roles', 'description' => 'Modify role permissions'],
+            ['name' => 'roles.delete', 'group' => 'roles', 'description' => 'Delete custom roles'],
             ['name' => 'courses.create', 'group' => 'courses', 'description' => 'Create new online courses'],
             ['name' => 'courses.view', 'group' => 'courses', 'description' => 'Access and view courses catalogue'],
             ['name' => 'courses.edit', 'group' => 'courses', 'description' => 'Modify syllabus or metadata of courses'],
@@ -34,6 +38,14 @@ class DatabaseSeeder extends Seeder
             ['name' => 'settings.edit', 'group' => 'settings', 'description' => 'Update system settings'],
             ['name' => 'media.upload', 'group' => 'media', 'description' => 'Upload files to media manager'],
             ['name' => 'media.view', 'group' => 'media', 'description' => 'Browse media assets'],
+            // Developer Permissions
+            ['name' => 'crud_generator.view', 'group' => 'developer', 'description' => 'Access Visual CRUD Generator'],
+            ['name' => 'database_manager.view', 'group' => 'developer', 'description' => 'Access Database Studio & Schema Manager'],
+            ['name' => 'webhooks.view', 'group' => 'developer', 'description' => 'Access Outgoing Webhooks Engine'],
+            ['name' => 'docs.view', 'group' => 'developer', 'description' => 'Access API Documentation'],
+            ['name' => 'backups.view', 'group' => 'system', 'description' => 'Manage Database Backups'],
+            ['name' => 'audit_logs.view', 'group' => 'system', 'description' => 'View System Audit Logs'],
+            ['name' => 'system_health.view', 'group' => 'system', 'description' => 'View System Health Monitor'],
         ];
 
         foreach ($permissions as $permissionData) {
@@ -49,11 +61,19 @@ class DatabaseSeeder extends Seeder
             ['description' => 'System administrator with full system capabilities']
         );
 
+        $developerRole = Role::updateOrCreate(
+            ['name' => 'developer', 'guard_name' => 'web'],
+            [
+                'description' => 'Software Developer with full access to developer tools, database, webhooks, and CRUD generator',
+                'parent_id' => $adminRole->id
+            ]
+        );
+
         $teacherRole = Role::updateOrCreate(
             ['name' => 'educator', 'guard_name' => 'web'],
             [
                 'description' => 'Instructors who manage courses and student registrations',
-                'parent_id' => $adminRole->id // educator is a child role of administrator
+                'parent_id' => $adminRole->id
             ]
         );
 
@@ -61,7 +81,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'student', 'guard_name' => 'web'],
             [
                 'description' => 'Registered students who consume content and view catalogs',
-                'parent_id' => $teacherRole->id // student is a child role of educator
+                'parent_id' => $teacherRole->id
             ]
         );
 
@@ -79,14 +99,11 @@ class DatabaseSeeder extends Seeder
             'users.view'
         ]);
 
-        $adminRole->syncPermissions([
-            'users.create',
-            'users.edit',
-            'users.delete',
-            'users.suspend',
-            'settings.view',
-            'settings.edit'
-        ]);
+        $allPermissionNames = Permission::pluck('name')->toArray();
+
+        // Administrator and Developer get ALL permissions
+        $adminRole->syncPermissions($allPermissionNames);
+        $developerRole->syncPermissions($allPermissionNames);
 
         // 4. Seed Users matching Postman sample IDs
         $adminUser = User::updateOrCreate(
@@ -100,6 +117,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
         $adminUser->assignRole($adminRole);
+
+        $developerUser = User::updateOrCreate(
+            ['email' => 'developer@laraforgex.com'],
+            [
+                'id' => '3c8fd9a7-e1ba-4f2e-89a1-cb9e8c4e47ac',
+                'name' => 'Developer',
+                'password' => Hash::make('SecurePassword123!'),
+                'status' => 'active',
+                'email_verified_at' => now(),
+            ]
+        );
+        $developerUser->assignRole($developerRole);
 
         $teacherUser = User::updateOrCreate(
             ['email' => 'teacher@laraforgex.com'],
@@ -124,6 +153,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
         $studentUser->assignRole($studentRole);
+
 
         // 5. Seed Platform Settings
         $settings = [
