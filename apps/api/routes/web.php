@@ -30,4 +30,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/webhooks', [\App\Http\Controllers\AdminController::class, 'webhooks']);
     Route::get('/docs', [\App\Http\Controllers\AdminController::class, 'docs']);
     Route::get('/activity-logs', [\App\Http\Controllers\AdminController::class, 'activityLogs']);
+    Route::get('/database-manager', [\App\Http\Controllers\AdminController::class, 'databaseManager']);
+    Route::get('/database-manager/create', [\App\Http\Controllers\AdminController::class, 'databaseManagerCreate']);
+    Route::get('/database-manager/console', [\App\Http\Controllers\AdminController::class, 'databaseManagerConsole']);
+    Route::get('/database-manager/manage/{table}', [\App\Http\Controllers\AdminController::class, 'databaseManagerManage']);
 });

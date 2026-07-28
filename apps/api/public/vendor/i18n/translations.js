@@ -35,6 +35,7 @@
       api_docs: 'API Documentation',
       audit_logs: 'Audit Logs',
       system_health: 'System Health',
+      database_manager: 'Database Studio',
     },
     es: {
       dashboard: 'Panel de Control',
@@ -66,6 +67,7 @@
       api_docs: 'Documentación API',
       audit_logs: 'Registros de Auditoría',
       system_health: 'Salud del Sistema',
+      database_manager: 'Estudio de Base de Datos',
     },
     fr: {
       dashboard: 'Tableau de Bord',
@@ -97,6 +99,7 @@
       api_docs: 'Documentation API',
       audit_logs: 'Journaux d\'Audit',
       system_health: 'Santé du Système',
+      database_manager: 'Studio de Base de Données',
     },
     de: {
       dashboard: 'Übersicht',
@@ -128,6 +131,7 @@
       api_docs: 'API-Dokumentation',
       audit_logs: 'Audit-Protokolle',
       system_health: 'Systemzustand',
+      database_manager: 'Datenbank-Studio',
     },
     ar: {
       dashboard: 'لوحة التحكم',
@@ -159,6 +163,7 @@
       api_docs: 'توثيق API',
       audit_logs: 'سجلات التدقيق',
       system_health: 'صحة النظام',
+      database_manager: 'استوديو قاعدة البيانات',
     },
     hi: {
       dashboard: 'डैशबोर्ड',
@@ -190,6 +195,7 @@
       api_docs: 'API दस्तावेज़',
       audit_logs: 'ऑडिट लॉग्स',
       system_health: 'सिस्टम स्वास्थ्य',
+      database_manager: 'डेटाबेस स्टूडियो',
     }
   };
 

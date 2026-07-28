@@ -128,4 +128,24 @@ class AdminController extends Controller
     {
         return view('admin.activity_logs.index');
     }
+
+    public function databaseManager(): View
+    {
+        return view('admin.database_manager.index');
+    }
+
+    public function databaseManagerCreate(): View
+    {
+        return view('admin.database_manager.create');
+    }
+
+    public function databaseManagerConsole(): View
+    {
+        return view('admin.database_manager.console');
+    }
+
+    public function databaseManagerManage(string $table): View
+    {
+        return view('admin.database_manager.manage', ['table' => $table]);
+    }
 }

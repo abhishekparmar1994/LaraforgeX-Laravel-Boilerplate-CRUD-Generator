@@ -19,6 +19,103 @@
     </div>
   </div>
 
+  <!-- Dedicated Toast Notification Customizer Card -->
+  <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+          <i class="fa-solid fa-bell text-base"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Toast Notification Customizer</h3>
+          <p class="text-xs text-slate-500 font-medium">Select toaster design theme, color palette, and screen alignment stored in Database.</p>
+        </div>
+      </div>
+      <span class="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-600">Appearance UI</span>
+    </div>
+
+    <form id="form-toast-settings" class="space-y-5">
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2.5">Toast Design & Color Aesthetic</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- Obsidian Theme Radio -->
+          <label class="toast-theme-option relative border-2 border-brand-500 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-slate-900 text-white shadow-sm">
+            <input type="radio" name="toast_theme_input" value="obsidian" class="sr-only" checked>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Deep Obsidian Glass</span>
+              <i class="fa-solid fa-circle-check text-brand-400 theme-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">Linear/Stripe obsidian glass with neon glowing left border edge.</p>
+          </label>
+
+          <!-- White Glass Theme Radio -->
+          <label class="toast-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-slate-50 hover:bg-white text-slate-900">
+            <input type="radio" name="toast_theme_input" value="white_glass" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">White Frosted Glass</span>
+              <i class="fa-solid fa-circle-check text-slate-300 theme-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-snug">Apple/Vercel style frosted white glass card with dark typography.</p>
+          </label>
+
+          <!-- Solid Vibrant Theme Radio -->
+          <label class="toast-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-gradient-to-r from-emerald-600 to-teal-700 text-white">
+            <input type="radio" name="toast_theme_input" value="solid_vibrant" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Solid Vibrant Gradient</span>
+              <i class="fa-solid fa-circle-check text-white/50 theme-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-white/80 leading-snug">Rich full-color gradient backgrounds per alert status.</p>
+          </label>
+
+          <!-- Minimal Dark Theme Radio -->
+          <label class="toast-theme-option relative border border-slate-200 rounded-xl p-3.5 cursor-pointer transition flex flex-col justify-between bg-zinc-800 text-white">
+            <input type="radio" name="toast_theme_input" value="minimal_dark" class="sr-only">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold">Minimal Matte Dark</span>
+              <i class="fa-solid fa-circle-check text-zinc-500 theme-check-icon text-sm"></i>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-snug">Compact dark charcoal matte card with high contrast text.</p>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <label for="toast-position-select" class="text-xs font-semibold uppercase tracking-wider text-slate-500">Screen Position</label>
+          <select id="toast-position-select" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-brand-500 transition">
+            <option value="top-right">Top Right (Default)</option>
+            <option value="top-left">Top Left</option>
+            <option value="top-center">Top Center</option>
+            <option value="bottom-right">Bottom Right</option>
+            <option value="bottom-left">Bottom Left</option>
+          </select>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-500">Test Toasters Live</label>
+          <div class="flex items-center gap-2 pt-0.5">
+            <button type="button" onclick="showToast('success', 'Operation completed successfully!', 'Success Test')" class="px-3 py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition border border-emerald-200 flex-1">
+              <i class="fa-solid fa-check mr-1"></i> Success
+            </button>
+            <button type="button" onclick="showToast('error', 'Critical validation issue detected!', 'Error Test')" class="px-3 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition border border-rose-200 flex-1">
+              <i class="fa-solid fa-xmark mr-1"></i> Error
+            </button>
+            <button type="button" onclick="showToast('warning', 'Please review settings configuration.', 'Warning Test')" class="px-3 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold transition border border-amber-200 flex-1">
+              <i class="fa-solid fa-triangle-exclamation mr-1"></i> Warning
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-1">
+        <button type="submit" class="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5 border-0 cursor-pointer">
+          <i class="fa-solid fa-floppy-disk"></i> Save Toast Preferences to Database
+        </button>
+      </div>
+    </form>
+  </div>
+
   <!-- Dedicated Google reCAPTCHA v2 Configuration Card -->
   <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -198,6 +295,87 @@ $(document).ready(function() {
         }
     }
 
+    // ── Load & Sync Toast Config from Database Settings Table ─────────
+    async function loadToastConfig() {
+        try {
+            const res = await axios.get('/settings?group=appearance');
+            const appSettings = res.data.data || [];
+            
+            const themeSet = appSettings.find(s => s.key === 'toast_theme');
+            const posSet = appSettings.find(s => s.key === 'toast_position');
+
+            const savedTheme = themeSet ? themeSet.value : (window.currentToastTheme || 'obsidian');
+            const savedPos = posSet ? posSet.value : (window.currentToastPosition || 'top-right');
+
+            window.currentToastTheme = savedTheme;
+            window.currentToastPosition = savedPos;
+
+            // Select active radio button
+            $(`input[name="toast_theme_input"][value="${savedTheme}"]`).prop('checked', true);
+            updateThemeCardBorders(savedTheme);
+
+            // Select active position dropdown
+            $('#toast-position-select').val(savedPos);
+        } catch (e) {
+            console.error('Failed to load toast settings from database', e);
+        }
+    }
+
+    function updateThemeCardBorders(selectedTheme) {
+        $('.toast-theme-option').removeClass('border-2 border-brand-500 ring-2 ring-brand-500 shadow-md').addClass('border border-slate-200');
+        const $activeCard = $(`input[name="toast_theme_input"][value="${selectedTheme}"]`).closest('.toast-theme-option');
+        $activeCard.addClass('border-2 border-brand-500 ring-2 ring-brand-500 shadow-md').removeClass('border-slate-200');
+    }
+
+    $(document).on('change click', '.toast-theme-option, input[name="toast_theme_input"]', function() {
+        setTimeout(function() {
+            const val = $('input[name="toast_theme_input"]:checked').val();
+            if (val) {
+                updateThemeCardBorders(val);
+                window.currentToastTheme = val;
+            }
+        }, 10);
+    });
+
+    $(document).on('change', '#toast-position-select', function() {
+        const val = $(this).val();
+        window.currentToastPosition = val;
+    });
+
+    $('#form-toast-settings').submit(async function(e) {
+        e.preventDefault();
+        const selectedTheme = $('input[name="toast_theme_input"]:checked').val() || 'obsidian';
+        const selectedPos = $('#toast-position-select').val() || 'top-right';
+
+        const payload = {
+            settings: [
+                {
+                    key: 'toast_theme',
+                    value: selectedTheme,
+                    group: 'appearance',
+                    is_encrypted: false
+                },
+                {
+                    key: 'toast_position',
+                    value: selectedPos,
+                    group: 'appearance',
+                    is_encrypted: false
+                }
+            ]
+        };
+
+        try {
+            await axios.post('/settings', payload);
+            window.currentToastTheme = selectedTheme;
+            window.currentToastPosition = selectedPos;
+            showToast('success', `Toast preferences saved to settings table! (Theme: ${selectedTheme}, Position: ${selectedPos})`);
+            settingsTable.reload();
+        } catch (err) {
+            handleAjaxError(err);
+        }
+    });
+
+    loadToastConfig();
     loadReCaptchaConfig();
 
     $('#recaptcha-enable-switch').change(function() {
@@ -277,6 +455,9 @@ $(document).ready(function() {
             showToast('success', 'Configuration updated successfully.');
             $('#modal-setting').addClass('hidden');
             settingsTable.reload();
+            if (typeof window.loadGlobalAppSettingsFromDB === 'function') {
+                window.loadGlobalAppSettingsFromDB();
+            }
         } catch (e) {
             handleAjaxError(e);
         }
