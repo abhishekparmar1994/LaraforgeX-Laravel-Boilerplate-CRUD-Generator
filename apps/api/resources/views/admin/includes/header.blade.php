@@ -594,11 +594,29 @@
       styleEl.id = 'dynamic-accent-style';
       document.head.appendChild(styleEl);
     }
+
+    const gradientMap = {
+      '#2b47ff': 'linear-gradient(135deg, #1b2eff 0%, #2b47ff 50%, #4338ca 100%)',
+      '#10b981': 'linear-gradient(135deg, #047857 0%, #10b981 50%, #0f766e 100%)',
+      '#8b5cf6': 'linear-gradient(135deg, #5b21b6 0%, #8b5cf6 50%, #6d28d9 100%)',
+      '#f59e0b': 'linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #c2410c 100%)',
+      '#f43f5e': 'linear-gradient(135deg, #be123c 0%, #f43f5e 50%, #9f1239 100%)',
+    };
+    const gradient = gradientMap[color.toLowerCase()] || `linear-gradient(135deg, ${color} 0%, ${color} 100%)`;
+
     styleEl.textContent = `
-      .bg-brand-600, .bg-brand-500 { background-color: ${color} !important; }
-      .text-brand-600, .text-brand-500 { color: ${color} !important; }
-      .border-brand-500, .border-brand-600 { border-color: ${color} !important; }
+      .bg-brand-600, .bg-brand-500, .bg-brand-400 { background-color: ${color} !important; }
+      .text-brand-600, .text-brand-500, .text-brand-400 { color: ${color} !important; }
+      .border-brand-500, .border-brand-600, .border-l-brand-500, .border-l-brand-400 { border-color: ${color} !important; }
       .bg-brand-50 { background-color: ${color}18 !important; }
+      .border-brand-100 { border-color: ${color}33 !important; }
+
+      .theme-hero-banner,
+      .bg-gradient-to-r.from-brand-900,
+      .bg-gradient-to-r.from-brand-600,
+      .bg-gradient-to-r.from-brand-500 {
+        background: ${gradient} !important;
+      }
     `;
   }
 

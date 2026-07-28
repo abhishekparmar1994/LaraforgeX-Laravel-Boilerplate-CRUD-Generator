@@ -19,11 +19,28 @@
       if (savedColor) {
         var styleEl = document.createElement('style');
         styleEl.id = 'dynamic-accent-style';
+        var gradientMap = {
+          '#2b47ff': 'linear-gradient(135deg, #1b2eff 0%, #2b47ff 50%, #4338ca 100%)',
+          '#10b981': 'linear-gradient(135deg, #047857 0%, #10b981 50%, #0f766e 100%)',
+          '#8b5cf6': 'linear-gradient(135deg, #5b21b6 0%, #8b5cf6 50%, #6d28d9 100%)',
+          '#f59e0b': 'linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #c2410c 100%)',
+          '#f43f5e': 'linear-gradient(135deg, #be123c 0%, #f43f5e 50%, #9f1239 100%)',
+        };
+        var gradient = gradientMap[savedColor.toLowerCase()] || `linear-gradient(135deg, ${savedColor} 0%, ${savedColor} 100%)`;
+
         styleEl.textContent = `
-          .bg-brand-600, .bg-brand-500 { background-color: ${savedColor} !important; }
-          .text-brand-600, .text-brand-500 { color: ${savedColor} !important; }
-          .border-brand-500, .border-brand-600 { border-color: ${savedColor} !important; }
+          .bg-brand-600, .bg-brand-500, .bg-brand-400 { background-color: ${savedColor} !important; }
+          .text-brand-600, .text-brand-500, .text-brand-400 { color: ${savedColor} !important; }
+          .border-brand-500, .border-brand-600, .border-l-brand-500, .border-l-brand-400 { border-color: ${savedColor} !important; }
           .bg-brand-50 { background-color: ${savedColor}18 !important; }
+          .border-brand-100 { border-color: ${savedColor}33 !important; }
+
+          .theme-hero-banner,
+          .bg-gradient-to-r.from-brand-900,
+          .bg-gradient-to-r.from-brand-600,
+          .bg-gradient-to-r.from-brand-500 {
+            background: ${gradient} !important;
+          }
         `;
         document.head.appendChild(styleEl);
       }
@@ -56,11 +73,44 @@
       transition: opacity 0.25s ease;
     }
 
+    /* Sidebar Popovers: Hidden by default */
+    .sidebar-popover {
+      display: none !important;
+    }
+
+    /* Caret pointer for dark tooltips pointing left to icon */
+    .sidebar-tooltip-caret::before {
+      content: '';
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent rgba(15, 23, 42, 0.95) transparent transparent;
+    }
+
+    @keyframes popoverFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-50%) translateX(-8px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0) scale(1);
+      }
+    }
+
     /* Collapsed sidebar styling on desktop */
     @media (min-width: 1024px) {
       #admin-sidebar.sidebar-collapsed {
         width: 4.5rem !important;
+        overflow: visible !important;
         /* Collapsed width */
+      }
+
+      #admin-sidebar.sidebar-collapsed > div {
+        overflow: visible !important;
       }
 
       #admin-sidebar.sidebar-collapsed .px-4 {
@@ -68,12 +118,16 @@
         padding-right: 0.75rem !important;
       }
 
-      /* Hide all text descriptions, headers, submenus and chevrons individually to prevent group parser discard */
+      /* Hide text, headers, submenus and chevrons in collapsed mode */
       #admin-sidebar.sidebar-collapsed nav p {
         display: none !important;
       }
 
-      #admin-sidebar.sidebar-collapsed span {
+      /* Hide only direct spans of links/buttons, preserving popover spans */
+      #admin-sidebar.sidebar-collapsed nav .sidebar-link > span,
+      #admin-sidebar.sidebar-collapsed nav button > div > span,
+      #admin-sidebar.sidebar-collapsed nav button > span,
+      #admin-sidebar.sidebar-collapsed .logo-title-span {
         display: none !important;
       }
 
@@ -114,14 +168,9 @@
       }
 
       #admin-sidebar.sidebar-collapsed .sidebar-group:hover .sidebar-popover {
-        display: block !important;
-        animation: popoverFadeIn 0.15s ease-out forwards;
+        display: flex !important;
+        animation: popoverFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
-    }
-
-    /* Sidebar Popovers: Hidden on mobile & standard desktop mode by default */
-    .sidebar-popover {
-      display: none !important;
     }
   </style>
 </head>

@@ -23,7 +23,7 @@
   <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
 
     <!-- Cover gradient bar -->
-    <div class="h-28 bg-gradient-to-r from-brand-500 via-indigo-600 to-violet-500"></div>
+    <div class="theme-hero-banner h-28 bg-gradient-to-r from-brand-500 via-indigo-600 to-violet-500"></div>
 
     <!-- Avatar + user info -->
     <div class="px-6 pb-6">

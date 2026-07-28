@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-gradient-to-r from-brand-600 to-indigo-600 p-8 rounded-2xl text-white shadow-md shadow-brand-600/10">
+    <div class="theme-hero-banner bg-gradient-to-r from-brand-600 to-indigo-600 p-8 rounded-2xl text-white shadow-md shadow-brand-600/10">
       <h2 class="text-2xl font-bold">Welcome back, Admin!</h2>
       <p class="text-sm text-brand-100 mt-1 font-medium">This boilerplate core is running under Laravel 13, Sanctum
         Security, and direct S3/GCS media integrations.</p>
