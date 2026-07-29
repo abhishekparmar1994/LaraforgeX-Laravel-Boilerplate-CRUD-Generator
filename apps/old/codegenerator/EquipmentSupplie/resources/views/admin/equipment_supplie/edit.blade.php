@@ -1,1 +1,0 @@
-<!-- Edit View for EquipmentSupplie -->

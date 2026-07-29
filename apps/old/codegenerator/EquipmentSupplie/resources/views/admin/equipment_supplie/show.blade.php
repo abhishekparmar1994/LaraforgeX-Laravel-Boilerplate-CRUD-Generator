@@ -1,1 +1,0 @@
-<!-- Show View for EquipmentSupplie -->
