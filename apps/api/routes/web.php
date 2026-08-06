@@ -23,13 +23,21 @@ Route::get('/storage-link', function () {
 });
 
 Route::get('/migrate-db', function () {
-    Artisan::call('migrate', ['--force' => true]);
-    return "Database migrations executed successfully: <br><pre>" . Artisan::output() . "</pre>";
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return "<h2 style='color:green'>✅ Database migrations executed successfully!</h2><pre>" . e(Artisan::output()) . "</pre>";
+    } catch (\Throwable $e) {
+        return "<h2 style='color:red'>❌ Migration Error:</h2><pre>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>";
+    }
 });
 
 Route::get('/seed-db', function () {
-    Artisan::call('db:seed', ['--force' => true]);
-    return "Database seeders executed successfully: <br><pre>" . Artisan::output() . "</pre>";
+    try {
+        Artisan::call('db:seed', ['--force' => true]);
+        return "<h2 style='color:green'>✅ Database seeders executed successfully!</h2><pre>" . e(Artisan::output()) . "</pre>";
+    } catch (\Throwable $e) {
+        return "<h2 style='color:red'>❌ Seeder Error:</h2><pre>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>";
+    }
 });
 Route::get('/landing', function () {
     return file_get_contents(public_path('codecanyon_landing.html'));
