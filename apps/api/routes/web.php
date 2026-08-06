@@ -39,6 +39,33 @@ Route::get('/seed-db', function () {
         return "<h2 style='color:red'>❌ Seeder Error:</h2><pre>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>";
     }
 });
+
+Route::get('/demo-reset', function () {
+    $key = request('key');
+    $secret = env('DEMO_RESET_KEY', 'laraforgex_reset_secret_2026');
+
+    if ($key !== $secret) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized: Invalid demo reset key.'
+        ], 403);
+    }
+
+    try {
+        Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+        return response()->json([
+            'success' => true,
+            'message' => '✅ Demo database successfully reset to clean default state!',
+            'output' => Artisan::output()
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Reset error: ' . $e->getMessage()
+        ], 500);
+    }
+});
+
 Route::get('/landing', function () {
     return file_get_contents(public_path('codecanyon_landing.html'));
 });
