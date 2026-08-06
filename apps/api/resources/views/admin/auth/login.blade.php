@@ -90,26 +90,21 @@
 
         <!-- CodeCanyon Live Demo Credentials Card (Placed at Bottom) -->
         <div
-          class="p-4 bg-gradient-to-r from-brand-50 to-indigo-50 border border-brand-200/80 rounded-2xl space-y-2 mt-4">
+          class="p-3.5 bg-gradient-to-r from-brand-50 to-indigo-50 border border-brand-200/80 rounded-2xl mt-4">
           <div class="flex items-center justify-between">
             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 uppercase tracking-wider">
               <i class="fa-solid fa-sparkles text-brand-500"></i> Live Demo Logins
             </span>
             <div class="flex gap-1.5">
               <button type="button" id="btn-fill-admin"
-                class="px-2.5 py-1 text-[11px] font-extrabold text-white bg-brand-600 hover:bg-brand-500 rounded-lg transition shadow-sm border-0 cursor-pointer">
-                <i class="fa-solid fa-user-shield mr-1"></i> Admin
+                class="px-3 py-1.5 text-xs font-extrabold text-white bg-brand-600 hover:bg-brand-500 rounded-xl transition shadow-sm border-0 cursor-pointer flex items-center gap-1">
+                <i class="fa-solid fa-user-shield"></i> Admin
               </button>
               <button type="button" id="btn-fill-dev"
-                class="px-2.5 py-1 text-[11px] font-extrabold text-white bg-violet-600 hover:bg-violet-500 rounded-lg transition shadow-sm border-0 cursor-pointer">
-                <i class="fa-solid fa-code mr-1"></i> Developer
+                class="px-3 py-1.5 text-xs font-extrabold text-white bg-violet-600 hover:bg-violet-500 rounded-xl transition shadow-sm border-0 cursor-pointer flex items-center gap-1">
+                <i class="fa-solid fa-code"></i> Developer
               </button>
             </div>
-          </div>
-          <div
-            class="text-[11px] text-slate-600 font-mono flex items-center justify-between pt-1 border-t border-brand-100/60">
-            <span>Admin: <strong class="text-slate-900">admin@laraforgex.com</strong></span>
-            <span>Dev: <strong class="text-slate-900">developer@laraforgex.com</strong></span>
           </div>
         </div>
 
