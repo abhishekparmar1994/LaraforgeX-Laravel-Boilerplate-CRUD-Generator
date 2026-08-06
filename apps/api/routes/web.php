@@ -41,7 +41,7 @@ Route::get('/seed-db', function () {
 });
 
 Route::get('/demo-reset', function () {
-    $key = request('key');
+    $key = request('key') ?? request('DEMO_RESET_KEY');
     $secret = env('DEMO_RESET_KEY', 'laraforgex_reset_secret_2026');
 
     if ($key !== $secret) {
@@ -52,11 +52,16 @@ Route::get('/demo-reset', function () {
     }
 
     try {
-        Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+        Artisan::call('migrate:fresh', ['--force' => true]);
+        $migrateOutput = Artisan::output();
+
+        Artisan::call('db:seed', ['--force' => true]);
+        $seedOutput = Artisan::output();
+
         return response()->json([
             'success' => true,
             'message' => '✅ Demo database successfully reset to clean default state!',
-            'output' => Artisan::output()
+            'output' => $migrateOutput . "\n" . $seedOutput
         ]);
     } catch (\Throwable $e) {
         return response()->json([
