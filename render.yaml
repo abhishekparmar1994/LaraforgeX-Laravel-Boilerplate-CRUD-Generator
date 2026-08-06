@@ -20,8 +20,10 @@ services:
         value: "false"
       - key: APP_URL
         sync: false # Set automatically or specify your Render custom domain URL
+      - key: PORT
+        value: "80"
       - key: APP_KEY
-        generateValue: true
+        sync: false # Must be a valid Laravel base64 key string
       - key: LOG_CHANNEL
         value: stderr
       - key: DB_CONNECTION

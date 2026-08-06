@@ -7,7 +7,24 @@ Route::get('/', function () {
 });
 
 Route::get('/install', [\App\Http\Controllers\InstallController::class, 'index']);
+Route::get('/clear-cache', function () {
 
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('optimize:clear');
+
+    return "All caches cleared successfully";
+
+});
+Route::get('/storage-link', function () {
+
+    Artisan::call('storage:link');
+
+    return "All caches cleared successfully";
+
+});
 Route::get('/landing', function () {
     return file_get_contents(public_path('codecanyon_landing.html'));
 });

@@ -48,6 +48,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Domains\AuditLog\Policies\AuditLogPolicy::class
         );
 
+        // Force HTTPS scheme in production or behind SSL proxy
+        if (config('app.env') === 'production' || request()->header('X-Forwarded-Proto') === 'https') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Define system gates
         \Illuminate\Support\Facades\Gate::define('admin-only', function ($user) {
             return $user->hasRole('administrator');
