@@ -1,0 +1,46 @@
+# ==============================================================================
+# Render Blueprint Specification for LaraforgeX (Laravel 13 API)
+# Supports 1-Click Zero-Config Deployment on Render Free Tier
+# ==============================================================================
+
+services:
+  - type: web
+    name: laraforgex-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: ./apps/api
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: APP_NAME
+        value: LaraforgeX
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        sync: false # Set automatically or specify your Render custom domain URL
+      - key: APP_KEY
+        generateValue: true
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: mysql # Configured for MySQL
+      - key: DB_HOST
+        sync: false # External MySQL host (e.g. Aiven, PlanetScale, Railway, or remote MySQL)
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSLMODE
+        value: require
+      - key: RUN_MIGRATIONS
+        value: "true"
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_STORE
+        value: file
