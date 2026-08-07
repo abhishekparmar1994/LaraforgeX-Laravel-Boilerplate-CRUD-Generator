@@ -157,10 +157,10 @@
             id="badge-column-count">0 Columns</span>
         </div>
 
-        <div class="overflow-x-auto border border-slate-200 rounded-xl">
-          <table class="w-full text-left text-xs font-sans">
+        <div class="overflow-x-auto border border-slate-200 rounded-xl w-full">
+          <table class="w-full min-w-[650px] text-left text-xs font-sans">
             <thead
-              class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px] font-bold">
+              class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px] font-bold whitespace-nowrap">
               <tr>
                 <th class="px-3 py-3">Column</th>
                 <th class="px-3 py-3">Label</th>

@@ -88,32 +88,32 @@
     </div>
 
     <!-- Main Studio Card -->
-    <div class="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden p-6 space-y-6">
+    <div class="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden p-4 sm:p-6 space-y-6">
 
       <!-- Navigation Tabs -->
-      <div class="flex items-center gap-2 border-b border-slate-200 text-xs font-bold text-slate-500">
+      <div class="flex items-center gap-1 sm:gap-2 border-b border-slate-200 text-xs font-bold text-slate-500 overflow-x-auto whitespace-nowrap scrollbar-none pb-px">
         <button type="button"
-          class="tab-btn px-5 py-3 border-b-2 border-brand-500 text-brand-600 flex items-center gap-2 font-bold cursor-pointer"
+          class="tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-brand-500 text-brand-600 flex items-center gap-2 font-bold cursor-pointer whitespace-nowrap"
           data-tab="columns" id="tab-btn-columns">
           <i class="fa-solid fa-columns"></i> Columns / Fields (<span id="count-columns">0</span>)
         </button>
         <button type="button"
-          class="tab-btn px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer"
+          class="tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer whitespace-nowrap"
           data-tab="indexes" id="tab-btn-indexes">
           <i class="fa-solid fa-key"></i> Indexes (<span id="count-indexes">0</span>)
         </button>
         <button type="button"
-          class="tab-btn px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer"
+          class="tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer whitespace-nowrap"
           data-tab="fks" id="tab-btn-fks">
           <i class="fa-solid fa-link"></i> Foreign Keys (<span id="count-fks">0</span>)
         </button>
         <button type="button"
-          class="tab-btn px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer"
+          class="tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer whitespace-nowrap"
           data-tab="data" id="tab-btn-data">
           <i class="fa-solid fa-table-list"></i> Browse Data
         </button>
         <button type="button"
-          class="tab-btn px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer"
+          class="tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer whitespace-nowrap"
           data-tab="sql" id="tab-btn-sql">
           <i class="fa-solid fa-code"></i> DDL & SQL Console
         </button>
@@ -121,11 +121,11 @@
 
       <!-- Tab 1: Columns / Fields -->
       <div id="tab-content-columns" class="tab-content space-y-4">
-        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-          <table class="w-full text-left border-collapse text-xs">
+        <div class="border border-slate-200 rounded-xl overflow-x-auto w-full shadow-xs">
+          <table class="w-full min-w-[750px] text-left border-collapse text-xs">
             <thead>
               <tr
-                class="bg-slate-50 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                class="bg-slate-50 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                 <th class="p-3.5 w-10 text-center">
                   <input type="checkbox" id="cb-select-all-columns"
                     class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
@@ -140,7 +140,7 @@
                 <th class="p-3.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="tbody-columns" class="divide-y divide-slate-100 font-mono text-xs text-slate-700">
+            <tbody id="tbody-columns" class="divide-y divide-slate-100 font-mono text-xs text-slate-700 whitespace-nowrap">
               <tr>
                 <td colspan="9" class="p-6 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin"></i>
                   Loading columns…</td>
@@ -152,19 +152,19 @@
 
       <!-- Tab 2: Indexes -->
       <div id="tab-content-indexes" class="tab-content hidden space-y-4">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p class="text-xs text-slate-500 font-medium">Index and unique constraints defined on `{{ $table }}`.</p>
           <button type="button" id="btn-open-add-index"
-            class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs transition shadow-sm inline-flex items-center gap-1.5 cursor-pointer">
+            class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs transition shadow-sm inline-flex items-center gap-1.5 cursor-pointer flex-shrink-0">
             <i class="fa-solid fa-plus text-xs"></i> Add New Index
           </button>
         </div>
 
-        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-          <table class="w-full text-left border-collapse text-xs">
+        <div class="border border-slate-200 rounded-xl overflow-x-auto w-full shadow-xs">
+          <table class="w-full min-w-[600px] text-left border-collapse text-xs">
             <thead>
               <tr
-                class="bg-slate-50 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                class="bg-slate-50 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                 <th class="p-3.5">Index Name</th>
                 <th class="p-3.5">Type</th>
                 <th class="p-3.5">Target Columns</th>
@@ -172,7 +172,7 @@
                 <th class="p-3.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="tbody-indexes" class="divide-y divide-slate-100 font-mono text-xs text-slate-700">
+            <tbody id="tbody-indexes" class="divide-y divide-slate-100 font-mono text-xs text-slate-700 whitespace-nowrap">
               <tr>
                 <td colspan="5" class="p-6 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin"></i>
                   Loading indexes…</td>
@@ -184,11 +184,11 @@
 
       <!-- Tab 3: Foreign Keys -->
       <div id="tab-content-fks" class="tab-content hidden space-y-4">
-        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-          <table class="w-full text-left border-collapse text-xs">
+        <div class="border border-slate-200 rounded-xl overflow-x-auto w-full shadow-xs">
+          <table class="w-full min-w-[650px] text-left border-collapse text-xs">
             <thead>
               <tr
-                class="bg-slate-50 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                class="bg-slate-50 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 whitespace-nowrap">
                 <th class="p-3.5">Constraint Name</th>
                 <th class="p-3.5">Local Column</th>
                 <th class="p-3.5">Foreign Table</th>
@@ -197,7 +197,7 @@
                 <th class="p-3.5">On Update</th>
               </tr>
             </thead>
-            <tbody id="tbody-fks" class="divide-y divide-slate-100 font-mono text-xs text-slate-700">
+            <tbody id="tbody-fks" class="divide-y divide-slate-100 font-mono text-xs text-slate-700 whitespace-nowrap">
               <tr>
                 <td colspan="6" class="p-6 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin"></i>
                   Loading foreign keys…</td>
@@ -919,10 +919,10 @@
         $('.tab-btn').each(function () {
           const t = $(this).data('tab');
           if (t === tab) {
-            $(this).attr('class', 'tab-btn px-5 py-3 border-b-2 border-brand-500 text-brand-600 flex items-center gap-2 font-bold cursor-pointer');
+            $(this).attr('class', 'tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-brand-500 text-brand-600 flex items-center gap-2 font-bold cursor-pointer whitespace-nowrap');
             $(`#tab-content-${t}`).removeClass('hidden');
           } else {
-            $(this).attr('class', 'tab-btn px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer');
+            $(this).attr('class', 'tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-2 cursor-pointer whitespace-nowrap');
             $(`#tab-content-${t}`).addClass('hidden');
           }
         });

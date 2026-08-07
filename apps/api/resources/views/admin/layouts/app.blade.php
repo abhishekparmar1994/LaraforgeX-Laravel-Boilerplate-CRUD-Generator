@@ -7,6 +7,25 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'LaraforgeX Core Admin')</title>
 
+  <!-- Synchronous Head Auth Guard (Anti-FOUC) -->
+  <script>
+    (function () {
+      var authToken = localStorage.getItem('laraforgex_auth_token');
+      var userSession = localStorage.getItem('laraforgex_user');
+      if (!authToken || !userSession) {
+        if (window.location.pathname !== '/admin/login') {
+          document.documentElement.classList.add('auth-checking');
+          window.location.replace('/admin/login');
+        }
+      }
+    })();
+  </script>
+  <style>
+    html.auth-checking body {
+      display: none !important;
+    }
+  </style>
+
   <!-- Tailwind CDN (offline vendor) -->
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
   <!-- jQuery (vendor) -->

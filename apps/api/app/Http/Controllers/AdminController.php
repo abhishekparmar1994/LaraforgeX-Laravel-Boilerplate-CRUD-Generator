@@ -9,11 +9,11 @@ use Illuminate\View\View;
 class AdminController extends Controller
 {
     /**
-     * Redirect index requests directly to the dashboard view.
+     * Redirect index requests directly to the login view.
      */
-    public function index(): View
+    public function index(): \Illuminate\Http\RedirectResponse
     {
-        return view('admin.dashboard');
+        return redirect('/admin/login');
     }
 
     /**

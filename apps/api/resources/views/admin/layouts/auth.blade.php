@@ -7,6 +7,25 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'LaraforgeX Admin Panel')</title>
 
+  <!-- Synchronous Head Auth Redirect for authenticated users -->
+  <script>
+    (function () {
+      var authToken = localStorage.getItem('laraforgex_auth_token');
+      var userSession = localStorage.getItem('laraforgex_user');
+      if (authToken && userSession) {
+        if (window.location.pathname === '/admin/login' || window.location.pathname === '/admin/forgot-password') {
+          document.documentElement.classList.add('auth-checking');
+          window.location.replace('/admin/dashboard');
+        }
+      }
+    })();
+  </script>
+  <style>
+    html.auth-checking body {
+      display: none !important;
+    }
+  </style>
+
   <!-- jQuery Vendor Script -->
   <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 

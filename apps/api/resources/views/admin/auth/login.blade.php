@@ -89,8 +89,7 @@
         </form>
 
         <!-- CodeCanyon Live Demo Credentials Card (Placed at Bottom) -->
-        <div
-          class="p-3.5 bg-gradient-to-r from-brand-50 to-indigo-50 border border-brand-200/80 rounded-2xl mt-4">
+        <div class="p-3.5 bg-gradient-to-r from-brand-50 to-indigo-50 border border-brand-200/80 rounded-2xl mt-4">
           <div class="flex items-center justify-between">
             <span class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 uppercase tracking-wider">
               <i class="fa-solid fa-sparkles text-brand-500"></i> Live Demo Logins
@@ -172,15 +171,16 @@
 @section('scripts')
   <script>
     $(document).ready(function () {
-      if (localStorage.getItem('laraforgex_auth_token')) {
-        window.location.href = '/admin/dashboard';
+      if (localStorage.getItem('laraforgex_auth_token') && localStorage.getItem('laraforgex_user')) {
+        window.location.replace('/admin/dashboard');
+        return;
       }
 
       $('#btn-fill-admin').click(function () {
         $('#email').val('admin@laraforgex.com');
         $('#password').val('SecurePassword123!');
         showToast('info', 'Authenticating Admin Demo...');
-        setTimeout(function() {
+        setTimeout(function () {
           $('#login-form').submit();
         }, 300);
       });
@@ -189,7 +189,7 @@
         $('#email').val('developer@laraforgex.com');
         $('#password').val('SecurePassword123!');
         showToast('info', 'Authenticating Developer Demo...');
-        setTimeout(function() {
+        setTimeout(function () {
           $('#login-form').submit();
         }, 300);
       });

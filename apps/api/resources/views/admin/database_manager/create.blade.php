@@ -97,11 +97,11 @@
           </button>
         </div>
 
-        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-          <table class="w-full text-left border-collapse text-xs">
+        <div class="border border-slate-200 rounded-xl overflow-x-auto w-full shadow-xs">
+          <table class="w-full min-w-[700px] text-left border-collapse text-xs">
             <thead>
               <tr
-                class="bg-slate-100/80 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 select-none">
+                class="bg-slate-100/80 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 select-none whitespace-nowrap">
                 <th class="p-3">Column Name *</th>
                 <th class="p-3">Data Type *</th>
                 <th class="p-3">Length / Values</th>
@@ -357,64 +357,64 @@
         const rowId = 'col-row-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
 
         const html = `
-            <tr id="${rowId}" class="hover:bg-slate-50 transition">
-              <td class="p-3">
-                <input type="text" name="col_name" value="${name}" required pattern="[a-zA-Z0-9_]+"
-                  class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white" placeholder="column_name">
-              </td>
-              <td class="p-3">
-                <select name="col_type" class="col-type-select w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:bg-white">
-                  <option value="INT" ${type === 'INT' ? 'selected' : ''}>INT (Integer)</option>
-                  <option value="BIGINT" ${type === 'BIGINT' ? 'selected' : ''}>BIGINT (64-bit Int)</option>
-                  <option value="TINYINT" ${type === 'TINYINT' ? 'selected' : ''}>TINYINT</option>
-                  <option value="SMALLINT" ${type === 'SMALLINT' ? 'selected' : ''}>SMALLINT</option>
-                  <option value="VARCHAR" ${type === 'VARCHAR' ? 'selected' : ''}>VARCHAR (String)</option>
-                  <option value="CHAR" ${type === 'CHAR' ? 'selected' : ''}>CHAR (Fixed String)</option>
-                  <option value="TEXT" ${type === 'TEXT' ? 'selected' : ''}>TEXT</option>
-                  <option value="TINYTEXT" ${type === 'TINYTEXT' ? 'selected' : ''}>TINYTEXT</option>
-                  <option value="MEDIUMTEXT" ${type === 'MEDIUMTEXT' ? 'selected' : ''}>MEDIUMTEXT</option>
-                  <option value="LONGTEXT" ${type === 'LONGTEXT' ? 'selected' : ''}>LONGTEXT</option>
-                  <option value="DECIMAL" ${type === 'DECIMAL' ? 'selected' : ''}>DECIMAL (Fixed Precision)</option>
-                  <option value="FLOAT" ${type === 'FLOAT' ? 'selected' : ''}>FLOAT</option>
-                  <option value="DOUBLE" ${type === 'DOUBLE' ? 'selected' : ''}>DOUBLE</option>
-                  <option value="BOOLEAN" ${type === 'BOOLEAN' ? 'selected' : ''}>BOOLEAN</option>
-                  <option value="DATE" ${type === 'DATE' ? 'selected' : ''}>DATE</option>
-                  <option value="DATETIME" ${type === 'DATETIME' ? 'selected' : ''}>DATETIME</option>
-                  <option value="TIMESTAMP" ${type === 'TIMESTAMP' ? 'selected' : ''}>TIMESTAMP</option>
-                  <option value="TIME" ${type === 'TIME' ? 'selected' : ''}>TIME</option>
-                  <option value="YEAR" ${type === 'YEAR' ? 'selected' : ''}>YEAR</option>
-                  <option value="JSON" ${type === 'JSON' ? 'selected' : ''}>JSON</option>
-                  <option value="BLOB" ${type === 'BLOB' ? 'selected' : ''}>BLOB</option>
-                  <option value="LONGBLOB" ${type === 'LONGBLOB' ? 'selected' : ''}>LONGBLOB</option>
-                  <option value="ENUM" ${type === 'ENUM' ? 'selected' : ''}>ENUM</option>
-                  <option value="SET" ${type === 'SET' ? 'selected' : ''}>SET</option>
-                </select>
-              </td>
-              <td class="p-3 col-length-cell">
-                <input type="text" name="col_length" value="${length}"
-                  class="col-length-input w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:bg-white" placeholder="e.g. 255">
-                <span class="col-length-na hidden text-[10px] text-slate-300 font-semibold italic">— N/A</span>
-              </td>
-              <td class="p-3 text-center">
-                <input type="checkbox" name="col_nullable" ${nullable ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
-              </td>
-              <td class="p-3">
-                <input type="text" name="col_default" value="${defVal}"
-                  class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:bg-white" placeholder="DEFAULT">
-              </td>
-              <td class="p-3 text-center">
-                <input type="checkbox" name="col_auto_inc" ${autoInc ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
-              </td>
-              <td class="p-3 text-center">
-                <input type="checkbox" name="col_primary" ${primary ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
-              </td>
-              <td class="p-3 text-center">
-                <button type="button" class="btn-remove-col-row h-8 w-8 rounded-lg text-rose-500 hover:bg-rose-50 transition cursor-pointer">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
-              </td>
-            </tr>
-          `;
+                      <tr id="${rowId}" class="hover:bg-slate-50 transition">
+                        <td class="p-3">
+                          <input type="text" name="col_name" value="${name}" required pattern="[a-zA-Z0-9_]+"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white" placeholder="column_name">
+                        </td>
+                        <td class="p-3">
+                          <select name="col_type" class="col-type-select w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:bg-white">
+                            <option value="INT" ${type === 'INT' ? 'selected' : ''}>INT (Integer)</option>
+                            <option value="BIGINT" ${type === 'BIGINT' ? 'selected' : ''}>BIGINT (64-bit Int)</option>
+                            <option value="TINYINT" ${type === 'TINYINT' ? 'selected' : ''}>TINYINT</option>
+                            <option value="SMALLINT" ${type === 'SMALLINT' ? 'selected' : ''}>SMALLINT</option>
+                            <option value="VARCHAR" ${type === 'VARCHAR' ? 'selected' : ''}>VARCHAR (String)</option>
+                            <option value="CHAR" ${type === 'CHAR' ? 'selected' : ''}>CHAR (Fixed String)</option>
+                            <option value="TEXT" ${type === 'TEXT' ? 'selected' : ''}>TEXT</option>
+                            <option value="TINYTEXT" ${type === 'TINYTEXT' ? 'selected' : ''}>TINYTEXT</option>
+                            <option value="MEDIUMTEXT" ${type === 'MEDIUMTEXT' ? 'selected' : ''}>MEDIUMTEXT</option>
+                            <option value="LONGTEXT" ${type === 'LONGTEXT' ? 'selected' : ''}>LONGTEXT</option>
+                            <option value="DECIMAL" ${type === 'DECIMAL' ? 'selected' : ''}>DECIMAL (Fixed Precision)</option>
+                            <option value="FLOAT" ${type === 'FLOAT' ? 'selected' : ''}>FLOAT</option>
+                            <option value="DOUBLE" ${type === 'DOUBLE' ? 'selected' : ''}>DOUBLE</option>
+                            <option value="BOOLEAN" ${type === 'BOOLEAN' ? 'selected' : ''}>BOOLEAN</option>
+                            <option value="DATE" ${type === 'DATE' ? 'selected' : ''}>DATE</option>
+                            <option value="DATETIME" ${type === 'DATETIME' ? 'selected' : ''}>DATETIME</option>
+                            <option value="TIMESTAMP" ${type === 'TIMESTAMP' ? 'selected' : ''}>TIMESTAMP</option>
+                            <option value="TIME" ${type === 'TIME' ? 'selected' : ''}>TIME</option>
+                            <option value="YEAR" ${type === 'YEAR' ? 'selected' : ''}>YEAR</option>
+                            <option value="JSON" ${type === 'JSON' ? 'selected' : ''}>JSON</option>
+                            <option value="BLOB" ${type === 'BLOB' ? 'selected' : ''}>BLOB</option>
+                            <option value="LONGBLOB" ${type === 'LONGBLOB' ? 'selected' : ''}>LONGBLOB</option>
+                            <option value="ENUM" ${type === 'ENUM' ? 'selected' : ''}>ENUM</option>
+                            <option value="SET" ${type === 'SET' ? 'selected' : ''}>SET</option>
+                          </select>
+                        </td>
+                        <td class="p-3 col-length-cell">
+                          <input type="text" name="col_length" value="${length}"
+                            class="col-length-input w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:bg-white" placeholder="e.g. 255">
+                          <span class="col-length-na hidden text-[10px] text-slate-300 font-semibold italic">— N/A</span>
+                        </td>
+                        <td class="p-3 text-center">
+                          <input type="checkbox" name="col_nullable" ${nullable ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
+                        </td>
+                        <td class="p-3">
+                          <input type="text" name="col_default" value="${defVal}"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:bg-white" placeholder="DEFAULT">
+                        </td>
+                        <td class="p-3 text-center">
+                          <input type="checkbox" name="col_auto_inc" ${autoInc ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
+                        </td>
+                        <td class="p-3 text-center">
+                          <input type="checkbox" name="col_primary" ${primary ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
+                        </td>
+                        <td class="p-3 text-center">
+                          <button type="button" class="btn-remove-col-row h-8 w-8 rounded-lg text-rose-500 hover:bg-rose-50 transition cursor-pointer">
+                            <i class="fa-solid fa-trash-can"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    `;
 
         $('#ct-columns-tbody').append(html);
         updateColumnsBadge();
@@ -431,46 +431,46 @@
         $.each(_existingTables, function (i, t) { tableOpts += `<option value="${t}">${t}</option>`; });
 
         const html = `
-            <div class="fk-card-item p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 relative shadow-xs">
-              <button type="button" class="btn-remove-fk-row absolute right-3 top-3 text-rose-500 hover:text-rose-700 cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-              </button>
-              <div class="grid grid-cols-3 gap-3">
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">Local Column</label>
-                  <input type="text" name="fk_column" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs font-bold" placeholder="user_id">
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">Foreign Table</label>
-                  <select name="fk_foreign_table" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
-                    ${tableOpts}
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">Foreign Column</label>
-                  <input type="text" name="fk_foreign_column" required value="id" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">On Delete Action</label>
-                  <select name="fk_on_delete" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
-                    <option value="CASCADE" selected>CASCADE (Cascade Delete)</option>
-                    <option value="SET NULL">SET NULL</option>
-                    <option value="RESTRICT">RESTRICT</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">On Update Action</label>
-                  <select name="fk_on_update" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
-                    <option value="CASCADE" selected>CASCADE</option>
-                    <option value="SET NULL">SET NULL</option>
-                    <option value="RESTRICT">RESTRICT</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          `;
+                      <div class="fk-card-item p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 relative shadow-xs">
+                        <button type="button" class="btn-remove-fk-row absolute right-3 top-3 text-rose-500 hover:text-rose-700 cursor-pointer">
+                          <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                        <div class="grid grid-cols-3 gap-3">
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">Local Column</label>
+                            <input type="text" name="fk_column" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs font-bold" placeholder="user_id">
+                          </div>
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">Foreign Table</label>
+                            <select name="fk_foreign_table" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
+                              ${tableOpts}
+                            </select>
+                          </div>
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">Foreign Column</label>
+                            <input type="text" name="fk_foreign_column" required value="id" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
+                          </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">On Delete Action</label>
+                            <select name="fk_on_delete" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
+                              <option value="CASCADE" selected>CASCADE (Cascade Delete)</option>
+                              <option value="SET NULL">SET NULL</option>
+                              <option value="RESTRICT">RESTRICT</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">On Update Action</label>
+                            <select name="fk_on_update" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
+                              <option value="CASCADE" selected>CASCADE</option>
+                              <option value="SET NULL">SET NULL</option>
+                              <option value="RESTRICT">RESTRICT</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    `;
 
         $('#ct-fk-container').append(html);
       }
@@ -479,30 +479,30 @@
         $('#no-idx-msg').remove();
 
         const html = `
-            <div class="idx-card-item p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 relative shadow-xs">
-              <button type="button" class="btn-remove-idx-row absolute right-3 top-3 text-rose-500 hover:text-rose-700 cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-              </button>
-              <div class="grid grid-cols-3 gap-3">
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">Index Name</label>
-                  <input type="text" name="idx_name" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs font-bold" placeholder="idx_column">
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">Index Type</label>
-                  <select name="idx_type" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
-                    <option value="INDEX" selected>INDEX (Key)</option>
-                    <option value="UNIQUE">UNIQUE</option>
-                    <option value="FULLTEXT">FULLTEXT</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-500 uppercase">Columns (comma sep)</label>
-                  <input type="text" name="idx_columns" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs" placeholder="name, email">
-                </div>
-              </div>
-            </div>
-          `;
+                      <div class="idx-card-item p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 relative shadow-xs">
+                        <button type="button" class="btn-remove-idx-row absolute right-3 top-3 text-rose-500 hover:text-rose-700 cursor-pointer">
+                          <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                        <div class="grid grid-cols-3 gap-3">
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">Index Name</label>
+                            <input type="text" name="idx_name" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs font-bold" placeholder="idx_column">
+                          </div>
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">Index Type</label>
+                            <select name="idx_type" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs">
+                              <option value="INDEX" selected>INDEX (Key)</option>
+                              <option value="UNIQUE">UNIQUE</option>
+                              <option value="FULLTEXT">FULLTEXT</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase">Columns (comma sep)</label>
+                            <input type="text" name="idx_columns" required class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-mono text-xs" placeholder="name, email">
+                          </div>
+                        </div>
+                      </div>
+                    `;
 
         $('#ct-idx-container').append(html);
       }
