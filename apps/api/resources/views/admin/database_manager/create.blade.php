@@ -97,11 +97,11 @@
           </button>
         </div>
 
-        <div class="border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-          <table class="w-full text-left border-collapse text-xs">
+        <div class="border border-slate-200 rounded-xl overflow-x-auto w-full shadow-xs">
+          <table class="w-full min-w-[700px] text-left border-collapse text-xs">
             <thead>
               <tr
-                class="bg-slate-100/80 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 select-none">
+                class="bg-slate-100/80 border-b border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 select-none whitespace-nowrap">
                 <th class="p-3">Column Name *</th>
                 <th class="p-3">Data Type *</th>
                 <th class="p-3">Length / Values</th>
