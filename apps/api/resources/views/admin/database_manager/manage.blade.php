@@ -91,7 +91,8 @@
     <div class="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden p-4 sm:p-6 space-y-6">
 
       <!-- Navigation Tabs -->
-      <div class="flex items-center gap-1 sm:gap-2 border-b border-slate-200 text-xs font-bold text-slate-500 overflow-x-auto whitespace-nowrap scrollbar-none pb-px">
+      <div
+        class="flex items-center gap-1 sm:gap-2 border-b border-slate-200 text-xs font-bold text-slate-500 overflow-x-auto whitespace-nowrap scrollbar-none pb-px">
         <button type="button"
           class="tab-btn flex-shrink-0 px-3.5 sm:px-5 py-3 border-b-2 border-brand-500 text-brand-600 flex items-center gap-2 font-bold cursor-pointer whitespace-nowrap"
           data-tab="columns" id="tab-btn-columns">
@@ -140,7 +141,8 @@
                 <th class="p-3.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="tbody-columns" class="divide-y divide-slate-100 font-mono text-xs text-slate-700 whitespace-nowrap">
+            <tbody id="tbody-columns"
+              class="divide-y divide-slate-100 font-mono text-xs text-slate-700 whitespace-nowrap">
               <tr>
                 <td colspan="9" class="p-6 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin"></i>
                   Loading columns…</td>
@@ -172,7 +174,8 @@
                 <th class="p-3.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="tbody-indexes" class="divide-y divide-slate-100 font-mono text-xs text-slate-700 whitespace-nowrap">
+            <tbody id="tbody-indexes"
+              class="divide-y divide-slate-100 font-mono text-xs text-slate-700 whitespace-nowrap">
               <tr>
                 <td colspan="5" class="p-6 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin"></i>
                   Loading indexes…</td>
@@ -226,7 +229,8 @@
             title="Toggle Advanced Filters">
             <i class="fa-solid fa-filter text-xs group-hover:text-indigo-600 transition"></i>
             <span>Filter</span>
-            <span id="filter-active-badge" class="hidden items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold">0</span>
+            <span id="filter-active-badge"
+              class="hidden items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold">0</span>
           </button>
 
           <!-- Spacer -->
@@ -298,14 +302,16 @@
           </div>
 
           <!-- Empty State -->
-          <div id="filter-rules-empty" class="flex items-center justify-center py-4 text-xs text-indigo-400 font-semibold">
+          <div id="filter-rules-empty"
+            class="flex items-center justify-center py-4 text-xs text-indigo-400 font-semibold">
             <i class="fa-solid fa-circle-plus mr-2 text-indigo-300"></i>
             Click <strong class="mx-1 text-indigo-600">Add Rule</strong> to build a filter condition
           </div>
         </div>
 
         <!-- Data Grid -->
-        <div class="border border-slate-200 rounded-xl overflow-x-auto shadow-xs" style="max-height:520px; overflow-y:auto;">
+        <div class="border border-slate-200 rounded-xl overflow-x-auto shadow-xs"
+          style="max-height:520px; overflow-y:auto;">
           <table class="w-full text-left border-collapse text-xs font-mono" id="data-grid-table">
             <!-- Dynamically populated via JS -->
           </table>
@@ -454,12 +460,15 @@
 
         <!-- Header -->
         <div class="flex items-center gap-3">
-          <div class="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+          <div
+            class="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
             <i class="fa-solid fa-pen-to-square"></i>
           </div>
           <div>
             <h3 class="font-bold text-slate-900 text-base">Modify Column</h3>
-            <p class="text-xs text-slate-400">Alter definition of <code id="mc-col-label" class="font-mono font-bold text-indigo-700"></code> on <code class="font-mono text-slate-600">`{{ $table }}`</code></p>
+            <p class="text-xs text-slate-400">Alter definition of <code id="mc-col-label"
+                class="font-mono font-bold text-indigo-700"></code> on <code
+                class="font-mono text-slate-600">`{{ $table }}`</code></p>
           </div>
         </div>
 
@@ -469,7 +478,8 @@
         <div class="grid grid-cols-2 gap-4">
           <!-- Rename column -->
           <div class="col-span-2">
-            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Rename To <span class="text-slate-300 font-normal">(leave blank to keep)</span></label>
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Rename To <span
+                class="text-slate-300 font-normal">(leave blank to keep)</span></label>
             <input type="text" id="mc-new-name" pattern="[a-zA-Z0-9_]*"
               class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:outline-none focus:border-indigo-400"
               placeholder="new_column_name">
@@ -523,7 +533,8 @@
 
           <!-- Length / Precision — shown/hidden based on data type -->
           <div id="mc-length-wrap">
-            <label id="mc-length-label" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Length / Precision</label>
+            <label id="mc-length-label"
+              class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Length / Precision</label>
             <input type="text" id="mc-length" pattern="[0-9,]*"
               class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-semibold text-slate-800 focus:outline-none focus:border-indigo-400"
               placeholder="e.g. 255 or 10,2">
@@ -548,11 +559,13 @@
           <!-- Toggles -->
           <div class="col-span-2 flex items-center gap-6 pt-1">
             <label class="flex items-center gap-2.5 cursor-pointer select-none">
-              <input type="checkbox" id="mc-nullable" class="h-4 w-4 rounded border-slate-300 text-indigo-600 cursor-pointer">
+              <input type="checkbox" id="mc-nullable"
+                class="h-4 w-4 rounded border-slate-300 text-indigo-600 cursor-pointer">
               <span class="text-xs font-bold text-slate-700">Allow NULL</span>
             </label>
             <label class="flex items-center gap-2.5 cursor-pointer select-none">
-              <input type="checkbox" id="mc-unsigned" class="h-4 w-4 rounded border-slate-300 text-indigo-600 cursor-pointer">
+              <input type="checkbox" id="mc-unsigned"
+                class="h-4 w-4 rounded border-slate-300 text-indigo-600 cursor-pointer">
               <span class="text-xs font-bold text-slate-700">UNSIGNED</span>
             </label>
           </div>
@@ -561,7 +574,8 @@
         <!-- Warning -->
         <div class="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
           <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5 flex-shrink-0"></i>
-          <span><b>Warning:</b> Changing a column's type may truncate or transform existing data. Always backup before modifying production tables.</span>
+          <span><b>Warning:</b> Changing a column's type may truncate or transform existing data. Always backup before
+            modifying production tables.</span>
         </div>
 
         <!-- Actions -->
@@ -603,40 +617,40 @@
        * ─────────────────────────────────────────────────────────────── */
       const TYPE_LENGTH_RULES = {
         // Types that have NO length parameter
-        JSON:       { mode: 'none' },
-        TEXT:       { mode: 'none' },
-        TINYTEXT:   { mode: 'none' },
+        JSON: { mode: 'none' },
+        TEXT: { mode: 'none' },
+        TINYTEXT: { mode: 'none' },
         MEDIUMTEXT: { mode: 'none' },
-        LONGTEXT:   { mode: 'none' },
-        BOOLEAN:    { mode: 'none' },
-        DATE:       { mode: 'none' },
-        DATETIME:   { mode: 'none' },
-        TIMESTAMP:  { mode: 'none' },
-        TIME:       { mode: 'none' },
-        YEAR:       { mode: 'none' },
-        BLOB:       { mode: 'none' },
-        TINYBLOB:   { mode: 'none' },
+        LONGTEXT: { mode: 'none' },
+        BOOLEAN: { mode: 'none' },
+        DATE: { mode: 'none' },
+        DATETIME: { mode: 'none' },
+        TIMESTAMP: { mode: 'none' },
+        TIME: { mode: 'none' },
+        YEAR: { mode: 'none' },
+        BLOB: { mode: 'none' },
+        TINYBLOB: { mode: 'none' },
         MEDIUMBLOB: { mode: 'none' },
-        LONGBLOB:   { mode: 'none' },
+        LONGBLOB: { mode: 'none' },
         // String — single length
-        VARCHAR:    { mode: 'length',    label: 'Length',           placeholder: '255'       },
-        CHAR:       { mode: 'length',    label: 'Length',           placeholder: '36'        },
-        BINARY:     { mode: 'length',    label: 'Length',           placeholder: '16'        },
-        VARBINARY:  { mode: 'length',    label: 'Length',           placeholder: '255'       },
+        VARCHAR: { mode: 'length', label: 'Length', placeholder: '255' },
+        CHAR: { mode: 'length', label: 'Length', placeholder: '36' },
+        BINARY: { mode: 'length', label: 'Length', placeholder: '16' },
+        VARBINARY: { mode: 'length', label: 'Length', placeholder: '255' },
         // Numeric — optional display width
-        INT:        { mode: 'width',     label: 'Display Width',    placeholder: '11'        },
-        INTEGER:    { mode: 'width',     label: 'Display Width',    placeholder: '11'        },
-        BIGINT:     { mode: 'width',     label: 'Display Width',    placeholder: '20'        },
-        TINYINT:    { mode: 'width',     label: 'Display Width',    placeholder: '4'         },
-        SMALLINT:   { mode: 'width',     label: 'Display Width',    placeholder: '6'         },
-        MEDIUMINT:  { mode: 'width',     label: 'Display Width',    placeholder: '9'         },
-        FLOAT:      { mode: 'width',     label: 'Precision',        placeholder: ''          },
-        DOUBLE:     { mode: 'width',     label: 'Precision',        placeholder: ''          },
+        INT: { mode: 'width', label: 'Display Width', placeholder: '11' },
+        INTEGER: { mode: 'width', label: 'Display Width', placeholder: '11' },
+        BIGINT: { mode: 'width', label: 'Display Width', placeholder: '20' },
+        TINYINT: { mode: 'width', label: 'Display Width', placeholder: '4' },
+        SMALLINT: { mode: 'width', label: 'Display Width', placeholder: '6' },
+        MEDIUMINT: { mode: 'width', label: 'Display Width', placeholder: '9' },
+        FLOAT: { mode: 'width', label: 'Precision', placeholder: '' },
+        DOUBLE: { mode: 'width', label: 'Precision', placeholder: '' },
         // Precision + Scale
-        DECIMAL:    { mode: 'precision', label: 'Precision, Scale', placeholder: '10,2'      },
+        DECIMAL: { mode: 'precision', label: 'Precision, Scale', placeholder: '10,2' },
         // Enum / Set values
-        ENUM:       { mode: 'values',    label: 'Values',           placeholder: "'a','b','c'" },
-        SET:        { mode: 'values',    label: 'Values',           placeholder: "'x','y','z'" },
+        ENUM: { mode: 'values', label: 'Values', placeholder: "'a','b','c'" },
+        SET: { mode: 'values', label: 'Values', placeholder: "'x','y','z'" },
       };
 
       /**
@@ -645,9 +659,9 @@
        * @param {jQuery} $select  The #mc-type select element
        */
       function applyModalLengthRules($select) {
-        const type   = ($select.val() || '').toUpperCase();
-        const rule   = TYPE_LENGTH_RULES[type] || { mode: 'length', label: 'Length / Precision', placeholder: '' };
-        const $wrap  = $('#mc-length-wrap');
+        const type = ($select.val() || '').toUpperCase();
+        const rule = TYPE_LENGTH_RULES[type] || { mode: 'length', label: 'Length / Precision', placeholder: '' };
+        const $wrap = $('#mc-length-wrap');
         const $label = $('#mc-length-label');
         const $input = $('#mc-length');
 
@@ -704,13 +718,13 @@
 
       // Modify Column — from per-row Edit button
       $(document).on('click', '.btn-edit-single-col', function () {
-        const $btn    = $(this);
+        const $btn = $(this);
         const colName = $btn.data('col');
         const colData = {
-          type:     $btn.data('type') || '',
+          type: $btn.data('type') || '',
           nullable: $btn.data('nullable') === 1 || $btn.data('nullable') === '1',
-          default:  $btn.data('default') || '',
-          comment:  $btn.data('comment') || '',
+          default: $btn.data('default') || '',
+          comment: $btn.data('comment') || '',
         };
         openModifyColModal(colName, colData);
       });
@@ -840,9 +854,9 @@
        * @returns {string} Full URL with query params
        */
       function buildExportUrl(format) {
-        const search  = $('#data-search-input').val().trim();
-        const rules   = collectFilterRules();
-        const active  = rules.filter(function (r) { return r.enabled && r.column; });
+        const search = $('#data-search-input').val().trim();
+        const rules = collectFilterRules();
+        const active = rules.filter(function (r) { return r.enabled && r.column; });
 
         const params = new URLSearchParams();
         params.set('format', format);
@@ -940,29 +954,29 @@
         let html = '';
         $.each(cols, function (i, c) {
           html += `
-            <tr class="hover:bg-slate-50 transition">
-              <td class="p-3.5 text-center">
-                <input type="checkbox" value="${c.name}" class="col-cb h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
-              </td>
-              <td class="p-3.5 font-bold text-slate-900 font-mono">${c.name}</td>
-              <td class="p-3.5 text-slate-600">${c.type}</td>
-              <td class="p-3.5 text-center">${c.nullable ? '<span class="text-amber-600 font-bold">YES</span>' : '<span class="text-slate-400">NO</span>'}</td>
-              <td class="p-3.5 font-bold ${c.key === 'PRI' ? 'text-rose-600' : 'text-slate-500'}">${c.key || '-'}</td>
-              <td class="p-3.5 text-slate-500">${c.default !== null ? c.default : '<span class="text-slate-300 italic">NULL</span>'}</td>
-              <td class="p-3.5 text-brand-600 font-semibold">${c.extra || '-'}</td>
-              <td class="p-3.5 text-slate-400 italic font-sans">${c.comment || '-'}</td>
-              <td class="p-3.5 text-right">
-                <div class="flex items-center justify-end gap-1.5">
-                  <button data-col="${c.name}" data-type="${c.type}" data-nullable="${c.nullable ? 1 : 0}" data-default="${c.default !== null ? c.default : ''}" data-comment="${c.comment || ''}" class="btn-edit-single-col px-2.5 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs transition border border-indigo-200 cursor-pointer">
-                    <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
-                  </button>
-                  <button data-col="${c.name}" class="btn-drop-single-col px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition border border-rose-200 cursor-pointer">
-                    <i class="fa-solid fa-trash-can text-[10px]"></i> Drop
-                  </button>
-                </div>
-              </td>
-            </tr>
-          `;
+                <tr class="hover:bg-slate-50 transition">
+                  <td class="p-3.5 text-center">
+                    <input type="checkbox" value="${c.name}" class="col-cb h-4 w-4 rounded border-slate-300 text-brand-600 cursor-pointer">
+                  </td>
+                  <td class="p-3.5 font-bold text-slate-900 font-mono">${c.name}</td>
+                  <td class="p-3.5 text-slate-600">${c.type}</td>
+                  <td class="p-3.5 text-center">${c.nullable ? '<span class="text-amber-600 font-bold">YES</span>' : '<span class="text-slate-400">NO</span>'}</td>
+                  <td class="p-3.5 font-bold ${c.key === 'PRI' ? 'text-rose-600' : 'text-slate-500'}">${c.key || '-'}</td>
+                  <td class="p-3.5 text-slate-500">${c.default !== null ? c.default : '<span class="text-slate-300 italic">NULL</span>'}</td>
+                  <td class="p-3.5 text-brand-600 font-semibold">${c.extra || '-'}</td>
+                  <td class="p-3.5 text-slate-400 italic font-sans">${c.comment || '-'}</td>
+                  <td class="p-3.5 text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                      <button data-col="${c.name}" data-type="${c.type}" data-nullable="${c.nullable ? 1 : 0}" data-default="${c.default !== null ? c.default : ''}" data-comment="${c.comment || ''}" class="btn-edit-single-col px-2.5 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs transition border border-indigo-200 cursor-pointer">
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
+                      </button>
+                      <button data-col="${c.name}" class="btn-drop-single-col px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition border border-rose-200 cursor-pointer">
+                        <i class="fa-solid fa-trash-can text-[10px]"></i> Drop
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `;
         });
         $tbody.html(html);
       }
@@ -1069,10 +1083,10 @@
         $('#mc-new-name').val('');
 
         // Parse the raw type string e.g. "varchar(255)" → type=VARCHAR, length=255
-        const rawType  = (colData.type || 'VARCHAR').toUpperCase();
+        const rawType = (colData.type || 'VARCHAR').toUpperCase();
         const typeMatch = rawType.match(/^([A-Z]+)\(?([^)]*)\)?/);
-        const baseType  = typeMatch ? typeMatch[1] : 'VARCHAR';
-        const baseLen   = typeMatch && typeMatch[2] ? typeMatch[2] : '';
+        const baseType = typeMatch ? typeMatch[1] : 'VARCHAR';
+        const baseLen = typeMatch && typeMatch[2] ? typeMatch[2] : '';
 
         // Select the matching option (fallback to VARCHAR)
         const $typeSelect = $('#mc-type');
@@ -1111,16 +1125,16 @@
        */
       function submitModifyCol() {
         const originalName = $('#mc-original-name').val();
-        const newName      = $('#mc-new-name').val().trim();
-        const $submitBtn   = $('#form-modify-col button[type="submit"]');
+        const newName = $('#mc-new-name').val().trim();
+        const $submitBtn = $('#form-modify-col button[type="submit"]');
 
         const payload = {
-          type:     $('#mc-type').val(),
-          length:   $('#mc-length').val().trim(),
+          type: $('#mc-type').val(),
+          length: $('#mc-length').val().trim(),
           nullable: $('#mc-nullable').is(':checked') ? 1 : 0,
           unsigned: $('#mc-unsigned').is(':checked') ? 1 : 0,
-          default:  $('#mc-default').val(),
-          comment:  $('#mc-comment').val().trim(),
+          default: $('#mc-default').val(),
+          comment: $('#mc-comment').val().trim(),
         };
 
         if (newName && newName !== originalName) {
@@ -1156,18 +1170,18 @@
         $.each(indexes, function (i, idx) {
           const colsStr = idx.columns.join(', ');
           html += `
-            <tr class="hover:bg-slate-50 transition">
-              <td class="p-3.5 font-bold text-slate-900 font-mono">${idx.name}</td>
-              <td class="p-3.5"><span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${idx.type === 'PRIMARY' ? 'bg-rose-50 text-rose-600 border border-rose-200' : (idx.unique ? 'bg-amber-50 text-amber-600 border border-amber-200' : 'bg-slate-100 text-slate-600')}">${idx.type}</span></td>
-              <td class="p-3.5 font-bold text-slate-700 font-mono">${colsStr}</td>
-              <td class="p-3.5 text-right font-mono text-slate-500">${idx.cardinality}</td>
-              <td class="p-3.5 text-right">
-                <button data-index="${idx.name}" class="btn-drop-index px-3 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition border border-rose-200 cursor-pointer">
-                  Drop Index
-                </button>
-              </td>
-            </tr>
-          `;
+                <tr class="hover:bg-slate-50 transition">
+                  <td class="p-3.5 font-bold text-slate-900 font-mono">${idx.name}</td>
+                  <td class="p-3.5"><span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${idx.type === 'PRIMARY' ? 'bg-rose-50 text-rose-600 border border-rose-200' : (idx.unique ? 'bg-amber-50 text-amber-600 border border-amber-200' : 'bg-slate-100 text-slate-600')}">${idx.type}</span></td>
+                  <td class="p-3.5 font-bold text-slate-700 font-mono">${colsStr}</td>
+                  <td class="p-3.5 text-right font-mono text-slate-500">${idx.cardinality}</td>
+                  <td class="p-3.5 text-right">
+                    <button data-index="${idx.name}" class="btn-drop-index px-3 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition border border-rose-200 cursor-pointer">
+                      Drop Index
+                    </button>
+                  </td>
+                </tr>
+              `;
         });
         $tbody.html(html);
       }
@@ -1181,15 +1195,15 @@
         let html = '';
         $.each(fks, function (i, fk) {
           html += `
-            <tr class="hover:bg-slate-50 transition">
-              <td class="p-3.5 font-bold text-slate-900 font-mono">${fk.constraint_name}</td>
-              <td class="p-3.5 text-brand-600 font-bold font-mono">${fk.column}</td>
-              <td class="p-3.5 text-slate-700 font-mono">${fk.foreign_table}</td>
-              <td class="p-3.5 text-emerald-600 font-bold font-mono">${fk.foreign_column}</td>
-              <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-[10px] font-bold text-slate-600">${fk.on_delete}</span></td>
-              <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-[10px] font-bold text-slate-600">${fk.on_update}</span></td>
-            </tr>
-          `;
+                <tr class="hover:bg-slate-50 transition">
+                  <td class="p-3.5 font-bold text-slate-900 font-mono">${fk.constraint_name}</td>
+                  <td class="p-3.5 text-brand-600 font-bold font-mono">${fk.column}</td>
+                  <td class="p-3.5 text-slate-700 font-mono">${fk.foreign_table}</td>
+                  <td class="p-3.5 text-emerald-600 font-bold font-mono">${fk.foreign_column}</td>
+                  <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-[10px] font-bold text-slate-600">${fk.on_delete}</span></td>
+                  <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-[10px] font-bold text-slate-600">${fk.on_update}</span></td>
+                </tr>
+              `;
         });
         $tbody.html(html);
       }
@@ -1199,22 +1213,22 @@
        * ────────────────────────────────────────────────────────────── */
 
       const FILTER_OPERATORS = [
-        { value: 'contains',              label: 'contains',              hasValue: true  },
-        { value: 'does_not_contain',      label: 'does not contain',      hasValue: true  },
-        { value: '=',                     label: '= equals',              hasValue: true  },
-        { value: '!=',                    label: '≠ not equals',          hasValue: true  },
-        { value: 'begins_with',           label: 'begins with',           hasValue: true  },
-        { value: 'does_not_begin_with',   label: 'does not begin with',   hasValue: true  },
-        { value: 'ends_with',             label: 'ends with',             hasValue: true  },
-        { value: 'does_not_end_with',     label: 'does not end with',     hasValue: true  },
-        { value: '<',                     label: '< less than',           hasValue: true  },
-        { value: '<=',                    label: '≤ less or equal',       hasValue: true  },
-        { value: '>',                     label: '> greater than',        hasValue: true  },
-        { value: '>=',                    label: '≥ greater or equal',    hasValue: true  },
-        { value: 'is_null',               label: 'is null',               hasValue: false },
-        { value: 'is_not_null',           label: 'is not null',           hasValue: false },
-        { value: 'is_empty',              label: 'is empty',              hasValue: false },
-        { value: 'is_not_empty',          label: 'is not empty',          hasValue: false },
+        { value: 'contains', label: 'contains', hasValue: true },
+        { value: 'does_not_contain', label: 'does not contain', hasValue: true },
+        { value: '=', label: '= equals', hasValue: true },
+        { value: '!=', label: '≠ not equals', hasValue: true },
+        { value: 'begins_with', label: 'begins with', hasValue: true },
+        { value: 'does_not_begin_with', label: 'does not begin with', hasValue: true },
+        { value: 'ends_with', label: 'ends with', hasValue: true },
+        { value: 'does_not_end_with', label: 'does not end with', hasValue: true },
+        { value: '<', label: '< less than', hasValue: true },
+        { value: '<=', label: '≤ less or equal', hasValue: true },
+        { value: '>', label: '> greater than', hasValue: true },
+        { value: '>=', label: '≥ greater or equal', hasValue: true },
+        { value: 'is_null', label: 'is null', hasValue: false },
+        { value: 'is_not_null', label: 'is not null', hasValue: false },
+        { value: 'is_empty', label: 'is empty', hasValue: false },
+        { value: 'is_not_empty', label: 'is not empty', hasValue: false },
       ];
 
       let _filterRuleCount = 0;
@@ -1252,42 +1266,42 @@
       function addFilterRule(preset) {
         _filterRuleCount++;
         const ruleId = 'filter-rule-' + _filterRuleCount;
-        const defaultCol  = (preset && preset.column)   || (_tableDetails && _tableDetails.columns && _tableDetails.columns[0] ? _tableDetails.columns[0].name : '');
-        const defaultOp   = (preset && preset.operator)  || 'contains';
-        const defaultVal  = (preset && preset.value)     || '';
-        const isEnabled   = (preset && preset.enabled === false) ? false : true;
+        const defaultCol = (preset && preset.column) || (_tableDetails && _tableDetails.columns && _tableDetails.columns[0] ? _tableDetails.columns[0].name : '');
+        const defaultOp = (preset && preset.operator) || 'contains';
+        const defaultVal = (preset && preset.value) || '';
+        const isEnabled = (preset && preset.enabled === false) ? false : true;
 
         const firstOpObj = FILTER_OPERATORS.find(function (o) { return o.value === defaultOp; }) || FILTER_OPERATORS[0];
-        const valHidden  = !firstOpObj.hasValue ? 'style="visibility:hidden;"' : '';
+        const valHidden = !firstOpObj.hasValue ? 'style="visibility:hidden;"' : '';
 
         const row = `
-          <div class="filter-rule-row flex items-center gap-2 bg-white border border-indigo-100 rounded-xl px-3 py-2 shadow-xs" id="${ruleId}">
-            <!-- Enable toggle -->
-            <input type="checkbox" class="filter-rule-enabled w-3.5 h-3.5 rounded border-indigo-300 text-indigo-600 cursor-pointer flex-shrink-0" ${isEnabled ? 'checked' : ''} title="Enable this rule">
+              <div class="filter-rule-row flex items-center gap-2 bg-white border border-indigo-100 rounded-xl px-3 py-2 shadow-xs" id="${ruleId}">
+                <!-- Enable toggle -->
+                <input type="checkbox" class="filter-rule-enabled w-3.5 h-3.5 rounded border-indigo-300 text-indigo-600 cursor-pointer flex-shrink-0" ${isEnabled ? 'checked' : ''} title="Enable this rule">
 
-            <!-- AND badge (except first) -->
-            <span class="filter-and-badge text-[9px] font-extrabold uppercase tracking-wider text-indigo-400 w-7 flex-shrink-0 text-center">AND</span>
+                <!-- AND badge (except first) -->
+                <span class="filter-and-badge text-[9px] font-extrabold uppercase tracking-wider text-indigo-400 w-7 flex-shrink-0 text-center">AND</span>
 
-            <!-- Column select -->
-            <select class="filter-col-select bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-400 min-w-[110px] cursor-pointer">
-              ${buildColumnOptions(defaultCol)}
-            </select>
+                <!-- Column select -->
+                <select class="filter-col-select bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-400 min-w-[110px] cursor-pointer">
+                  ${buildColumnOptions(defaultCol)}
+                </select>
 
-            <!-- Operator select -->
-            <select class="filter-op-select bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-indigo-400 min-w-[150px] cursor-pointer">
-              ${buildOperatorOptions(defaultOp)}
-            </select>
+                <!-- Operator select -->
+                <select class="filter-op-select bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-indigo-400 min-w-[150px] cursor-pointer">
+                  ${buildOperatorOptions(defaultOp)}
+                </select>
 
-            <!-- Value input -->
-            <div class="filter-val-wrap flex-1 min-w-[100px]" ${valHidden}>
-              <input type="text" class="filter-val-input w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-400 placeholder-slate-300" value="${defaultVal}" placeholder="&lt;?&gt; value…">
-            </div>
+                <!-- Value input -->
+                <div class="filter-val-wrap flex-1 min-w-[100px]" ${valHidden}>
+                  <input type="text" class="filter-val-input w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-400 placeholder-slate-300" value="${defaultVal}" placeholder="&lt;?&gt; value…">
+                </div>
 
-            <!-- Remove rule button -->
-            <button type="button" class="btn-remove-filter-rule flex-shrink-0 w-6 h-6 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-700 flex items-center justify-center transition cursor-pointer border border-rose-200" title="Remove rule">
-              <i class="fa-solid fa-xmark text-[9px]"></i>
-            </button>
-          </div>`;
+                <!-- Remove rule button -->
+                <button type="button" class="btn-remove-filter-rule flex-shrink-0 w-6 h-6 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-500 hover:text-rose-700 flex items-center justify-center transition cursor-pointer border border-rose-200" title="Remove rule">
+                  <i class="fa-solid fa-xmark text-[9px]"></i>
+                </button>
+              </div>`;
 
         $('#filter-rules-container').append(row);
         $('#filter-rules-empty').hide();
@@ -1328,11 +1342,11 @@
       function collectFilterRules() {
         const rules = [];
         $('#filter-rules-container .filter-rule-row').each(function () {
-          const $row    = $(this);
+          const $row = $(this);
           const enabled = $row.find('.filter-rule-enabled').is(':checked');
-          const column   = $row.find('.filter-col-select').val();
+          const column = $row.find('.filter-col-select').val();
           const operator = $row.find('.filter-op-select').val();
-          const value    = $row.find('.filter-val-input').val().trim();
+          const value = $row.find('.filter-val-input').val().trim();
           rules.push({ enabled: enabled, column: column, operator: operator, value: value });
         });
         return rules;
@@ -1344,9 +1358,9 @@
 
       function loadDataRows(page = 1) {
         _currentPage = page;
-        const $grid  = $('#data-grid-table');
+        const $grid = $('#data-grid-table');
         const search = $('#data-search-input').val().trim();
-        const rules  = collectFilterRules();
+        const rules = collectFilterRules();
 
         // Only send active rules
         const activeFilters = rules.filter(function (r) { return r.enabled && r.column; });
@@ -1431,11 +1445,11 @@
         $.each(_tableDetails.columns || [], function (i, c) {
           const isChecked = $.inArray(c.name, preselectedCols) !== -1 ? 'checked' : '';
           html += `
-            <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
-              <input type="checkbox" name="ai_col" value="${c.name}" ${isChecked} class="rounded border-slate-300 text-brand-600">
-              <span class="font-mono">${c.name}</span> <span class="text-[10px] text-slate-400">(${c.type})</span>
-            </label>
-          `;
+                <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                  <input type="checkbox" name="ai_col" value="${c.name}" ${isChecked} class="rounded border-slate-300 text-brand-600">
+                  <span class="font-mono">${c.name}</span> <span class="text-[10px] text-slate-400">(${c.type})</span>
+                </label>
+              `;
         });
         $container.html(html);
 
@@ -1556,11 +1570,11 @@
                 $output.html(`<table class="w-full text-left border-collapse">${headerHtml}${bodyHtml}</table>`);
               } else {
                 $output.html(`
-                  <div class="p-4 bg-emerald-50 text-emerald-800 text-xs font-sans font-medium flex items-center gap-2">
-                    <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                    <span>${d.message}</span>
-                  </div>
-                `);
+                      <div class="p-4 bg-emerald-50 text-emerald-800 text-xs font-sans font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                        <span>${d.message}</span>
+                      </div>
+                    `);
               }
             }
           },
@@ -1568,10 +1582,10 @@
             $btn.prop('disabled', false).html(`<i class="fa-solid fa-play text-xs"></i> Execute Query`);
             const errMsg = xhr.responseJSON?.message || 'Database query error.';
             $output.html(`
-              <div class="p-4 bg-rose-50 text-rose-700 text-xs font-mono leading-relaxed">
-                <i class="fa-solid fa-circle-exclamation mr-1 text-rose-600"></i> ${errMsg}
-              </div>
-            `);
+                  <div class="p-4 bg-rose-50 text-rose-700 text-xs font-mono leading-relaxed">
+                    <i class="fa-solid fa-circle-exclamation mr-1 text-rose-600"></i> ${errMsg}
+                  </div>
+                `);
           }
         });
       }
@@ -1580,15 +1594,15 @@
         Swal.fire({
           title: `Truncate Table '${tableName}'?`,
           html: `
-            <div class="text-left space-y-2.5 font-sans text-xs text-slate-600">
-              <p class="font-semibold text-slate-800 text-sm">Are you sure you want to erase all records in table <b class="font-mono text-amber-600">${tableName}</b>?</p>
-              <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs">
-                <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-600"></i>
-                <b>Warning:</b> All rows will be permanently deleted and auto-increment sequences reset.
-              </div>
-              <p class="text-[11px] font-bold text-slate-500 pt-1">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> below to confirm:</p>
-            </div>
-          `,
+                <div class="text-left space-y-2.5 font-sans text-xs text-slate-600">
+                  <p class="font-semibold text-slate-800 text-sm">Are you sure you want to erase all records in table <b class="font-mono text-amber-600">${tableName}</b>?</p>
+                  <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs">
+                    <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-600"></i>
+                    <b>Warning:</b> All rows will be permanently deleted and auto-increment sequences reset.
+                  </div>
+                  <p class="text-[11px] font-bold text-slate-500 pt-1">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> below to confirm:</p>
+                </div>
+              `,
           input: 'text',
           inputPlaceholder: `Type '${tableName}' to confirm`,
           icon: 'warning',
@@ -1624,15 +1638,15 @@
         Swal.fire({
           title: `DROP TABLE '${tableName}'?`,
           html: `
-            <div class="text-left space-y-2.5 font-sans text-xs text-slate-600">
-              <p class="font-semibold text-slate-800 text-sm">You are about to permanently delete table <b class="font-mono text-rose-600">${tableName}</b>!</p>
-              <div class="p-2.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs">
-                <i class="fa-solid fa-radiation mr-1 text-rose-600"></i>
-                <b>Critical Warning:</b> The table structure, all columns, indexes, and records will be deleted forever.
-              </div>
-              <p class="text-[11px] font-bold text-slate-500 pt-1">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> to confirm drop:</p>
-            </div>
-          `,
+                <div class="text-left space-y-2.5 font-sans text-xs text-slate-600">
+                  <p class="font-semibold text-slate-800 text-sm">You are about to permanently delete table <b class="font-mono text-rose-600">${tableName}</b>!</p>
+                  <div class="p-2.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs">
+                    <i class="fa-solid fa-radiation mr-1 text-rose-600"></i>
+                    <b>Critical Warning:</b> The table structure, all columns, indexes, and records will be deleted forever.
+                  </div>
+                  <p class="text-[11px] font-bold text-slate-500 pt-1">Please type <span class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">${tableName}</span> to confirm drop:</p>
+                </div>
+              `,
           input: 'text',
           inputPlaceholder: `Type '${tableName}' to confirm`,
           icon: 'error',
