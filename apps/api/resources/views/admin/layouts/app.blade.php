@@ -1458,6 +1458,20 @@
         $(this).closest('.fixed').addClass('hidden');
       });
 
+      // Auto-trigger Laravel session flash toasts
+      @if(session('success'))
+        setTimeout(function() { if (typeof window.showToast === 'function') window.showToast('success', {!! json_encode(session('success')) !!}); }, 150);
+      @endif
+      @if(session('error'))
+        setTimeout(function() { if (typeof window.showToast === 'function') window.showToast('error', {!! json_encode(session('error')) !!}); }, 150);
+      @endif
+      @if(session('warning'))
+        setTimeout(function() { if (typeof window.showToast === 'function') window.showToast('warning', {!! json_encode(session('warning')) !!}); }, 150);
+      @endif
+      @if(session('info'))
+        setTimeout(function() { if (typeof window.showToast === 'function') window.showToast('info', {!! json_encode(session('info')) !!}); }, 150);
+      @endif
+
       // Apply initial desktop sidebar minimized state if persisted
       const isSidebarCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
       if (isSidebarCollapsed && $(window).width() >= 1024) {

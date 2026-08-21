@@ -1,0 +1,15 @@
+.git
+.gitignore
+.editorconfig
+.phpunit.result.cache
+vendor/
+node_modules/
+storage/*.key
+storage/logs/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+tests/
+README.md
+.env
+.env.example

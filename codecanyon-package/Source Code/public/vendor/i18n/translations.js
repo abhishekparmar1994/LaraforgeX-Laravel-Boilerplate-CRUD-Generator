@@ -1,0 +1,250 @@
+/**
+ * translations.js — LaraforgeX Universal Client-Side i18n Translation Dictionary
+ */
+(function (global) {
+  'use strict';
+
+  var translations = {
+    en: {
+      dashboard: 'Dashboard',
+      crud_generator: 'Visual CRUD Generator',
+      users: 'User Management',
+      roles: 'Roles & Hierarchy',
+      permissions: 'Permissions Matrix',
+      media: 'Media Manager',
+      settings: 'Platform Settings',
+      profile: 'My Profile',
+      logout: 'Log Out',
+      search: 'Search platform...',
+      notifications: 'Notifications',
+      platform_config: 'Platform Configurations',
+      two_factor: 'Two-Factor Auth',
+      save_changes: 'Save Changes',
+      welcome_back: 'Welcome Back',
+      actions: 'Actions',
+      status: 'Status',
+      active: 'Active',
+      disabled: 'Disabled',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      edit: 'Edit',
+      view: 'View',
+      create_new: 'Create New',
+      backups: 'Database Backups',
+      webhooks: 'Webhooks Engine',
+      api_docs: 'API Documentation',
+      audit_logs: 'Audit Logs',
+      system_health: 'System Health',
+      database_manager: 'Database Studio',
+    },
+    es: {
+      dashboard: 'Panel de Control',
+      crud_generator: 'Generador CRUD Visual',
+      users: 'Gestión de Usuarios',
+      roles: 'Roles y Jerarquía',
+      permissions: 'Matriz de Permisos',
+      media: 'Gestor de Medios',
+      settings: 'Configuración del Sistema',
+      profile: 'Mi Perfil',
+      logout: 'Cerrar Sesión',
+      search: 'Buscar...',
+      notifications: 'Notificaciones',
+      platform_config: 'Configuraciones de Plataforma',
+      two_factor: 'Autenticación de 2 Factores',
+      save_changes: 'Guardar Cambios',
+      welcome_back: 'Bienvenido de nuevo',
+      actions: 'Acciones',
+      status: 'Estado',
+      active: 'Activo',
+      disabled: 'Deshabilitado',
+      cancel: 'Cancelar',
+      delete: 'Eliminar',
+      edit: 'Editar',
+      view: 'Ver',
+      create_new: 'Crear Nuevo',
+      backups: 'Copias de Seguridad',
+      webhooks: 'Motor de Webhooks',
+      api_docs: 'Documentación API',
+      audit_logs: 'Registros de Auditoría',
+      system_health: 'Salud del Sistema',
+      database_manager: 'Estudio de Base de Datos',
+    },
+    fr: {
+      dashboard: 'Tableau de Bord',
+      crud_generator: 'Générateur CRUD Visuel',
+      users: 'Gestion des Utilisateurs',
+      roles: 'Rôles et Hiérarchie',
+      permissions: 'Matrice des Permissions',
+      media: 'Gestionnaire de Médias',
+      settings: 'Paramètres du Système',
+      profile: 'Mon Profil',
+      logout: 'Déconnexion',
+      search: 'Rechercher...',
+      notifications: 'Notifications',
+      platform_config: 'Configurations de la Plateforme',
+      two_factor: 'Auth à Deux Facteurs',
+      save_changes: 'Enregistrer les modifications',
+      welcome_back: 'Bon retour',
+      actions: 'Actions',
+      status: 'Statut',
+      active: 'Actif',
+      disabled: 'Désactivé',
+      cancel: 'Annuler',
+      delete: 'Supprimer',
+      edit: 'Modifier',
+      view: 'Voir',
+      create_new: 'Créer Nouveau',
+      backups: 'Sauvegardes BDD',
+      webhooks: 'Moteur Webhooks',
+      api_docs: 'Documentation API',
+      audit_logs: 'Journaux d\'Audit',
+      system_health: 'Santé du Système',
+      database_manager: 'Studio de Base de Données',
+    },
+    de: {
+      dashboard: 'Übersicht',
+      crud_generator: 'Visueller CRUD-Generator',
+      users: 'Benutzerverwaltung',
+      roles: 'Rollen & Hierarchie',
+      permissions: 'Berechtigungsmatrix',
+      media: 'Medien-Manager',
+      settings: 'System-Einstellungen',
+      profile: 'Mein Profil',
+      logout: 'Abmelden',
+      search: 'Suchen...',
+      notifications: 'Benachrichtigungen',
+      platform_config: 'Plattform-Konfigurationen',
+      two_factor: 'Zwei-Faktor-Auth',
+      save_changes: 'Änderungen speichern',
+      welcome_back: 'Willkommen zurück',
+      actions: 'Aktionen',
+      status: 'Status',
+      active: 'Aktiv',
+      disabled: 'Deaktiviert',
+      cancel: 'Abbrechen',
+      delete: 'Löschen',
+      edit: 'Bearbeiten',
+      view: 'Anzeigen',
+      create_new: 'Neu erstellen',
+      backups: 'Datenbank-Backups',
+      webhooks: 'Webhooks-Engine',
+      api_docs: 'API-Dokumentation',
+      audit_logs: 'Audit-Protokolle',
+      system_health: 'Systemzustand',
+      database_manager: 'Datenbank-Studio',
+    },
+    ar: {
+      dashboard: 'لوحة التحكم',
+      crud_generator: 'مولد CRUD المرئي',
+      users: 'إدارة المستخدمين',
+      roles: 'الأدوار والتسلسل الهرمي',
+      permissions: 'مصفوفة الأذونات',
+      media: 'مدير الوسائط',
+      settings: 'إعدادات النظام',
+      profile: 'ملفي الشخصي',
+      logout: 'تسجيل الخروج',
+      search: 'بحث في النظام...',
+      notifications: 'الإشعارات',
+      platform_config: 'إعدادات المنصة',
+      two_factor: 'المصادقة الثنائية',
+      save_changes: 'حفظ التغييرات',
+      welcome_back: 'مرحباً بعودتك',
+      actions: 'الإجراءات',
+      status: 'الحالة',
+      active: 'نشط',
+      disabled: 'معطل',
+      cancel: 'إلغاء',
+      delete: 'حذف',
+      edit: 'تعديل',
+      view: 'عرض',
+      create_new: 'إنشاء جديد',
+      backups: 'نسخ احتياطية',
+      webhooks: 'محرك Webhooks',
+      api_docs: 'توثيق API',
+      audit_logs: 'سجلات التدقيق',
+      system_health: 'صحة النظام',
+      database_manager: 'استوديو قاعدة البيانات',
+    },
+    hi: {
+      dashboard: 'डैशबोर्ड',
+      crud_generator: 'विज़ुअल CRUD जनरेटर',
+      users: 'उपयोगकर्ता प्रबंधन',
+      roles: 'भूमिकाएँ और पदानुक्रम',
+      permissions: 'अनुमति मैट्रिक्स',
+      media: 'मीडिया प्रबंधक',
+      settings: 'प्लेटफ़ॉर्म सेटिंग्स',
+      profile: 'मेरी प्रोफ़ाइल',
+      logout: 'लॉग आउट',
+      search: 'खोजें...',
+      notifications: 'सूचनाएं',
+      platform_config: 'प्लेटफ़ॉर्म कॉन्फ़िगरेशन',
+      two_factor: 'द्वि-कारक प्रमाणीकरण',
+      save_changes: 'परिवर्तन सहेजें',
+      welcome_back: 'वापस आपका स्वागत है',
+      actions: 'क्रियाएँ',
+      status: 'स्थिति',
+      active: 'सक्रिय',
+      disabled: 'अक्षम',
+      cancel: 'रद्द करें',
+      delete: 'हटाएं',
+      edit: 'संपादित करें',
+      view: 'देखें',
+      create_new: 'नया बनाएं',
+      backups: 'डेटाबेस बैकअप',
+      webhooks: 'वेबहुक इंजन',
+      api_docs: 'API दस्तावेज़',
+      audit_logs: 'ऑडिट लॉग्स',
+      system_health: 'सिस्टम स्वास्थ्य',
+      database_manager: 'डेटाबेस स्टूडियो',
+    }
+  };
+
+  global.i18nTranslations = translations;
+
+  global.translatePage = function (langCode) {
+    var dict = translations[langCode] || translations.en;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          if (el.hasAttribute('placeholder')) {
+            el.setAttribute('placeholder', dict[key]);
+          } else {
+            el.value = dict[key];
+          }
+        } else {
+          el.textContent = dict[key];
+        }
+      }
+    });
+  };
+
+  /* Auto-restore translation and RTL layout on DOM load */
+  if (typeof document !== 'undefined') {
+    var initTranslation = function () {
+      var savedCode = localStorage.getItem('laraforgex_lang_code') || 'en';
+      var savedFlag = localStorage.getItem('laraforgex_lang_flag') || '🇺🇸';
+      var savedFlagImg = localStorage.getItem('laraforgex_lang_flag_img') || 'https://flagcdn.com/w40/us.png';
+      var savedLabel = localStorage.getItem('laraforgex_lang_label') || 'EN';
+      var savedDir = localStorage.getItem('laraforgex_lang_dir') || 'ltr';
+
+      document.documentElement.setAttribute('dir', savedDir);
+      
+      var flagEl = document.getElementById('current-lang-flag');
+      var flagImgEl = document.getElementById('current-lang-flag-img');
+      var codeEl = document.getElementById('current-lang-code');
+      if (flagEl) flagEl.textContent = savedFlag;
+      if (flagImgEl) flagImgEl.src = savedFlagImg;
+      if (codeEl) codeEl.textContent = savedLabel;
+
+      global.translatePage(savedCode);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTranslation);
+    } else {
+      initTranslation();
+    }
+  }
+
+})(typeof window !== 'undefined' ? window : this);

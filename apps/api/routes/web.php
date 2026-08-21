@@ -1,12 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CrmDashboardController;
+use App\Http\Controllers\Admin\LeadController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\WebsiteController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\TaskController;
+use App\Http\Controllers\Admin\CalendarController;
+use App\Http\Controllers\Admin\FollowUpController;
+use App\Http\Controllers\Admin\ActivityController;
+use App\Http\Controllers\Admin\NoteController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SearchController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\InstallController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin/dashboard');
 });
 
-Route::get('/install', [\App\Http\Controllers\InstallController::class, 'index']);
+Route::get('/install', [InstallController::class, 'index']);
 
 Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
@@ -40,61 +59,128 @@ Route::get('/seed-db', function () {
     }
 });
 
-Route::get('/demo-reset', function () {
-    $key = request('key') ?? request('DEMO_RESET_KEY');
-    $secret = env('DEMO_RESET_KEY', 'laraforgex_reset_secret_2026');
-
-    if ($key !== $secret) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Unauthorized: Invalid demo reset key.'
-        ], 403);
-    }
-
-    try {
-        Artisan::call('migrate:fresh', ['--force' => true]);
-        $migrateOutput = Artisan::output();
-
-        Artisan::call('db:seed', ['--force' => true]);
-        $seedOutput = Artisan::output();
-
-        return response()->json([
-            'success' => true,
-            'message' => '✅ Demo database successfully reset to clean default state!',
-            'output' => $migrateOutput . "\n" . $seedOutput
-        ]);
-    } catch (\Throwable $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Reset error: ' . $e->getMessage()
-        ], 500);
-    }
-});
-
 Route::get('/landing', function () {
     return file_get_contents(public_path('codecanyon_landing.html'));
 });
 
+// ── ADMIN & CRM ROUTES ──────────────────────────────────────────────
 Route::prefix('admin')->group(function () {
-    Route::get('/', [\App\Http\Controllers\AdminController::class, 'index']);
-    Route::get('/login', [\App\Http\Controllers\AdminController::class, 'login']);
-    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard']);
-    Route::get('/users', [\App\Http\Controllers\AdminController::class, 'users']);
-    Route::get('/roles', [\App\Http\Controllers\AdminController::class, 'roles']);
-    Route::get('/permissions', [\App\Http\Controllers\AdminController::class, 'permissions']);
-    Route::get('/media', [\App\Http\Controllers\AdminController::class, 'media']);
-    Route::get('/settings', [\App\Http\Controllers\AdminController::class, 'settings']);
-    Route::get('/profile', [\App\Http\Controllers\AdminController::class, 'profile']);
-    Route::get('/forgot-password', [\App\Http\Controllers\AdminController::class, 'forgotPassword']);
-    Route::get('/reset-password', [\App\Http\Controllers\AdminController::class, 'resetPassword']);
-    Route::get('/crud-generator', [\App\Http\Controllers\AdminController::class, 'crudGenerator']);
-    Route::get('/backups', [\App\Http\Controllers\AdminController::class, 'backups']);
-    Route::get('/health', [\App\Http\Controllers\AdminController::class, 'health']);
-    Route::get('/webhooks', [\App\Http\Controllers\AdminController::class, 'webhooks']);
-    Route::get('/docs', [\App\Http\Controllers\AdminController::class, 'docs']);
-    Route::get('/activity-logs', [\App\Http\Controllers\AdminController::class, 'activityLogs']);
-    Route::get('/database-manager', [\App\Http\Controllers\AdminController::class, 'databaseManager']);
-    Route::get('/database-manager/create', [\App\Http\Controllers\AdminController::class, 'databaseManagerCreate']);
-    Route::get('/database-manager/console', [\App\Http\Controllers\AdminController::class, 'databaseManagerConsole']);
-    Route::get('/database-manager/manage/{table}', [\App\Http\Controllers\AdminController::class, 'databaseManagerManage']);
+    // Auth & Dashboard
+    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/login', [AdminController::class, 'login']);
+    Route::get('/dashboard', [CrmDashboardController::class, 'index']);
+    Route::get('/crm/analytics', [CrmDashboardController::class, 'analytics']);
+    Route::get('/global-search', [SearchController::class, 'search']);
+
+    // CRM — Leads & Pipeline
+    Route::get('/leads', [LeadController::class, 'index']);
+    Route::get('/leads/kanban', [LeadController::class, 'kanban']);
+    Route::post('/leads', [LeadController::class, 'store']);
+    Route::post('/leads/import', [LeadController::class, 'import']);
+    Route::get('/leads/{lead}', [LeadController::class, 'show']);
+    Route::put('/leads/{lead}', [LeadController::class, 'update']);
+    Route::post('/leads/{lead}/stage', [LeadController::class, 'updateStage']);
+    Route::post('/leads/{lead}/convert', [LeadController::class, 'convert']);
+    Route::delete('/leads/{lead}', [LeadController::class, 'destroy']);
+
+    // CRM — Companies
+    Route::get('/companies', [CompanyController::class, 'index']);
+    Route::post('/companies', [CompanyController::class, 'store']);
+    Route::get('/companies/{company}', [CompanyController::class, 'show']);
+    Route::put('/companies/{company}', [CompanyController::class, 'update']);
+    Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
+
+    // CRM — Contacts
+    Route::get('/contacts', [ContactController::class, 'index']);
+    Route::post('/contacts', [ContactController::class, 'store']);
+    Route::get('/contacts/{contact}', [ContactController::class, 'show']);
+    Route::put('/contacts/{contact}', [ContactController::class, 'update']);
+    Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
+
+    // CRM — Clients
+    Route::get('/clients', [ClientController::class, 'index']);
+    Route::post('/clients', [ClientController::class, 'store']);
+    Route::get('/clients/{client}', [ClientController::class, 'show']);
+    Route::put('/clients/{client}', [ClientController::class, 'update']);
+    Route::delete('/clients/{client}', [ClientController::class, 'destroy']);
+
+    // Projects — Websites & Credentials Vault
+    Route::get('/websites', [WebsiteController::class, 'index']);
+    Route::post('/websites', [WebsiteController::class, 'store']);
+    Route::get('/websites/{website}', [WebsiteController::class, 'show']);
+    Route::put('/websites/{website}', [WebsiteController::class, 'update']);
+    Route::post('/websites/{website}/credentials', [WebsiteController::class, 'storeCredential']);
+    Route::post('/credentials/{credential}/reveal', [WebsiteController::class, 'revealCredential']);
+    Route::delete('/credentials/{credential}', [WebsiteController::class, 'destroyCredential']);
+    Route::delete('/websites/{website}', [WebsiteController::class, 'destroy']);
+
+    // Projects — Projects & Milestones
+    Route::get('/projects', [ProjectController::class, 'index']);
+    Route::post('/projects', [ProjectController::class, 'store']);
+    Route::get('/projects/{project}', [ProjectController::class, 'show']);
+    Route::put('/projects/{project}', [ProjectController::class, 'update']);
+    Route::post('/projects/{project}/milestones', [ProjectController::class, 'storeMilestone']);
+    Route::post('/milestones/{milestone}/toggle', [ProjectController::class, 'toggleMilestone']);
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
+
+    // Projects — Tasks, Kanban & Todo
+    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::get('/tasks/kanban', [TaskController::class, 'kanban']);
+    Route::get('/tasks/todo', [TaskController::class, 'todo']);
+    Route::post('/tasks', [TaskController::class, 'store']);
+    Route::post('/tasks/{task}/status', [TaskController::class, 'updateStatus']);
+    Route::post('/tasks/{task}/toggle', [TaskController::class, 'toggleComplete']);
+    Route::put('/tasks/{task}', [TaskController::class, 'update']);
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
+
+    // Projects — Calendar
+    Route::get('/calendar', [CalendarController::class, 'index']);
+    Route::get('/calendar/events', [CalendarController::class, 'events']);
+
+    // Communication — Follow-ups
+    Route::get('/followups', [FollowUpController::class, 'index']);
+    Route::post('/followups', [FollowUpController::class, 'store']);
+    Route::put('/followups/{followup}', [FollowUpController::class, 'update']);
+    Route::post('/followups/{followup}/complete', [FollowUpController::class, 'complete']);
+    Route::post('/followups/{followup}/reschedule', [FollowUpController::class, 'reschedule']);
+    Route::delete('/followups/{followup}', [FollowUpController::class, 'destroy']);
+
+    // Communication — Activities & Notes
+    Route::get('/activities', [ActivityController::class, 'index']);
+    Route::post('/activities', [ActivityController::class, 'store']);
+    Route::get('/notes', [NoteController::class, 'index']);
+    Route::post('/notes', [NoteController::class, 'store']);
+    Route::post('/notes/{note}/pin', [NoteController::class, 'togglePin']);
+    Route::delete('/notes/{note}', [NoteController::class, 'destroy']);
+
+    // Finance — Payments & Invoices
+    Route::get('/payments', [PaymentController::class, 'index']);
+    Route::post('/payments', [PaymentController::class, 'store']);
+    Route::put('/payments/{payment}', [PaymentController::class, 'update']);
+    Route::delete('/payments/{payment}', [PaymentController::class, 'destroy']);
+
+    // Team — Developers & Performance
+    Route::get('/team', [TeamController::class, 'index']);
+    Route::get('/team/{user}', [TeamController::class, 'show']);
+    Route::get('/team-performance/data', [TeamController::class, 'performanceData']);
+
+    // Reports
+    Route::get('/reports', [ReportController::class, 'index']);
+
+    // Core System Routes
+    Route::get('/users', [AdminController::class, 'users']);
+    Route::get('/roles', [AdminController::class, 'roles']);
+    Route::get('/permissions', [AdminController::class, 'permissions']);
+    Route::get('/media', [AdminController::class, 'media']);
+    Route::get('/settings', [AdminController::class, 'settings']);
+    Route::get('/profile', [AdminController::class, 'profile']);
+    Route::get('/forgot-password', [AdminController::class, 'forgotPassword']);
+    Route::get('/reset-password', [AdminController::class, 'resetPassword']);
+    Route::get('/crud-generator', [AdminController::class, 'crudGenerator']);
+    Route::get('/backups', [AdminController::class, 'backups']);
+    Route::get('/health', [AdminController::class, 'health']);
+    Route::get('/webhooks', [AdminController::class, 'webhooks']);
+    Route::get('/docs', [AdminController::class, 'docs']);
+    Route::get('/activity-logs', [AdminController::class, 'activityLogs']);
+    Route::get('/database-manager', [AdminController::class, 'databaseManager']);
 });

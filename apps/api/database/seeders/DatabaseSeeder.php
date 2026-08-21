@@ -174,6 +174,9 @@ class DatabaseSeeder extends Seeder
             );
         }
 
+        // 6. Seed Agency CRM & Project Management System Data
+        $this->call(CrmDatabaseSeeder::class);
+
         // Mark installation complete
         file_put_contents(storage_path('installed'), date('Y-m-d H:i:s'));
     }

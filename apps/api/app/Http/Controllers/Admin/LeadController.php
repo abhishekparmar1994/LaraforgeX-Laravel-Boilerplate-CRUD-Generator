@@ -1,0 +1,445 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Actions\ConvertLeadToClientAction;
+use App\Actions\LogActivityAction;
+use App\Domains\User\Models\User;
+use App\Http\Controllers\Controller;
+use App\Models\Lead;
+use App\Services\LeadImportService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+/**
+ * Controller for managing CRM Leads and Kanban pipeline.
+ */
+class LeadController extends Controller
+{
+    protected ConvertLeadToClientAction $convertAction;
+    protected LogActivityAction $activityLogger;
+    protected LeadImportService $importService;
+
+    public function __construct(
+        ConvertLeadToClientAction $convertAction,
+        LogActivityAction $activityLogger,
+        LeadImportService $importService
+    ) {
+        $this->convertAction = $convertAction;
+        $this->activityLogger = $activityLogger;
+        $this->importService = $importService;
+    }
+
+    /**
+     * Display the leads list with advanced filters and pagination.
+     */
+    public function index(Request $request): View
+    {
+        $query = Lead::with('assignedDeveloper');
+
+        // Multi-field search
+        if ($request->filled('search')) {
+            $s = trim($request->search);
+            $query->where(function ($q) use ($s) {
+                $q->where('company_name', 'like', "%{$s}%")
+                    ->orWhere('contact_person', 'like', "%{$s}%")
+                    ->orWhere('email', 'like', "%{$s}%")
+                    ->orWhere('phone', 'like', "%{$s}%")
+                    ->orWhere('industry', 'like', "%{$s}%")
+                    ->orWhere('location', 'like', "%{$s}%")
+                    ->orWhere('area_locality', 'like', "%{$s}%")
+                    ->orWhere('full_address', 'like', "%{$s}%");
+            });
+        }
+
+        // Website Status filter (NO = Hot Leads, YES = Has Website)
+        if ($request->filled('has_website')) {
+            $webStatus = strtoupper(trim($request->has_website));
+            if ($webStatus === 'NO') {
+                $query->where(function ($q) {
+                    $q->where('has_website', 'NO')
+                        ->orWhereNull('website')
+                        ->orWhere('website', '')
+                        ->orWhere('website', 'N/A')
+                        ->orWhere('website', 'None');
+                });
+            } elseif ($webStatus === 'YES') {
+                $query->where('has_website', 'YES')
+                    ->whereNotNull('website')
+                    ->where('website', '!=', '')
+                    ->where('website', '!=', 'N/A')
+                    ->where('website', '!=', 'None');
+            }
+        }
+
+        // City filter
+        if ($request->filled('city')) {
+            $city = trim($request->city);
+            $query->where(function ($q) use ($city) {
+                $q->where('location', 'like', "%{$city}%")
+                    ->orWhere('area_locality', 'like', "%{$city}%")
+                    ->orWhere('full_address', 'like', "%{$city}%");
+            });
+        }
+
+        // Area / Locality filter
+        if ($request->filled('area')) {
+            $area = trim($request->area);
+            $query->where(function ($q) use ($area) {
+                $q->where('area_locality', 'like', "%{$area}%")
+                    ->orWhere('location', 'like', "%{$area}%")
+                    ->orWhere('full_address', 'like', "%{$area}%");
+            });
+        }
+
+        // Industry Category filter
+        if ($request->filled('industry')) {
+            $query->where('industry', $request->industry);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+        if ($request->filled('source')) {
+            $query->where('lead_source', $request->source);
+        }
+
+        if ($request->filled('developer_id')) {
+            $query->where('assigned_to_user_id', $request->developer_id);
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortDir = $request->get('sort_dir', 'desc');
+        $allowedSorts = ['company_name', 'has_website', 'industry', 'phone', 'location', 'area_locality', 'rating', 'created_at', 'status', 'priority'];
+        if (in_array($sortBy, $allowedSorts)) {
+            $query->orderBy($sortBy, $sortDir === 'asc' ? 'asc' : 'desc');
+        } else {
+            $query->latest();
+        }
+
+        $perPage = (int) $request->get('per_page', 25);
+        if ($perPage < 5 || $perPage > 500) {
+            $perPage = 25;
+        }
+
+        $leads = $query->paginate($perPage)->withQueryString();
+        $developers = User::all();
+
+        // Populate filter dropdowns
+        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
+        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
+        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
+
+        return view('admin.leads.index', compact('leads', 'developers', 'cities', 'areas', 'industries'));
+    }
+
+    /**
+     * Display the visual Kanban pipeline board with filters.
+     */
+    public function kanban(Request $request): View
+    {
+        $stages = [
+            'new' => 'New',
+            'contacted' => 'Contacted',
+            'qualified' => 'Qualified',
+            'proposal_sent' => 'Proposal Sent',
+            'negotiation' => 'Negotiation',
+            'won' => 'Won',
+            'lost' => 'Lost',
+        ];
+
+        // Base query with filters
+        $baseQuery = Lead::with('assignedDeveloper');
+
+        // Multi-field search
+        if ($request->filled('search')) {
+            $s = trim($request->search);
+            $baseQuery->where(function ($q) use ($s) {
+                $q->where('company_name', 'like', "%{$s}%")
+                    ->orWhere('contact_person', 'like', "%{$s}%")
+                    ->orWhere('email', 'like', "%{$s}%")
+                    ->orWhere('phone', 'like', "%{$s}%")
+                    ->orWhere('industry', 'like', "%{$s}%")
+                    ->orWhere('location', 'like', "%{$s}%")
+                    ->orWhere('area_locality', 'like', "%{$s}%")
+                    ->orWhere('full_address', 'like', "%{$s}%");
+            });
+        }
+
+        // Website Status filter
+        if ($request->filled('has_website')) {
+            $webStatus = strtoupper(trim($request->has_website));
+            if ($webStatus === 'NO') {
+                $baseQuery->where(function ($q) {
+                    $q->where('has_website', 'NO')
+                        ->orWhereNull('website')
+                        ->orWhere('website', '')
+                        ->orWhere('website', 'N/A')
+                        ->orWhere('website', 'None');
+                });
+            } elseif ($webStatus === 'YES') {
+                $baseQuery->where('has_website', 'YES')
+                    ->whereNotNull('website')
+                    ->where('website', '!=', '')
+                    ->where('website', '!=', 'N/A')
+                    ->where('website', '!=', 'None');
+            }
+        }
+
+        // City filter
+        if ($request->filled('city')) {
+            $city = trim($request->city);
+            $baseQuery->where(function ($q) use ($city) {
+                $q->where('location', 'like', "%{$city}%")
+                    ->orWhere('area_locality', 'like', "%{$city}%")
+                    ->orWhere('full_address', 'like', "%{$city}%");
+            });
+        }
+
+        // Area / Locality filter
+        if ($request->filled('area')) {
+            $area = trim($request->area);
+            $baseQuery->where(function ($q) use ($area) {
+                $q->where('area_locality', 'like', "%{$area}%")
+                    ->orWhere('location', 'like', "%{$area}%")
+                    ->orWhere('full_address', 'like', "%{$area}%");
+            });
+        }
+
+        // Industry Category filter
+        if ($request->filled('industry')) {
+            $baseQuery->where('industry', $request->industry);
+        }
+
+        // Priority filter
+        if ($request->filled('priority')) {
+            $baseQuery->where('priority', $request->priority);
+        }
+
+        // Assignee filter
+        if ($request->filled('developer_id')) {
+            $baseQuery->where('assigned_to_user_id', $request->developer_id);
+        }
+
+        $leadsByStage = [];
+        $totalBudgetByStage = [];
+
+        foreach (array_keys($stages) as $stage) {
+            $stageQuery = (clone $baseQuery)->where('status', $stage)->latest();
+            $leads = $stageQuery->get();
+            $leadsByStage[$stage] = $leads;
+            $totalBudgetByStage[$stage] = $leads->sum('estimated_budget');
+        }
+
+        $developers = User::all();
+        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
+        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
+        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
+
+        return view('admin.leads.kanban', compact('stages', 'leadsByStage', 'totalBudgetByStage', 'developers', 'cities', 'areas', 'industries'));
+    }
+
+    /**
+     * Store a new lead.
+     */
+    public function store(Request $request): RedirectResponse|JsonResponse
+    {
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'whatsapp' => 'nullable|string|max:50',
+            'website' => 'nullable|string|max:255',
+            'industry' => 'nullable|string|max:100',
+            'lead_source' => 'required|string|max:50',
+            'location' => 'nullable|string|max:100',
+            'requirement' => 'nullable|string',
+            'estimated_budget' => 'nullable|numeric|min:0',
+            'priority' => 'required|in:low,medium,high,urgent',
+            'status' => 'required|in:new,contacted,qualified,proposal_sent,negotiation,won,lost',
+            'assigned_to_user_id' => 'nullable|exists:users,id',
+            'next_followup_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+        ]);
+
+        $lead = Lead::create($validated);
+
+        $this->activityLogger->execute(
+            $lead,
+            'note',
+            "New Lead created for '{$lead->company_name}' ({$lead->contact_person})."
+        );
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Lead created successfully', 'lead' => $lead]);
+        }
+
+        return redirect()->back()->with('success', 'Lead created successfully!');
+    }
+
+    /**
+     * Display a single lead's 360 CRM profile.
+     */
+    public function show(Lead $lead): View
+    {
+        $lead->load(['assignedDeveloper', 'followUps.assignedTo', 'activities.user', 'leadNotes.user']);
+        $developers = User::all();
+
+        return view('admin.leads.show', compact('lead', 'developers'));
+    }
+
+    /**
+     * Update lead details.
+     */
+    public function update(Request $request, Lead $lead): RedirectResponse|JsonResponse
+    {
+        $validated = $request->validate([
+            'company_name' => 'sometimes|required|string|max:255',
+            'contact_person' => 'sometimes|required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'whatsapp' => 'nullable|string|max:50',
+            'website' => 'nullable|string|max:255',
+            'industry' => 'nullable|string|max:100',
+            'lead_source' => 'nullable|string|max:50',
+            'location' => 'nullable|string|max:100',
+            'requirement' => 'nullable|string',
+            'estimated_budget' => 'nullable|numeric|min:0',
+            'priority' => 'nullable|in:low,medium,high,urgent',
+            'status' => 'nullable|in:new,contacted,qualified,proposal_sent,negotiation,won,lost',
+            'assigned_to_user_id' => 'nullable|exists:users,id',
+            'last_contact_date' => 'nullable|date',
+            'next_followup_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+        ]);
+
+        $oldStatus = $lead->status;
+        $lead->update(array_filter($validated, fn($v) => $v !== null));
+
+        if ($oldStatus !== $lead->status) {
+            $this->activityLogger->execute(
+                $lead,
+                'status_change',
+                "Lead stage moved from '{$oldStatus}' to '{$lead->status}'."
+            );
+        }
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Lead updated successfully', 'lead' => $lead]);
+        }
+
+        return redirect()->back()->with('success', 'Lead updated successfully!');
+    }
+
+    /**
+     * Update lead stage via drag & drop Kanban board (AJAX).
+     */
+    public function updateStage(Request $request, Lead $lead): JsonResponse
+    {
+        $newStatus = $request->input('status') ?: $request->input('stage');
+        $allowed = ['new', 'contacted', 'qualified', 'proposal_sent', 'negotiation', 'won', 'lost'];
+
+        if (!$newStatus || !in_array($newStatus, $allowed, true)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or missing stage/status parameter: ' . json_encode($newStatus)
+            ], 422);
+        }
+
+        $oldStatus = $lead->status;
+        $lead->update(['status' => $newStatus]);
+
+        $this->activityLogger->execute(
+            $lead,
+            'status_change',
+            "Pipeline stage dragged from '{$oldStatus}' to '{$lead->status}'."
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => "Lead stage updated to {$lead->status}",
+            'lead' => $lead,
+        ]);
+    }
+
+    /**
+     * Convert a won lead to a client account.
+     */
+    public function convert(Request $request, Lead $lead): RedirectResponse|JsonResponse
+    {
+        $options = $request->only(['job_title', 'create_project', 'project_name', 'project_type', 'create_website']);
+        $client = $this->convertAction->execute($lead, $options);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Lead converted to Client successfully!',
+                'redirect_url' => "/admin/clients/{$client->id}",
+            ]);
+        }
+
+        return redirect("/admin/clients/{$client->id}")
+            ->with('success', "Lead successfully converted to Client {$client->name} ({$client->client_code})!");
+    }
+
+    /**
+     * Import leads from uploaded Excel (.xlsx) or CSV file and skip duplicates.
+     */
+    public function import(Request $request): RedirectResponse|JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|max:51200', // max 50MB
+            'imported_by' => 'nullable|string|max:100',
+        ]);
+
+        try {
+            $importedBy = $request->input('imported_by') ?: (auth()->user()?->name ?? 'Excel Import');
+            $result = $this->importService->import($request->file('file'), $importedBy);
+
+            $this->activityLogger->execute(
+                null,
+                'note',
+                "Excel Lead Import: {$result['imported']} new leads added, {$result['skipped']} duplicates skipped."
+            );
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $result['message'],
+                    'stats' => $result
+                ]);
+            }
+
+            return redirect()->back()->with('success', $result['message']);
+        } catch (\Throwable $e) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            }
+            return redirect()->back()->with('error', 'Import failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete a lead.
+     */
+    public function destroy(Lead $lead): RedirectResponse|JsonResponse
+    {
+        $companyName = $lead->company_name;
+        $lead->delete();
+
+        if (request()->ajax()) {
+            return response()->json(['success' => true, 'message' => "Lead '{$companyName}' removed."]);
+        }
+
+        return redirect('/admin/leads')->with('success', "Lead '{$companyName}' deleted successfully.");
+    }
+}

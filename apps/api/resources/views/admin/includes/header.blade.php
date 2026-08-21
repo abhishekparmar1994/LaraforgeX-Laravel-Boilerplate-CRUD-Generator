@@ -1,21 +1,75 @@
-<header class="flex items-center justify-between pb-4 border-b border-slate-200 font-sans">
+<header class="flex items-center justify-between pb-4 border-b border-slate-200 font-sans gap-4">
 
   <!-- Left: breadcrumbs + mobile hamburger toggle -->
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-3 min-w-0">
     <!-- Sidebar Toggle -->
     <button type="button"
-      class="h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm cursor-pointer"
+      class="h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm cursor-pointer shrink-0"
       onclick="toggleSidebar()" title="Toggle Sidebar">
       <i class="fa-solid fa-bars text-sm"></i>
     </button>
 
-    <div class="hidden md:block min-w-0">
+    <div class="hidden lg:block min-w-0">
       @yield('breadcrumbs')
     </div>
   </div>
 
-  <!-- Right: notification + user dropdown -->
-  <div class="flex items-center gap-3">
+  <!-- Center: Universal Global Search Bar -->
+  <div class="flex-1 max-w-md relative hidden sm:block">
+    <div class="relative">
+      <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+      <input type="text" id="global-search-input" placeholder="Search leads, clients, projects, websites, tasks... (Ctrl+K)"
+        class="w-full bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition shadow-2xs">
+      <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] bg-slate-200 text-slate-500 font-mono px-1.5 py-0.5 rounded">/</span>
+    </div>
+
+    <!-- Search Results Dropdown -->
+    <div id="global-search-results" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden text-xs max-h-96 overflow-y-auto">
+      <div id="global-search-content" class="divide-y divide-slate-100 p-2"></div>
+    </div>
+  </div>
+
+  <!-- Right: notification + quick actions + user dropdown -->
+  <div class="flex items-center gap-2.5 shrink-0">
+
+    <!-- Quick Action Button -->
+    <div class="relative" id="quick-add-wrapper">
+      <button id="quick-add-toggle"
+        class="h-9 px-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs flex items-center gap-2 shadow-sm shadow-brand-600/20 transition cursor-pointer"
+        onclick="$('#quick-add-dropdown').toggleClass('hidden')">
+        <i class="fa-solid fa-plus text-[11px]"></i>
+        <span class="hidden md:inline">Quick Add</span>
+      </button>
+
+      <!-- Quick Add Dropdown Menu -->
+      <div id="quick-add-dropdown"
+        class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs py-1">
+        <a href="/admin/leads" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+          <i class="fa-solid fa-filter-dollar w-4 text-center text-brand-500"></i>
+          <span>New Lead</span>
+        </a>
+        <a href="/admin/clients" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+          <i class="fa-solid fa-user-tie w-4 text-center text-indigo-500"></i>
+          <span>New Client</span>
+        </a>
+        <a href="/admin/projects" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+          <i class="fa-solid fa-diagram-project w-4 text-center text-purple-500"></i>
+          <span>New Project</span>
+        </a>
+        <a href="/admin/websites" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+          <i class="fa-solid fa-globe w-4 text-center text-emerald-500"></i>
+          <span>New Website</span>
+        </a>
+        <a href="/admin/tasks" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+          <i class="fa-solid fa-list-check w-4 text-center text-amber-500"></i>
+          <span>New Task</span>
+        </a>
+        <a href="/admin/followups" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+          <i class="fa-solid fa-phone-volume w-4 text-center text-rose-500"></i>
+          <span>Schedule Follow-up</span>
+        </a>
+      </div>
+    </div>
 
     <!-- Theme Customizer Dropdown -->
     <div class="relative" id="theme-dropdown-wrapper">
@@ -755,11 +809,85 @@
 
   $(document).ready(function () {
     loadNotifications();
+
+    // Global Search Debounce Handler
+    let searchDebounceTimer = null;
+    $('#global-search-input').on('input', function() {
+      const q = $(this).val().trim();
+      clearTimeout(searchDebounceTimer);
+      if (q.length < 2) {
+        $('#global-search-results').addClass('hidden');
+        return;
+      }
+
+      searchDebounceTimer = setTimeout(async function() {
+        try {
+          const res = await axios.get('/admin/global-search', { params: { q: q } });
+          const groups = res.data.groups || {};
+          const keys = Object.keys(groups);
+
+          if (keys.length === 0) {
+            $('#global-search-content').html('<div class="p-4 text-center text-slate-400">No results found for "<b>' + $('<div>').text(q).html() + '</b>"</div>');
+            $('#global-search-results').removeClass('hidden');
+            return;
+          }
+
+          let html = '';
+          keys.forEach(groupName => {
+            html += `<div class="p-2">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 pb-1">${groupName}</p>
+              <div class="space-y-0.5">`;
+            groups[groupName].forEach(item => {
+              html += `
+                <a href="${item.url}" class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition group">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="h-7 w-7 rounded-lg bg-slate-100 group-hover:bg-brand-50 group-hover:text-brand-600 flex items-center justify-center text-slate-500 text-xs shrink-0 transition">
+                      <i class="${item.icon}"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <p class="font-bold text-slate-800 text-xs group-hover:text-brand-600 truncate transition">${item.title}</p>
+                      <p class="text-[11px] text-slate-400 truncate">${item.subtitle}</p>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">${item.badge}</span>
+                </a>
+              `;
+            });
+            html += `</div></div>`;
+          });
+
+          $('#global-search-content').html(html);
+          $('#global-search-results').removeClass('hidden');
+        } catch(err) {
+          console.error('Search error:', err);
+        }
+      }, 250);
+    });
+
+    // Keyboard Shortcuts
+    $(document).on('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        $('#global-search-input').focus();
+      } else if (e.key === '/' && !$(e.target).is('input, textarea')) {
+        e.preventDefault();
+        $('#global-search-input').focus();
+      } else if (e.key === 'Escape') {
+        $('#global-search-results').addClass('hidden');
+        $('#quick-add-dropdown').addClass('hidden');
+      }
+    });
   });
 
   $(document).on('click', function (e) {
     if (!$(e.target).closest('#notif-dropdown-wrapper').length) {
       $('#notif-dropdown-panel').addClass('hidden');
+    }
+    if (!$(e.target).closest('#quick-add-wrapper').length) {
+      $('#quick-add-dropdown').addClass('hidden');
+    }
+    if (!$(e.target).closest('#global-search-input, #global-search-results').length) {
+      $('#global-search-results').addClass('hidden');
     }
   });
 </script>

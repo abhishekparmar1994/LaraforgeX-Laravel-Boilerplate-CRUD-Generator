@@ -1,0 +1,135 @@
+# 🛰️ LaraforgeX — Modern Laravel 13 DDD Boilerplate & Visual Intelligent CRUD Generator Engine
+
+[![Laravel 13](https://img.shields.io/badge/Laravel-13.x-ff2d20?style=for-the-badge&logo=laravel)](https://laravel.com)
+[![PHP 8.5+](https://img.shields.io/badge/PHP-8.5%2B-777bb4?style=for-the-badge&logo=php)](https://php.net)
+[![Architecture](https://img.shields.io/badge/Architecture-DDD%20Lite-indigo?style=for-the-badge)](https://laravel.com)
+[![License](https://img.shields.io/badge/License-Envato%20%2F%20Commercial-emerald?style=for-the-badge)](https://codecanyon.net)
+
+> **LaraforgeX** is an enterprise-ready, modular Laravel 13 boilerplate and visual code generation engine designed to build scalable SaaS, ERP, CRM, and LMS platforms **10x faster**. Built around Domain-Driven Design (DDD Lite), LaraforgeX isolates business logic into self-contained domain modules with zero controller bloat.
+
+---
+
+## 🌟 Key Features & Standout Capabilities
+
+### ⚡ 1. Intelligent 5-Step Visual CRUD Generator Engine
+- **Sequential Schema Inspector**: Auto-inspects database connections, databases with live table row counts, and table schema columns.
+- **35+ Smart Input Controls**: Auto-infers text, textarea, richtext, select dropdowns, datepickers, datetime, switch toggles, currency, email, password, and file uploads.
+- **Interactive Rule Selector**: 1-click validation rule badges (`required`, `nullable`, `email`, `unique`, `max:255`, `date`, `numeric`, etc.).
+- **Smart Relationship Builder**: Map foreign keys, target tables, and target columns with **automated data type compatibility validation** (blocks invalid `bigint` to `varchar` mappings with SweetAlert warnings).
+- **11 Laravel Relation Types Supported**: `belongsTo`, `hasMany`, `hasOne`, `belongsToMany`, `hasOneThrough`, `hasManyThrough`, `morphOne`, `morphMany`, `morphTo`, `morphToMany`, and `morphedByMany`.
+- **Complete Module File Output**: Generates Models, DTOs, Requests, Actions, Repositories, Services, Resources, Policies, Controllers, Blade Views (`index`, `create`, `edit`, `show`), Seeders, Factories, Observers, Notifications, Tests, and Route snippets inside `codegenerator/{ModuleName}/`.
+
+---
+
+### 🛡️ 2. Google reCAPTCHA v2 Security & Management
+- **Admin Settings Control ([/admin/settings](file:///admin/settings))**: Dedicated security management card to toggle reCAPTCHA v2 ON/OFF and manage public Site Keys & encrypted Secret Keys.
+- **Key Validation Safeguards**: Prevents enabling reCAPTCHA without valid non-empty Site Key and Secret Key configuration on both client and server boundaries.
+- **Full Auth Coverage**: Protects Admin Login (`/admin/login`), Forgot Password (`/admin/forgot-password`), and Reset Password (`/admin/reset-password`) against automated bot attacks.
+
+---
+
+### 🎨 3. 100% Mobile & Widescreen Responsive Glassmorphic Admin UI
+- **Full Page Width Layouts**: Responsive dashboard, data tables, profile management, and CRUD form cards.
+- **LaraforgeX Card Design System**: Signature gradient cover banners (`h-28 bg-gradient-to-r from-brand-500 via-indigo-600 to-violet-500`), floating icon badges, and clean key-value attribute grids.
+- **Interactive DataTables**: Ajax pagination, column sorting, search filtering, and action buttons.
+
+---
+
+### 🏗️ 4. Enterprise DDD Lite Architecture
+- **Single Responsibility Actions**: Every business operation is encapsulated inside an Action class (`CreateUserAction`, `UpdateUserAction`, etc.).
+- **Contract DTOs**: Request data is cast into strongly typed `BaseDTO` instances at the controller boundary.
+- **Repository Pattern & Caching**: Database queries are encapsulated inside Repositories with Redis caching support.
+- **Sanctum V4 & Hierarchical RBAC**: Role-based access control with granular permission inheritance and audit logging.
+
+---
+
+## 📂 Project Directory Structure
+
+```text
+LaraforgeX/
+├── apps/
+│   └── api/                            # Laravel 13 Intelligence Core
+│       ├── app/
+│       │   ├── Domains/                # Feature Domains (DDD Lite)
+│       │   │   ├── User/               # Users, Profiles, Auth, RBAC, Sessions, Audits
+│       │   │   ├── Settings/           # Encrypted Settings Store & reCAPTCHA Config
+│       │   │   ├── Media/              # Folders & S3/R2 direct-to-cloud files
+│       │   │   ├── AuditLog/           # System Audit logs
+│       │   │   └── CrudGenerator/      # Visual Generator Engine & Schema Reader
+│       │   ├── Shared/                 # Global contracts and base classes (BaseDTO, HasUUID)
+│       │   └── Services/               # Global services (ReCaptchaService)
+│       ├── codegenerator/              # Isolated generated CRUD modules
+│       ├── config/                     # Application configurations
+│       ├── database/                   # Migrations & seeders
+│       ├── public/                     # Static assets & CodeCanyon landing page
+│       ├── resources/
+│       │   └── views/admin/            # Responsive Admin Panel Blade Templates
+│       ├── routes/                     # web.php & api.php routes
+│       └── tests/                      # Automated PHPUnit Feature/Unit Test Suites
+└── docs/                               # Developer documentation
+```
+
+---
+
+## 🚀 Quick Setup & Installation
+
+### 1. Prerequisites
+- **PHP**: 8.2 / 8.3 / 8.4 / 8.5+
+- **Database**: MySQL 8.0+ or MariaDB 10.5+
+- **Composer**: 2.x
+- **Node.js**: 18.x+ & NPM
+
+### 2. Installation Steps
+```bash
+# Clone the repository
+git clone https://github.com/abhishekparmar1994/LaraforgeX-Laravel-Boilerplate-CRUD-Generator.git
+cd LaraforgeX/apps/api
+
+# Install PHP dependencies
+composer install
+
+# Copy environment configuration
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+
+# Configure database credentials in .env, then run migrations and seeders
+php artisan migrate --seed
+
+# Start the local development server
+php artisan serve
+```
+
+Access the Admin Panel in your browser:  
+`http://127.0.0.1:8000/admin/login`
+
+**Default Credentials**:
+- **Email**: `admin@laraforgex.com`
+- **Password**: `password`
+
+---
+
+## 🖥️ Visual CRUD Generator Usage
+
+1. Open `http://127.0.0.1:8000/admin/crud-generator` in your browser.
+2. **Step 1**: Select Database Connection, Database, and Target Table.
+3. **Step 2**: Customize field labels, 35+ control types, and 1-click validation rule badges.
+4. **Step 3**: Configure relationships with automated data type compatibility checks.
+5. **Step 4**: Select module features (Seeders, Factories, Observers, Notifications, PHPUnit Tests).
+6. **Step 5**: Preview generated code, copy snippets, or download the full module inside `codegenerator/{ModuleName}/`.
+
+---
+
+## 🧪 Testing & Quality Assurance
+
+Run the complete automated test suite:
+```bash
+php artisan test
+```
+
+---
+
+## 📜 License & Commercial Usage
+
+LaraforgeX is released under commercial distribution guidelines suitable for CodeCanyon / Envato Market sales. See [LICENSE.txt](file:///c:/laragon/www/LaraforgeX/apps/api/public/codecanyon_landing.html) for full terms.
