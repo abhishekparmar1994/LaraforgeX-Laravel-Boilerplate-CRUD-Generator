@@ -88,24 +88,6 @@
           </button>
         </form>
 
-        <!-- CodeCanyon Live Demo Credentials Card (Placed at Bottom) -->
-        <div class="p-3.5 bg-gradient-to-r from-brand-50 to-indigo-50 border border-brand-200/80 rounded-2xl mt-4">
-          <div class="flex items-center justify-between">
-            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 uppercase tracking-wider">
-              <i class="fa-solid fa-sparkles text-brand-500"></i> Live Demo Logins
-            </span>
-            <div class="flex gap-1.5">
-              <button type="button" id="btn-fill-admin"
-                class="px-3 py-1.5 text-xs font-extrabold text-white bg-brand-600 hover:bg-brand-500 rounded-xl transition shadow-sm border-0 cursor-pointer flex items-center gap-1">
-                <i class="fa-solid fa-user-shield"></i> Admin
-              </button>
-              <button type="button" id="btn-fill-dev"
-                class="px-3 py-1.5 text-xs font-extrabold text-white bg-violet-600 hover:bg-violet-500 rounded-xl transition shadow-sm border-0 cursor-pointer flex items-center gap-1">
-                <i class="fa-solid fa-code"></i> Developer
-              </button>
-            </div>
-          </div>
-        </div>
 
         <!-- Magic Link UI block -->
         <div id="magic-link-block" class="hidden space-y-4 pt-5 border-t border-slate-100">
@@ -176,23 +158,6 @@
         return;
       }
 
-      $('#btn-fill-admin').click(function () {
-        $('#email').val('admin@laraforgex.com');
-        $('#password').val('SecurePassword123!');
-        showToast('info', 'Authenticating Admin Demo...');
-        setTimeout(function () {
-          $('#login-form').submit();
-        }, 300);
-      });
-
-      $('#btn-fill-dev').click(function () {
-        $('#email').val('developer@laraforgex.com');
-        $('#password').val('SecurePassword123!');
-        showToast('info', 'Authenticating Developer Demo...');
-        setTimeout(function () {
-          $('#login-form').submit();
-        }, 300);
-      });
 
       let isMagicLinkMode = false;
       let tempToken = null;
