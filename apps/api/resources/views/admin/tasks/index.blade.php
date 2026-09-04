@@ -231,20 +231,38 @@
 <script>
   async function toggleTask(taskId) {
     try {
-      await axios.post(`/admin/tasks/${taskId}/toggle`);
-      location.reload();
+      const res = await axios.post(`{{ url('/admin/tasks') }}/${taskId}/toggle`);
+      if (res.data && res.data.success) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('success', res.data.status === 'completed' ? 'Task marked as completed' : 'Task re-opened');
+        }
+      }
+      setTimeout(() => location.reload(), 300);
     } catch(e) {
-      alert('Error toggling task status');
+      console.error('Error toggling task status:', e);
+      if (typeof window.showToast === 'function') {
+        window.showToast('error', 'Error toggling task status');
+      } else {
+        alert('Error toggling task status');
+      }
     }
   }
 
   async function confirmDeleteTask(taskId) {
     if (confirm('Delete this task?')) {
       try {
-        await axios.delete(`/admin/tasks/${taskId}`);
-        location.reload();
+        await axios.delete(`{{ url('/admin/tasks') }}/${taskId}`);
+        if (typeof window.showToast === 'function') {
+          window.showToast('success', 'Task deleted');
+        }
+        setTimeout(() => location.reload(), 300);
       } catch(e) {
-        alert('Failed to delete task');
+        console.error('Failed to delete task:', e);
+        if (typeof window.showToast === 'function') {
+          window.showToast('error', 'Failed to delete task');
+        } else {
+          alert('Failed to delete task');
+        }
       }
     }
   }

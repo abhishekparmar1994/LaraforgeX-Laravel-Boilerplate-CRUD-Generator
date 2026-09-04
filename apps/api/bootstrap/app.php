@@ -18,6 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\CheckInstalledMiddleware::class,
         ]);
+        $middleware->encryptCookies(except: [
+            'laraforgex_auth_token',
+        ]);
+        $middleware->alias([
+            'admin.auth' => \App\Http\Middleware\AdminAuthMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

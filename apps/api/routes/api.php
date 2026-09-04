@@ -14,66 +14,77 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/process', [\App\Http\Controllers\InstallController::class, 'install']);
     });
 
-    // Notification Hub API routes
-    Route::prefix('notifications')->group(function (): void {
-        Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index']);
-        Route::post('/mark-read', [\App\Http\Controllers\NotificationController::class, 'markRead']);
-    });
+    // Authenticated System & Administration APIs
+    Route::middleware('auth:sanctum')->group(function (): void {
+        // AI CRM Agent API routes
+        Route::prefix('agent')->group(function (): void {
+            Route::post('/chat', [\App\Http\Controllers\Api\AgentApiController::class, 'chat']);
+            Route::get('/conversations', [\App\Http\Controllers\Api\AgentApiController::class, 'conversations']);
+            Route::get('/conversations/{id}', [\App\Http\Controllers\Api\AgentApiController::class, 'conversation']);
+            Route::delete('/conversations/{id}', [\App\Http\Controllers\Api\AgentApiController::class, 'deleteConversation']);
+        });
 
-    // Activity Audit Logs API routes
-    Route::prefix('activity-logs')->group(function (): void {
-        Route::get('/', [\App\Http\Controllers\ActivityLogController::class, 'index']);
-        Route::delete('/', [\App\Http\Controllers\ActivityLogController::class, 'clear']);
-    });
+        // Notification Hub API routes
+        Route::prefix('notifications')->group(function (): void {
+            Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index']);
+            Route::post('/mark-read', [\App\Http\Controllers\NotificationController::class, 'markRead']);
+        });
 
-    // System Health & SMTP API routes
-    Route::prefix('health')->group(function (): void {
-        Route::get('/metrics', [\App\Http\Controllers\HealthController::class, 'metrics']);
-        Route::post('/test-mail', [\App\Http\Controllers\HealthController::class, 'testMail']);
-    });
+        // Activity Audit Logs API routes
+        Route::prefix('activity-logs')->group(function (): void {
+            Route::get('/', [\App\Http\Controllers\ActivityLogController::class, 'index']);
+            Route::delete('/', [\App\Http\Controllers\ActivityLogController::class, 'clear']);
+        });
 
-    // Outgoing Webhooks API routes
-    Route::prefix('webhooks')->group(function (): void {
-        Route::get('/', [\App\Http\Controllers\WebhookController::class, 'index']);
-        Route::post('/', [\App\Http\Controllers\WebhookController::class, 'store']);
-        Route::post('/test', [\App\Http\Controllers\WebhookController::class, 'test']);
-        Route::delete('/{id}', [\App\Http\Controllers\WebhookController::class, 'destroy']);
-    });
+        // System Health & SMTP API routes
+        Route::prefix('health')->group(function (): void {
+            Route::get('/metrics', [\App\Http\Controllers\HealthController::class, 'metrics']);
+            Route::post('/test-mail', [\App\Http\Controllers\HealthController::class, 'testMail']);
+        });
 
-    // Database Backups API routes
-    Route::prefix('backups')->group(function (): void {
-        Route::get('/', [\App\Http\Controllers\BackupController::class, 'index']);
-        Route::post('/generate', [\App\Http\Controllers\BackupController::class, 'generate']);
-        Route::get('/download/{filename}', [\App\Http\Controllers\BackupController::class, 'download']);
-        Route::delete('/{filename}', [\App\Http\Controllers\BackupController::class, 'destroy']);
-    });
+        // Outgoing Webhooks API routes
+        Route::prefix('webhooks')->group(function (): void {
+            Route::get('/', [\App\Http\Controllers\WebhookController::class, 'index']);
+            Route::post('/', [\App\Http\Controllers\WebhookController::class, 'store']);
+            Route::post('/test', [\App\Http\Controllers\WebhookController::class, 'test']);
+            Route::delete('/{id}', [\App\Http\Controllers\WebhookController::class, 'destroy']);
+        });
 
-    // CRUD Generator API routes
-    Route::prefix('crud-generator')->group(function (): void {
-        Route::get('/connections', [CrudGeneratorController::class, 'connections']);
-        Route::get('/databases', [CrudGeneratorController::class, 'databases']);
-        Route::get('/tables', [CrudGeneratorController::class, 'tables']);
-        Route::get('/schema', [CrudGeneratorController::class, 'schema']);
-        Route::post('/preview', [CrudGeneratorController::class, 'preview']);
-        Route::post('/generate', [CrudGeneratorController::class, 'generate']);
-        Route::post('/publish', [CrudGeneratorController::class, 'publish']);
-        Route::get('/download/{module}', [CrudGeneratorController::class, 'download']);
-    });
+        // Database Backups API routes
+        Route::prefix('backups')->group(function (): void {
+            Route::get('/', [\App\Http\Controllers\BackupController::class, 'index']);
+            Route::post('/generate', [\App\Http\Controllers\BackupController::class, 'generate']);
+            Route::get('/download/{filename}', [\App\Http\Controllers\BackupController::class, 'download']);
+            Route::delete('/{filename}', [\App\Http\Controllers\BackupController::class, 'destroy']);
+        });
 
-    // Database Studio / Table Manager API routes
-    Route::prefix('database-manager')->group(function (): void {
-        Route::get('/', [\App\Http\Controllers\DatabaseManagerController::class, 'index']);
-        Route::post('/create', [\App\Http\Controllers\DatabaseManagerController::class, 'store']);
-        Route::get('/{table}', [\App\Http\Controllers\DatabaseManagerController::class, 'show']);
-        Route::get('/{table}/data', [\App\Http\Controllers\DatabaseManagerController::class, 'data']);
-        Route::get('/{table}/export', [\App\Http\Controllers\DatabaseManagerController::class, 'exportData']);
-        Route::post('/{table}/indexes', [\App\Http\Controllers\DatabaseManagerController::class, 'addIndex']);
-        Route::delete('/{table}/indexes/{indexName}', [\App\Http\Controllers\DatabaseManagerController::class, 'dropIndex']);
-        Route::post('/bulk-action', [\App\Http\Controllers\DatabaseManagerController::class, 'bulkAction']);
-        Route::post('/{table}/drop-columns', [\App\Http\Controllers\DatabaseManagerController::class, 'dropColumns']);
-        Route::put('/{table}/columns/{column}', [\App\Http\Controllers\DatabaseManagerController::class, 'modifyColumn']);
-        Route::post('/execute-sql', [\App\Http\Controllers\DatabaseManagerController::class, 'executeSql']);
-        Route::post('/{table}/truncate', [\App\Http\Controllers\DatabaseManagerController::class, 'truncate']);
-        Route::delete('/{table}', [\App\Http\Controllers\DatabaseManagerController::class, 'destroy']);
+        // CRUD Generator API routes
+        Route::prefix('crud-generator')->group(function (): void {
+            Route::get('/connections', [CrudGeneratorController::class, 'connections']);
+            Route::get('/databases', [CrudGeneratorController::class, 'databases']);
+            Route::get('/tables', [CrudGeneratorController::class, 'tables']);
+            Route::get('/schema', [CrudGeneratorController::class, 'schema']);
+            Route::post('/preview', [CrudGeneratorController::class, 'preview']);
+            Route::post('/generate', [CrudGeneratorController::class, 'generate']);
+            Route::post('/publish', [CrudGeneratorController::class, 'publish']);
+            Route::get('/download/{module}', [CrudGeneratorController::class, 'download']);
+        });
+
+        // Database Studio / Table Manager API routes
+        Route::prefix('database-manager')->group(function (): void {
+            Route::get('/', [\App\Http\Controllers\DatabaseManagerController::class, 'index']);
+            Route::post('/create', [\App\Http\Controllers\DatabaseManagerController::class, 'store']);
+            Route::get('/{table}', [\App\Http\Controllers\DatabaseManagerController::class, 'show']);
+            Route::get('/{table}/data', [\App\Http\Controllers\DatabaseManagerController::class, 'data']);
+            Route::get('/{table}/export', [\App\Http\Controllers\DatabaseManagerController::class, 'exportData']);
+            Route::post('/{table}/indexes', [\App\Http\Controllers\DatabaseManagerController::class, 'addIndex']);
+            Route::delete('/{table}/indexes/{indexName}', [\App\Http\Controllers\DatabaseManagerController::class, 'dropIndex']);
+            Route::post('/bulk-action', [\App\Http\Controllers\DatabaseManagerController::class, 'bulkAction']);
+            Route::post('/{table}/drop-columns', [\App\Http\Controllers\DatabaseManagerController::class, 'dropColumns']);
+            Route::put('/{table}/columns/{column}', [\App\Http\Controllers\DatabaseManagerController::class, 'modifyColumn']);
+            Route::post('/execute-sql', [\App\Http\Controllers\DatabaseManagerController::class, 'executeSql']);
+            Route::post('/{table}/truncate', [\App\Http\Controllers\DatabaseManagerController::class, 'truncate']);
+            Route::delete('/{table}', [\App\Http\Controllers\DatabaseManagerController::class, 'destroy']);
+        });
     });
 });

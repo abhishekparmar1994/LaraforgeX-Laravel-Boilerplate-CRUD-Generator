@@ -153,12 +153,6 @@
 @section('scripts')
   <script>
     $(document).ready(function () {
-      if (localStorage.getItem('laraforgex_auth_token') && localStorage.getItem('laraforgex_user')) {
-        window.location.replace('/admin/dashboard');
-        return;
-      }
-
-
       let isMagicLinkMode = false;
       let tempToken = null;
       let tempUser = null;
@@ -286,10 +280,14 @@
           if (response.data.success) {
             localStorage.setItem('laraforgex_auth_token', tempToken);
             localStorage.setItem('laraforgex_user', JSON.stringify(tempUser));
+            document.cookie = "laraforgex_auth_token=" + tempToken + "; path=/; max-age=86400; SameSite=Lax";
+            if (window.axios) {
+              window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + tempToken;
+            }
             showToast('success', 'Two factor authenticated successfully!');
             setTimeout(() => {
               window.location.href = '/admin/dashboard';
-            }, 1000);
+            }, 800);
           }
         } catch (err) {
           handleAjaxError(err, '2FA authentication check failed. Invalid code.');
@@ -305,11 +303,15 @@
       function handleLoginSuccess(data) {
         localStorage.setItem('laraforgex_auth_token', data.token);
         localStorage.setItem('laraforgex_user', JSON.stringify(data.user));
+        document.cookie = "laraforgex_auth_token=" + data.token + "; path=/; max-age=86400; SameSite=Lax";
+        if (window.axios) {
+          window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
+        }
 
         showToast('success', 'Authentication verified! Redirecting...');
         setTimeout(() => {
           window.location.href = '/admin/dashboard';
-        }, 1200);
+        }, 800);
       }
     });
   </script>

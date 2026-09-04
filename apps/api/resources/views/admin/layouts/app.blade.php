@@ -10,6 +10,7 @@
   <!-- Synchronous Head Auth Guard (Anti-FOUC) -->
   <script>
     (function () {
+      @guest
       var authToken = localStorage.getItem('laraforgex_auth_token');
       var userSession = localStorage.getItem('laraforgex_user');
       if (!authToken || !userSession) {
@@ -18,6 +19,12 @@
           window.location.replace('/admin/login');
         }
       }
+      @endguest
+      @auth
+      if (!localStorage.getItem('laraforgex_user')) {
+        localStorage.setItem('laraforgex_user', JSON.stringify(@json(auth()->user())));
+      }
+      @endauth
     })();
   </script>
   <style>
@@ -30,10 +37,27 @@
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
   <!-- jQuery (vendor) -->
   <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+  <!-- Axios (vendor) -->
+  <script src="{{ asset('vendor/axios/axios.min.js') }}"></script>
+  <script>
+    if (window.axios) {
+      window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      var csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      if (csrfToken) {
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+      }
+      var authToken = localStorage.getItem('laraforgex_auth_token');
+      if (authToken) {
+        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + authToken;
+      }
+    }
+  </script>
   <!-- Universal i18n Translations -->
   <script src="{{ asset('vendor/i18n/translations.js') }}"></script>
   <!-- ApexCharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <!-- Marked Markdown Parser CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
   <script>
     $(function () {
       var savedColor = localStorage.getItem('laraforgex_theme_color');
@@ -1163,6 +1187,7 @@
 </head>
 
 <body class="bg-slate-50 text-slate-700 antialiased selection:bg-brand-500 selection:text-white">
+  @include('admin.includes.http_loader')
 
 
 
@@ -1498,10 +1523,15 @@
 
   <!-- ── Back to Top Floating Action Button ─────────────────────── -->
   <button id="btn-back-to-top"
-    class="fixed bottom-6 right-6 z-40 h-10 w-10 rounded-full bg-brand-600 hover:bg-brand-500 text-white flex items-center justify-center shadow-lg transition-all duration-300 opacity-0 pointer-events-none translate-y-4 cursor-pointer border-0"
+    class="fixed bottom-24 right-6 z-40 h-10 w-10 rounded-full bg-brand-600 hover:bg-brand-500 text-white flex items-center justify-center shadow-lg transition-all duration-300 opacity-0 pointer-events-none translate-y-4 cursor-pointer border-0"
     title="Back to Top">
     <i class="fa-solid fa-arrow-up text-sm"></i>
   </button>
+
+  <!-- ── Global Floating AI Agent Chatbox ─────────────────────── -->
+  @if(!request()->is('admin/ai-agent*'))
+    @include('admin.includes.floating_ai_agent')
+  @endif
 
   <!-- Universal i18n Translations -->
   <script src="{{ asset('vendor/i18n/translations.js') }}"></script>

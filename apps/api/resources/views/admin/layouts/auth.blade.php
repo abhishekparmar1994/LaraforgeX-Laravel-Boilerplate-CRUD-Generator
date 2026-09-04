@@ -7,27 +7,19 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'LaraforgeX Admin Panel')</title>
 
-  <!-- Synchronous Head Auth Redirect for authenticated users -->
-  <script>
-    (function () {
-      var authToken = localStorage.getItem('laraforgex_auth_token');
-      var userSession = localStorage.getItem('laraforgex_user');
-      if (authToken && userSession) {
-        if (window.location.pathname === '/admin/login' || window.location.pathname === '/admin/forgot-password') {
-          document.documentElement.classList.add('auth-checking');
-          window.location.replace('/admin/dashboard');
-        }
-      }
-    })();
-  </script>
-  <style>
-    html.auth-checking body {
-      display: none !important;
-    }
-  </style>
-
   <!-- jQuery Vendor Script -->
   <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+  <!-- Axios Vendor Script -->
+  <script src="{{ asset('vendor/axios/axios.min.js') }}"></script>
+  <script>
+    if (window.axios) {
+      window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      var csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      if (csrfToken) {
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+      }
+    }
+  </script>
 
   <!-- Local Offline Tailwind JS (Play CDN script loaded locally) -->
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
@@ -226,6 +218,7 @@
 </head>
 
 <body class="bg-slate-50 text-slate-700 antialiased selection:bg-brand-500 selection:text-white">
+  @include('admin.includes.http_loader')
 
 
 

@@ -27,48 +27,67 @@ Route::get('/', function () {
 
 Route::get('/install', [InstallController::class, 'index']);
 
-Route::get('/clear-cache', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('config:clear');
-    Artisan::call('route:clear');
-    Artisan::call('view:clear');
-    Artisan::call('optimize:clear');
-    return "All caches cleared successfully";
-});
+// ── MAINTENANCE ROUTES (Protected: Local/Admin Only) ────────────────
+Route::middleware(['admin.auth'])->group(function () {
+    Route::get('/clear-cache', function () {
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        Artisan::call('optimize:clear');
+        return "All caches cleared successfully";
+    });
 
-Route::get('/storage-link', function () {
-    Artisan::call('storage:link');
-    return "Storage link created successfully";
-});
+    Route::get('/storage-link', function () {
+        Artisan::call('storage:link');
+        return "Storage link created successfully";
+    });
 
-Route::get('/migrate-db', function () {
-    try {
-        Artisan::call('migrate', ['--force' => true]);
-        return "<h2 style='color:green'>✅ Database migrations executed successfully!</h2><pre>" . e(Artisan::output()) . "</pre>";
-    } catch (\Throwable $e) {
-        return "<h2 style='color:red'>❌ Migration Error:</h2><pre>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>";
-    }
-});
+    Route::get('/migrate-db', function () {
+        try {
+            Artisan::call('migrate', ['--force' => true]);
+            return "<h2 style='color:green'>✅ Database migrations executed successfully!</h2><pre>" . e(Artisan::output()) . "</pre>";
+        } catch (\Throwable $e) {
+            return "<h2 style='color:red'>❌ Migration Error:</h2><pre>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>";
+        }
+    });
 
-Route::get('/seed-db', function () {
-    try {
-        Artisan::call('db:seed', ['--force' => true]);
-        return "<h2 style='color:green'>✅ Database seeders executed successfully!</h2><pre>" . e(Artisan::output()) . "</pre>";
-    } catch (\Throwable $e) {
-        return "<h2 style='color:red'>❌ Seeder Error:</h2><pre>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>";
-    }
+    Route::get('/seed-db', function () {
+        try {
+            Artisan::call('db:seed', ['--force' => true]);
+            return "<h2 style='color:green'>✅ Database seeders executed successfully!</h2><pre>" . e(Artisan::output()) . "</pre>";
+        } catch (\Throwable $e) {
+            return "<h2 style='color:red'>❌ Seeder Error:</h2><pre>" . e($e->getMessage()) . "\n\n" . e($e->getTraceAsString()) . "</pre>";
+        }
+    });
 });
 
 Route::get('/landing', function () {
     return file_get_contents(public_path('codecanyon_landing.html'));
 });
 
-// ── ADMIN & CRM ROUTES ──────────────────────────────────────────────
+// ── AUTHENTICATION BRIDGE ROUTES (Web Portal AJAX) ─────────────────
+Route::prefix('auth')->group(function () {
+    Route::get('/captcha-config', [\App\Domains\User\Controllers\AuthController::class, 'captchaConfig']);
+    Route::post('/login', [\App\Domains\User\Controllers\AuthController::class, 'login']);
+    Route::post('/magic-link', [\App\Domains\User\Controllers\AuthController::class, 'magicLink']);
+    Route::post('/2fa/verify', [\App\Domains\User\Controllers\AuthController::class, 'twoFactorVerify']);
+    Route::post('/logout', [\App\Domains\User\Controllers\AuthController::class, 'logout']);
+});
+
+// ── ADMIN GUEST ROUTES ──────────────────────────────────────────────
 Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminController::class, 'login'])->name('login');
+    Route::get('/forgot-password', [AdminController::class, 'forgotPassword']);
+    Route::get('/reset-password', [AdminController::class, 'resetPassword']);
+});
+
+// ── ADMIN & CRM PROTECTED ROUTES ────────────────────────────────────
+Route::prefix('admin')->middleware(['admin.auth'])->group(function () {
     // Auth & Dashboard
     Route::get('/', [AdminController::class, 'index']);
-    Route::get('/login', [AdminController::class, 'login']);
     Route::get('/dashboard', [CrmDashboardController::class, 'index']);
+    Route::get('/ai-agent', [\App\Http\Controllers\Admin\AiAgentController::class, 'index']);
     Route::get('/crm/analytics', [CrmDashboardController::class, 'analytics']);
     Route::get('/global-search', [SearchController::class, 'search']);
 
@@ -174,8 +193,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/media', [AdminController::class, 'media']);
     Route::get('/settings', [AdminController::class, 'settings']);
     Route::get('/profile', [AdminController::class, 'profile']);
-    Route::get('/forgot-password', [AdminController::class, 'forgotPassword']);
-    Route::get('/reset-password', [AdminController::class, 'resetPassword']);
     Route::get('/crud-generator', [AdminController::class, 'crudGenerator']);
     Route::get('/backups', [AdminController::class, 'backups']);
     Route::get('/health', [AdminController::class, 'health']);

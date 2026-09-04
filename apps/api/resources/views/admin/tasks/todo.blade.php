@@ -161,10 +161,20 @@
 <script>
   async function toggleTodoTask(taskId) {
     try {
-      await axios.post(`/admin/tasks/${taskId}/toggle`);
-      location.reload();
+      const res = await axios.post(`{{ url('/admin/tasks') }}/${taskId}/toggle`);
+      if (res.data && res.data.success) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('success', res.data.status === 'completed' ? 'Task completed' : 'Task reopened');
+        }
+      }
+      setTimeout(() => location.reload(), 300);
     } catch(e) {
-      alert('Error updating task');
+      console.error('Error updating task:', e);
+      if (typeof window.showToast === 'function') {
+        window.showToast('error', 'Error updating task');
+      } else {
+        alert('Error updating task');
+      }
     }
   }
 </script>

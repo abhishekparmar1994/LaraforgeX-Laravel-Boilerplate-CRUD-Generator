@@ -28,13 +28,29 @@
     <nav class="space-y-0.5">
 
       <!-- ── DASHBOARD ──────────────────────── -->
-      <p class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Dashboard</p>
+      <p class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Dashboard & Intelligence
+      </p>
       <div class="relative group sidebar-group">
         <a href="/admin/dashboard"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/dashboard') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-chart-pie w-4 text-center {{ request()->is('admin/dashboard') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-chart-pie w-4 text-center {{ request()->is('admin/dashboard') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Dashboard</span>
+        </a>
+      </div>
+
+      <!-- AI CRM Agent -->
+      <div class="relative group sidebar-group">
+        <a href="/admin/ai-agent"
+          class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
+                  {{ request()->is('admin/ai-agent*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i
+            class="fa-solid fa-wand-magic-sparkles w-4 text-center {{ request()->is('admin/ai-agent*') ? 'text-brand-500' : 'text-indigo-500' }}"></i>
+          <span class="flex items-center gap-1.5">
+            <span>AI CRM Agent</span>
+            <span class="text-[9px] font-extrabold bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded-md">NEW</span>
+          </span>
         </a>
       </div>
 
@@ -46,7 +62,8 @@
         <a href="/admin/leads"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/leads') && !request()->is('admin/leads/kanban') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-filter w-4 text-center {{ request()->is('admin/leads') && !request()->is('admin/leads/kanban') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-filter w-4 text-center {{ request()->is('admin/leads') && !request()->is('admin/leads/kanban') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Leads</span>
         </a>
       </div>
@@ -56,7 +73,8 @@
         <a href="/admin/leads/kanban"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/leads/kanban*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-table-columns w-4 text-center {{ request()->is('admin/leads/kanban*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-table-columns w-4 text-center {{ request()->is('admin/leads/kanban*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Sales Pipeline</span>
         </a>
       </div>
@@ -66,7 +84,8 @@
         <a href="/admin/contacts"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/contacts*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-address-book w-4 text-center {{ request()->is('admin/contacts*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-address-book w-4 text-center {{ request()->is('admin/contacts*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Contacts</span>
         </a>
       </div>
@@ -76,7 +95,8 @@
         <a href="/admin/clients"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/clients*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-user-tie w-4 text-center {{ request()->is('admin/clients*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-user-tie w-4 text-center {{ request()->is('admin/clients*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Clients</span>
         </a>
       </div>
@@ -86,7 +106,8 @@
         <a href="/admin/companies"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/companies*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-building w-4 text-center {{ request()->is('admin/companies*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-building w-4 text-center {{ request()->is('admin/companies*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Companies</span>
         </a>
       </div>
@@ -99,7 +120,8 @@
         <a href="/admin/websites"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/websites*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-globe w-4 text-center {{ request()->is('admin/websites*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-globe w-4 text-center {{ request()->is('admin/websites*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Websites</span>
         </a>
       </div>
@@ -109,7 +131,8 @@
         <a href="/admin/projects"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/projects*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-diagram-project w-4 text-center {{ request()->is('admin/projects*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-diagram-project w-4 text-center {{ request()->is('admin/projects*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Projects</span>
         </a>
       </div>
@@ -119,19 +142,22 @@
         <a href="/admin/tasks"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/tasks') && !request()->is('admin/tasks/kanban') && !request()->is('admin/tasks/todo') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-list-check w-4 text-center {{ request()->is('admin/tasks') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-list-check w-4 text-center {{ request()->is('admin/tasks') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Tasks List</span>
         </a>
         <a href="/admin/tasks/kanban"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/tasks/kanban*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-table-cells-large w-4 text-center {{ request()->is('admin/tasks/kanban*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-table-cells-large w-4 text-center {{ request()->is('admin/tasks/kanban*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Task Kanban</span>
         </a>
         <a href="/admin/tasks/todo"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/tasks/todo*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-circle-check w-4 text-center {{ request()->is('admin/tasks/todo*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-circle-check w-4 text-center {{ request()->is('admin/tasks/todo*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>My Todo List</span>
         </a>
       </div>
@@ -141,7 +167,8 @@
         <a href="/admin/calendar"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/calendar*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-calendar-days w-4 text-center {{ request()->is('admin/calendar*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-calendar-days w-4 text-center {{ request()->is('admin/calendar*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Agency Calendar</span>
         </a>
       </div>
@@ -153,7 +180,8 @@
         <a href="/admin/followups"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/followups*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-phone-volume w-4 text-center {{ request()->is('admin/followups*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-phone-volume w-4 text-center {{ request()->is('admin/followups*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Follow-ups</span>
         </a>
       </div>
@@ -162,7 +190,8 @@
         <a href="/admin/activities"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/activities*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-clock-rotate-left w-4 text-center {{ request()->is('admin/activities*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-clock-rotate-left w-4 text-center {{ request()->is('admin/activities*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Activity Stream</span>
         </a>
       </div>
@@ -171,7 +200,8 @@
         <a href="/admin/notes"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/notes*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-note-sticky w-4 text-center {{ request()->is('admin/notes*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-note-sticky w-4 text-center {{ request()->is('admin/notes*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Notes Vault</span>
         </a>
       </div>
@@ -183,7 +213,8 @@
         <a href="/admin/payments"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/payments*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-file-invoice-dollar w-4 text-center {{ request()->is('admin/payments*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-file-invoice-dollar w-4 text-center {{ request()->is('admin/payments*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Invoices & Payments</span>
         </a>
       </div>
@@ -192,7 +223,8 @@
         <a href="/admin/reports"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/reports*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-chart-line w-4 text-center {{ request()->is('admin/reports*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-chart-line w-4 text-center {{ request()->is('admin/reports*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Business Reports</span>
         </a>
       </div>
@@ -204,7 +236,8 @@
         <a href="/admin/team"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/team*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-users-gear w-4 text-center {{ request()->is('admin/team*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-users-gear w-4 text-center {{ request()->is('admin/team*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>4-Developer Team</span>
         </a>
       </div>
@@ -213,7 +246,8 @@
         <a href="/admin/users"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/users*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-user-shield w-4 text-center {{ request()->is('admin/users*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-user-shield w-4 text-center {{ request()->is('admin/users*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>User Accounts</span>
         </a>
       </div>
@@ -222,7 +256,8 @@
         <a href="/admin/settings"
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/settings*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-          <i class="fa-solid fa-sliders w-4 text-center {{ request()->is('admin/settings*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <i
+            class="fa-solid fa-sliders w-4 text-center {{ request()->is('admin/settings*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
           <span>Settings</span>
         </a>
       </div>
@@ -233,7 +268,8 @@
   <!-- Bottom Agency Profile Badge -->
   <div class="p-4 border-t border-slate-200 bg-slate-50/50">
     <div class="flex items-center gap-3">
-      <div class="h-9 w-9 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+      <div
+        class="h-9 w-9 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
         {{ substr(auth()->user()->name ?? 'Rohan', 0, 2) }}
       </div>
       <div class="min-w-0 flex-1">

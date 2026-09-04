@@ -4,11 +4,21 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class CrudGeneratorTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $user = \App\Domains\User\Models\User::factory()->create();
+        $this->actingAs($user, 'sanctum');
+    }
+
     public function test_connections_endpoint_returns_available_connections(): void
     {
         $response = $this->getJson('/api/v1/crud-generator/connections');

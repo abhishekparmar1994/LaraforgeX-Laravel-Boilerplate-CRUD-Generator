@@ -13,14 +13,31 @@ class AdminController extends Controller
      */
     public function index(): \Illuminate\Http\RedirectResponse
     {
+        if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
+            return redirect('/admin/dashboard');
+        }
+
         return redirect('/admin/login');
     }
 
     /**
      * Render the admin login view.
      */
-    public function login(): View
+    public function login(\Illuminate\Http\Request $request): View|\Illuminate\Http\RedirectResponse
     {
+        if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
+            return redirect('/admin/dashboard');
+        }
+
+        $token = $request->bearerToken() ?? $request->cookie('laraforgex_auth_token');
+        if ($token) {
+            $accessToken = \Laravel\Sanctum\PersonalAccessToken::findToken($token);
+            if ($accessToken && $accessToken->tokenable) {
+                \Illuminate\Support\Facades\Auth::guard('web')->login($accessToken->tokenable);
+                return redirect('/admin/dashboard');
+            }
+        }
+
         return view('admin.auth.login');
     }
 

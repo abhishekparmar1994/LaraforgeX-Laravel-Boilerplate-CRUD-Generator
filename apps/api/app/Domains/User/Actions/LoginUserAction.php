@@ -46,6 +46,9 @@ class LoginUserAction
             'last_login_ip' => $dto->ipAddress,
         ]);
 
+        // Establish session state for web portal navigation
+        Auth::guard('web')->login($user, $dto->remember);
+
         // Generate Sanctum api token
         $token = $user->createToken('auth-token')->plainTextToken;
 
