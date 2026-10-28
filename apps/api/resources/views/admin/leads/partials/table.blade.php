@@ -60,15 +60,6 @@
               </span>
             </span>
           </th>
-          <th class="px-4 py-3.5 text-center cursor-pointer select-none hover:text-slate-800 transition" onclick="handleLeadsSort('rating')">
-            <span class="inline-flex items-center justify-center">
-              Rating
-              <span id="sort-wrap-rating" class="dt-sort-wrap">
-                <svg class="w-2.5 h-2.5 text-slate-300" viewBox="0 0 320 512" fill="currentColor"><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>
-              </span>
-            </span>
-          </th>
-          <th class="px-3 py-3.5 text-center">Maps</th>
           <th class="px-4 py-3.5 text-right">Actions</th>
         </tr>
       </thead>
@@ -105,27 +96,6 @@
               @endif
             </td>
             <td class="px-4 py-3.5 text-slate-600"><span>{{ $lead->area_locality ?? $lead->location ?? 'Vadodara' }}</span></td>
-            <td class="px-4 py-3.5 text-center whitespace-nowrap">
-              @if($lead->rating && $lead->rating !== 'N/A')
-                <span class="inline-flex items-center gap-1 font-bold text-amber-600 text-xs">
-                  <i class="fa-solid fa-star text-[10px]"></i> {{ $lead->rating }}
-                  @if($lead->total_reviews && $lead->total_reviews !== '0')
-                    <span class="text-slate-400 font-normal text-[10px]">({{ $lead->total_reviews }})</span>
-                  @endif
-                </span>
-              @else
-                <span class="text-slate-300">-</span>
-              @endif
-            </td>
-            <td class="px-3 py-3.5 text-center">
-              @if($lead->google_maps_link)
-                <a href="{{ $lead->google_maps_link }}" target="_blank" rel="noopener" class="text-slate-400 hover:text-brand-600 transition" title="Open in Google Maps">
-                  <i class="fa-solid fa-location-dot text-sm text-rose-500"></i>
-                </a>
-              @else
-                <span class="text-slate-300">-</span>
-              @endif
-            </td>
             <td class="px-4 py-3.5 text-right whitespace-nowrap">
               <a href="/admin/leads/{{ $lead->id }}" class="p-1.5 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition inline-block" title="View 360 Profile">
                 <i class="fa-solid fa-arrow-right text-xs"></i>
@@ -134,7 +104,7 @@
           </tr>
         @empty
           <tr>
-            <td colspan="7" class="px-6 py-12 text-center text-slate-400">
+            <td colspan="5" class="px-6 py-12 text-center text-slate-400">
               <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
               <p class="font-bold text-sm">No solar leads found</p>
             </td>

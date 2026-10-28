@@ -60,7 +60,7 @@
     );
 
     if (!leads || !leads.length) {
-      $tbody.html(`<tr><td colspan="7" class="px-6 py-12 text-center text-slate-400">
+      $tbody.html(`<tr><td colspan="5" class="px-6 py-12 text-center text-slate-400">
         <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
         <p class="font-bold text-sm">No solar leads found</p>
       </td></tr>`);
@@ -87,21 +87,11 @@
       ? `<div class="flex items-center gap-1.5 font-bold text-slate-900"><a href="tel:${lead.phone}" class="hover:text-brand-600">${lead.phone}</a>${waPhone ? `<a href="https://wa.me/${waPhone}" target="_blank" rel="noopener" class="text-emerald-500 hover:text-emerald-600 transition" title="Chat on WhatsApp"><i class="fa-brands fa-whatsapp text-sm"></i></a>` : ''}</div>`
       : `<span class="text-slate-300 font-semibold italic">N/A</span>`;
 
-    const ratingHtml = lead.rating && lead.rating !== 'N/A'
-      ? `<span class="inline-flex items-center gap-1 font-bold text-amber-600 text-xs"><i class="fa-solid fa-star text-[10px]"></i> ${lead.rating}${lead.total_reviews && lead.total_reviews !== '0' ? `<span class="text-slate-400 font-normal text-[10px]">(${lead.total_reviews})</span>` : ''}</span>`
-      : `<span class="text-slate-300">-</span>`;
-
-    const mapsBtn = lead.google_maps_link
-      ? `<a href="${lead.google_maps_link}" target="_blank" rel="noopener" class="text-slate-400 hover:text-brand-600 transition" title="Open in Google Maps"><i class="fa-solid fa-location-dot text-sm text-rose-500"></i></a>`
-      : `<span class="text-slate-300">-</span>`;
-
     return `<tr class="hover:bg-slate-50/80 transition">
       <td class="px-3.5 py-3.5 text-center font-bold text-slate-400">${index}</td>
       <td class="px-4 py-3.5"><a href="/admin/leads/${lead.id}" class="font-bold text-slate-900 hover:text-brand-600 block text-xs">${escapeHtml(lead.company_name)}</a><span class="text-[11px] text-slate-400 block mt-0.5">${escapeHtml(lead.contact_person || 'Owner')} ${lead.email && lead.email !== 'N/A' ? '• ' + escapeHtml(lead.email) : ''}</span></td>
       <td class="px-4 py-3.5 whitespace-nowrap">${phoneHtml}</td>
       <td class="px-4 py-3.5 text-slate-600">${escapeHtml(lead.area_locality || lead.location || 'Vadodara')}</td>
-      <td class="px-4 py-3.5 text-center whitespace-nowrap">${ratingHtml}</td>
-      <td class="px-3 py-3.5 text-center">${mapsBtn}</td>
       <td class="px-4 py-3.5 text-right whitespace-nowrap"><a href="/admin/leads/${lead.id}" class="p-1.5 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition inline-block" title="View 360 Profile"><i class="fa-solid fa-arrow-right text-xs"></i></a></td>
     </tr>`;
   }

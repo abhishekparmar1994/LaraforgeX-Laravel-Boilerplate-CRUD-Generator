@@ -14,242 +14,253 @@
     </div>
   </div>
 
-  <!-- Center: Universal Global Search Bar -->
-  <div class="flex-1 max-w-md relative hidden sm:block">
-    <div class="relative">
-      <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-      <input type="text" id="global-search-input" placeholder="Search customers, leads, projects, invoices... (Ctrl+K)"
-        class="w-full bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition shadow-2xs">
-      <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] bg-slate-200 text-slate-500 font-mono px-1.5 py-0.5 rounded">Ctrl K</span>
-    </div>
+    <!-- Center: Universal Global Search Bar (Hidden per user request) -->
+    <div class="flex-1 max-w-md relative hidden">
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        <input type="text" id="global-search-input"
+          placeholder="Search customers, leads, projects, invoices... (Ctrl+K)"
+          class="w-full bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition shadow-2xs">
+        <span
+          class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] bg-slate-200 text-slate-500 font-mono px-1.5 py-0.5 rounded">Ctrl
+          K</span>
+      </div>
 
-    <!-- Search Results Dropdown -->
-    <div id="global-search-results" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden text-xs max-h-96 overflow-y-auto">
-      <div id="global-search-content" class="divide-y divide-slate-100 p-2"></div>
-    </div>
-  </div>
-
-  <!-- Right: notification + quick actions + user dropdown -->
-  <div class="flex items-center gap-2.5 shrink-0">
-
-    <!-- Money Action Button (Solar Payment / Invoice Collection) -->
-    <a href="/admin/clients"
-      class="h-9 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-emerald-600/20 transition cursor-pointer"
-      title="Record Payment / Collection">
-      <i class="fa-solid fa-money-bill-wave text-xs"></i>
-      <span class="hidden sm:inline">Money</span>
-    </a>
-
-    <!-- Quick Action Button -->
-    <div class="relative" id="quick-add-wrapper">
-      <button id="quick-add-toggle"
-        class="h-9 w-9 sm:w-auto sm:px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm shadow-emerald-600/20 transition cursor-pointer"
-        onclick="$('#quick-add-dropdown').toggleClass('hidden')">
-        <i class="fa-solid fa-plus text-[12px]"></i>
-        <span class="hidden md:inline">Quick Add</span>
-      </button>
-
-      <!-- Quick Add Dropdown Menu -->
-      <div id="quick-add-dropdown"
-        class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs py-1">
-        <a href="/admin/leads" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
-          <i class="fa-solid fa-filter-dollar w-4 text-center text-brand-500"></i>
-          <span>New Lead</span>
-        </a>
-        <a href="/admin/clients" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
-          <i class="fa-solid fa-user-tie w-4 text-center text-indigo-500"></i>
-          <span>New Client</span>
-        </a>
-        <a href="/admin/projects" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
-          <i class="fa-solid fa-diagram-project w-4 text-center text-purple-500"></i>
-          <span>New Project</span>
-        </a>
-        <a href="/admin/websites" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
-          <i class="fa-solid fa-globe w-4 text-center text-emerald-500"></i>
-          <span>New Website</span>
-        </a>
-        <a href="/admin/tasks" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
-          <i class="fa-solid fa-list-check w-4 text-center text-amber-500"></i>
-          <span>New Task</span>
-        </a>
-        <a href="/admin/followups" class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
-          <i class="fa-solid fa-phone-volume w-4 text-center text-rose-500"></i>
-          <span>Schedule Follow-up</span>
-        </a>
+      <!-- Search Results Dropdown -->
+      <div id="global-search-results"
+        class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden text-xs max-h-96 overflow-y-auto">
+        <div id="global-search-content" class="divide-y divide-slate-100 p-2"></div>
       </div>
     </div>
 
-    <!-- Theme Customizer Dropdown -->
-    <div class="relative" id="theme-dropdown-wrapper">
-      <button id="theme-dropdown-toggle"
-        class="h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer"
-        onclick="toggleThemeDropdown()" title="Theme Customizer">
-        <i class="fa-solid fa-palette text-sm text-brand-600"></i>
-      </button>
+    <!-- Right: notification + quick actions + user dropdown -->
+    <div class="flex items-center gap-2.5 shrink-0">
 
-      <div id="theme-dropdown-panel"
-        class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs p-3 space-y-3">
-        <div>
-          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Accent Color Palette</p>
-          <div class="grid grid-cols-5 gap-1.5">
-            <button onclick="setAccentTheme('#2b47ff')"
-              class="h-6 w-6 rounded-full bg-[#2b47ff] border-2 border-white shadow cursor-pointer"
-              title="Royal Blue"></button>
-            <button onclick="setAccentTheme('#10b981')"
-              class="h-6 w-6 rounded-full bg-[#10b981] border-2 border-white shadow cursor-pointer"
-              title="Emerald"></button>
-            <button onclick="setAccentTheme('#8b5cf6')"
-              class="h-6 w-6 rounded-full bg-[#8b5cf6] border-2 border-white shadow cursor-pointer"
-              title="Deep Violet"></button>
-            <button onclick="setAccentTheme('#f59e0b')"
-              class="h-6 w-6 rounded-full bg-[#f59e0b] border-2 border-white shadow cursor-pointer"
-              title="Sunset Amber"></button>
-            <button onclick="setAccentTheme('#f43f5e')"
-              class="h-6 w-6 rounded-full bg-[#f43f5e] border-2 border-white shadow cursor-pointer"
-              title="Crimson Rose"></button>
+      <!-- Money Action Button (Hidden per user request) -->
+      <a href="/admin/clients"
+        class="hidden h-9 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs items-center gap-1.5 shadow-sm shadow-emerald-600/20 transition cursor-pointer"
+        title="Record Payment / Collection">
+        <i class="fa-solid fa-money-bill-wave text-xs"></i>
+        <span class="hidden sm:inline">Money</span>
+      </a>
+
+      <!-- Quick Action Button -->
+      <div class="relative" id="quick-add-wrapper">
+        <button id="quick-add-toggle"
+          class="h-9 w-9 sm:w-auto sm:px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm shadow-emerald-600/20 transition cursor-pointer"
+          onclick="$('#quick-add-dropdown').toggleClass('hidden')">
+          <i class="fa-solid fa-plus text-[12px]"></i>
+          <span class="hidden md:inline">Quick Add</span>
+        </button>
+
+        <!-- Quick Add Dropdown Menu -->
+        <div id="quick-add-dropdown"
+          class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs py-1">
+          <a href="/admin/leads"
+            class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+            <i class="fa-solid fa-filter-dollar w-4 text-center text-brand-500"></i>
+            <span>New Lead</span>
+          </a>
+          <a href="/admin/clients"
+            class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+            <i class="fa-solid fa-user-tie w-4 text-center text-indigo-500"></i>
+            <span>New Client</span>
+          </a>
+          <a href="/admin/projects"
+            class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+            <i class="fa-solid fa-diagram-project w-4 text-center text-purple-500"></i>
+            <span>New Project</span>
+          </a>
+          <a href="/admin/websites"
+            class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+            <i class="fa-solid fa-globe w-4 text-center text-emerald-500"></i>
+            <span>New Website</span>
+          </a>
+          <a href="/admin/tasks"
+            class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+            <i class="fa-solid fa-list-check w-4 text-center text-amber-500"></i>
+            <span>New Task</span>
+          </a>
+          <a href="/admin/followups"
+            class="flex items-center gap-2.5 px-3.5 py-2.5 text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition font-semibold">
+            <i class="fa-solid fa-phone-volume w-4 text-center text-rose-500"></i>
+            <span>Schedule Follow-up</span>
+          </a>
+        </div>
+      </div>
+
+        <!-- Theme Customizer Dropdown (Hidden per user request) -->
+        <div class="relative hidden" id="theme-dropdown-wrapper">
+          <button id="theme-dropdown-toggle"
+            class="h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer"
+            onclick="toggleThemeDropdown()" title="Theme Customizer">
+            <i class="fa-solid fa-palette text-sm text-brand-600"></i>
+          </button>
+
+          <div id="theme-dropdown-panel"
+            class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs p-3 space-y-3">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Accent Color Palette</p>
+              <div class="grid grid-cols-5 gap-1.5">
+                <button onclick="setAccentTheme('#2b47ff')"
+                  class="h-6 w-6 rounded-full bg-[#2b47ff] border-2 border-white shadow cursor-pointer"
+                  title="Royal Blue"></button>
+                <button onclick="setAccentTheme('#10b981')"
+                  class="h-6 w-6 rounded-full bg-[#10b981] border-2 border-white shadow cursor-pointer"
+                  title="Emerald"></button>
+                <button onclick="setAccentTheme('#8b5cf6')"
+                  class="h-6 w-6 rounded-full bg-[#8b5cf6] border-2 border-white shadow cursor-pointer"
+                  title="Deep Violet"></button>
+                <button onclick="setAccentTheme('#f59e0b')"
+                  class="h-6 w-6 rounded-full bg-[#f59e0b] border-2 border-white shadow cursor-pointer"
+                  title="Sunset Amber"></button>
+                <button onclick="setAccentTheme('#f43f5e')"
+                  class="h-6 w-6 rounded-full bg-[#f43f5e] border-2 border-white shadow cursor-pointer"
+                  title="Crimson Rose"></button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Language Switcher Dropdown -->
-    <div class="relative" id="lang-dropdown-wrapper">
-      <button id="lang-dropdown-toggle"
-        class="h-9 px-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer text-xs font-bold gap-2"
-        onclick="toggleLangDropdown()" title="Language Selector">
-        <img id="current-lang-flag-img" src="https://flagcdn.com/w40/us.png"
-          class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US">
-        <span id="current-lang-code" class="uppercase font-mono">EN</span>
-        <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
-      </button>
+          <!-- Language Switcher Dropdown (Hidden per user request) -->
+          <div class="relative hidden" id="lang-dropdown-wrapper">
+            <button id="lang-dropdown-toggle"
+              class="h-9 px-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:border-slate-300 transition shadow-sm cursor-pointer text-xs font-bold gap-2"
+              onclick="toggleLangDropdown()" title="Language Selector">
+              <img id="current-lang-flag-img" src="https://flagcdn.com/w40/us.png"
+                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US">
+              <span id="current-lang-code" class="uppercase font-mono">EN</span>
+              <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
+            </button>
 
-      <div id="lang-dropdown-panel"
-        class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs">
-        <div class="py-1">
-          <button onclick="setLanguage('en', 'https://flagcdn.com/w40/us.png', 'EN', 'ltr')"
-            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/us.png"
-                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US"> English</span>
-            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
-          </button>
-          <button onclick="setLanguage('es', 'https://flagcdn.com/w40/es.png', 'ES', 'ltr')"
-            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/es.png"
-                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="ES"> Español</span>
-            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
-          </button>
-          <button onclick="setLanguage('fr', 'https://flagcdn.com/w40/fr.png', 'FR', 'ltr')"
-            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/fr.png"
-                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="FR"> Français</span>
-            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
-          </button>
-          <button onclick="setLanguage('de', 'https://flagcdn.com/w40/de.png', 'DE', 'ltr')"
-            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/de.png"
-                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="DE"> Deutsch</span>
-            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
-          </button>
-          <button onclick="setLanguage('ar', 'https://flagcdn.com/w40/sa.png', 'AR', 'rtl')"
-            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/sa.png"
-                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="SA"> العربية</span>
-            <span class="text-[10px] text-brand-600 font-bold font-mono">RTL</span>
-          </button>
-          <button onclick="setLanguage('hi', 'https://flagcdn.com/w40/in.png', 'HI', 'ltr')"
-            class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
-            <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/in.png"
-                class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="IN"> हिंदी</span>
-            <span class="text-[10px] text-slate-400 font-mono">LTR</span>
-          </button>
-        </div>
-      </div>
-    </div>
+            <div id="lang-dropdown-panel"
+              class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs">
+              <div class="py-1">
+                <button onclick="setLanguage('en', 'https://flagcdn.com/w40/us.png', 'EN', 'ltr')"
+                  class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+                  <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/us.png"
+                      class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="US"> English</span>
+                  <span class="text-[10px] text-slate-400 font-mono">LTR</span>
+                </button>
+                <button onclick="setLanguage('es', 'https://flagcdn.com/w40/es.png', 'ES', 'ltr')"
+                  class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+                  <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/es.png"
+                      class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="ES"> Español</span>
+                  <span class="text-[10px] text-slate-400 font-mono">LTR</span>
+                </button>
+                <button onclick="setLanguage('fr', 'https://flagcdn.com/w40/fr.png', 'FR', 'ltr')"
+                  class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+                  <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/fr.png"
+                      class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="FR"> Français</span>
+                  <span class="text-[10px] text-slate-400 font-mono">LTR</span>
+                </button>
+                <button onclick="setLanguage('de', 'https://flagcdn.com/w40/de.png', 'DE', 'ltr')"
+                  class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+                  <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/de.png"
+                      class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="DE"> Deutsch</span>
+                  <span class="text-[10px] text-slate-400 font-mono">LTR</span>
+                </button>
+                <button onclick="setLanguage('ar', 'https://flagcdn.com/w40/sa.png', 'AR', 'rtl')"
+                  class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+                  <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/sa.png"
+                      class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="SA"> العربية</span>
+                  <span class="text-[10px] text-brand-600 font-bold font-mono">RTL</span>
+                </button>
+                <button onclick="setLanguage('hi', 'https://flagcdn.com/w40/in.png', 'HI', 'ltr')"
+                  class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-700">
+                  <span class="flex items-center gap-2.5"><img src="https://flagcdn.com/w40/in.png"
+                      class="h-3.5 w-5 object-cover rounded-xs shadow-xs" alt="IN"> हिंदी</span>
+                  <span class="text-[10px] text-slate-400 font-mono">LTR</span>
+                </button>
+              </div>
+            </div>
+          </div>
 
-    <!-- Notification Bell & Dropdown Hub -->
-    <div class="relative" id="notif-dropdown-wrapper">
-      <button id="notif-dropdown-toggle"
-        class="relative h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm cursor-pointer"
-        onclick="toggleNotifDropdown()" title="Notifications">
-        <i class="fa-regular fa-bell text-sm"></i>
-        <span id="notif-badge-dot"
-          class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-white"></span>
-      </button>
+            <!-- Notification Bell & Dropdown Hub (Hidden per user request) -->
+            <div class="relative hidden" id="notif-dropdown-wrapper">
+              <button id="notif-dropdown-toggle"
+                class="relative h-9 w-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition shadow-sm cursor-pointer"
+                onclick="toggleNotifDropdown()" title="Notifications">
+                <i class="fa-regular fa-bell text-sm"></i>
+                <span id="notif-badge-dot"
+                  class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-white"></span>
+              </button>
 
-      <div id="notif-dropdown-panel"
-        class="hidden absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs font-sans">
-        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-          <span class="font-extrabold text-slate-900">Notifications</span>
-          <button onclick="markAllNotificationsRead()"
-            class="text-[10px] font-bold text-brand-600 hover:underline border-0 bg-transparent cursor-pointer">Mark all
-            as read</button>
-        </div>
-        <div id="notif-list-container" class="divide-y divide-slate-100 max-h-72 overflow-y-auto">
-          <div class="p-4 text-center text-slate-400 text-xs">Loading notifications...</div>
-        </div>
-      </div>
-    </div>
+              <div id="notif-dropdown-panel"
+                class="hidden absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs font-sans">
+                <div class="px-4 py-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+                  <span class="font-extrabold text-slate-900">Notifications</span>
+                  <button onclick="markAllNotificationsRead()"
+                    class="text-[10px] font-bold text-brand-600 hover:underline border-0 bg-transparent cursor-pointer">Mark
+                    all
+                    as read</button>
+                </div>
+                <div id="notif-list-container" class="divide-y divide-slate-100 max-h-72 overflow-y-auto">
+                  <div class="p-4 text-center text-slate-400 text-xs">Loading notifications...</div>
+                </div>
+              </div>
+            </div>
 
-    <!-- User Dropdown -->
-    <div class="relative" id="user-dropdown-wrapper">
-      <button id="user-dropdown-toggle"
-        class="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition shadow-sm cursor-pointer select-none"
-        onclick="toggleUserDropdown()">
-        <div id="header-avatar"
-          class="h-8 w-8 rounded-lg bg-gradient-to-tr from-brand-500 to-violet-500 flex items-center justify-center text-white font-bold uppercase text-sm shrink-0">
-          U
-        </div>
-        <div class="text-left hidden sm:block">
-          <p class="text-xs font-bold text-slate-900 leading-tight" id="header-user-name">Loading…</p>
-          <p class="text-[10px] font-semibold leading-tight" id="header-2fa-badge">—</p>
-        </div>
-        <i id="header-chevron"
-          class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5 transition-transform duration-200"></i>
-      </button>
+            <!-- User Dropdown -->
+            <div class="relative" id="user-dropdown-wrapper">
+              <button id="user-dropdown-toggle"
+                class="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition shadow-sm cursor-pointer select-none"
+                onclick="toggleUserDropdown()">
+                <div id="header-avatar"
+                  class="h-8 w-8 rounded-lg bg-gradient-to-tr from-brand-500 to-violet-500 flex items-center justify-center text-white font-bold uppercase text-sm shrink-0">
+                  U
+                </div>
+                <div class="text-left hidden sm:block">
+                  <p class="text-xs font-bold text-slate-900 leading-tight" id="header-user-name">Loading…</p>
+                  <p class="text-[10px] font-semibold leading-tight" id="header-2fa-badge">—</p>
+                </div>
+                <i id="header-chevron"
+                  class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5 transition-transform duration-200"></i>
+              </button>
 
-      <!-- Dropdown Panel -->
-      <div id="user-dropdown-panel"
-        class="hidden absolute right-0 mt-2 w-60 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-900/10 z-50 overflow-hidden">
+              <!-- Dropdown Panel -->
+              <div id="user-dropdown-panel"
+                class="hidden absolute right-0 mt-2 w-60 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-900/10 z-50 overflow-hidden">
 
-        <!-- User info block -->
-        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50">
-          <p class="text-xs font-bold text-slate-900 truncate" id="dropdown-user-name">User Name</p>
-          <p class="text-[11px] text-slate-400 truncate" id="dropdown-user-email">user@email.com</p>
-        </div>
+                <!-- User info block -->
+                <div class="px-4 py-3 border-b border-slate-100 bg-slate-50">
+                  <p class="text-xs font-bold text-slate-900 truncate" id="dropdown-user-name">User Name</p>
+                  <p class="text-[11px] text-slate-400 truncate" id="dropdown-user-email">user@email.com</p>
+                </div>
 
-        <!-- Menu Items -->
-        <div class="py-1.5">
-          <a href="/admin/profile"
-            class="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-            <i class="fa-regular fa-circle-user w-4 text-center text-slate-400"></i>
-            My Profile
-          </a>
+                <!-- Menu Items -->
+                <div class="py-1.5">
+                  <a href="/admin/profile"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+                    <i class="fa-regular fa-circle-user w-4 text-center text-slate-400"></i>
+                    My Profile
+                  </a>
 
-          <!-- 2FA Toggle — label and action change based on current state -->
-          <button type="button" id="btn-header-2fa"
-            class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-            <i class="fa-solid fa-shield-halved w-4 text-center text-slate-400"></i>
-            <span id="btn-header-2fa-label">Two-Factor Auth</span>
-          </button>
+                  <!-- 2FA Toggle — label and action change based on current state -->
+                  <button type="button" id="btn-header-2fa"
+                    class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-shield-halved w-4 text-center text-slate-400"></i>
+                    <span id="btn-header-2fa-label">Two-Factor Auth</span>
+                  </button>
 
-          <button type="button" onclick="openChangePasswordModal()"
-            class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-            <i class="fa-solid fa-key w-4 text-center text-slate-400"></i>
-            Change Password
-          </button>
-        </div>
+                  <button type="button" onclick="openChangePasswordModal()"
+                    class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-key w-4 text-center text-slate-400"></i>
+                    Change Password
+                  </button>
+                </div>
 
-        <!-- Logout -->
-        <div class="border-t border-slate-100 py-1.5">
-          <button type="button" id="header-logout-btn"
-            class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 transition">
-            <i class="fa-solid fa-right-from-bracket w-4 text-center text-rose-500"></i>
-            Sign Out
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+                <!-- Logout -->
+                <div class="border-t border-slate-100 py-1.5">
+                  <button type="button" id="header-logout-btn"
+                    class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 transition">
+                    <i class="fa-solid fa-right-from-bracket w-4 text-center text-rose-500"></i>
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 </header>
 
 
@@ -820,7 +831,7 @@
 
     // Global Search Debounce Handler
     let searchDebounceTimer = null;
-    $('#global-search-input').on('input', function() {
+    $('#global-search-input').on('input', function () {
       const q = $(this).val().trim();
       clearTimeout(searchDebounceTimer);
       if (q.length < 2) {
@@ -828,7 +839,7 @@
         return;
       }
 
-      searchDebounceTimer = setTimeout(async function() {
+      searchDebounceTimer = setTimeout(async function () {
         try {
           const res = await axios.get('/admin/global-search', { params: { q: q } });
           const groups = res.data.groups || {};
@@ -866,14 +877,14 @@
 
           $('#global-search-content').html(html);
           $('#global-search-results').removeClass('hidden');
-        } catch(err) {
+        } catch (err) {
           console.error('Search error:', err);
         }
       }, 250);
     });
 
     // Keyboard Shortcuts
-    $(document).on('keydown', function(e) {
+    $(document).on('keydown', function (e) {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         $('#global-search-input').focus();
