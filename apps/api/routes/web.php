@@ -180,6 +180,7 @@ Route::prefix('admin')->middleware(['admin.auth'])->group(function () {
 
     // Team — Developers & Performance
     Route::get('/team', [TeamController::class, 'index']);
+    Route::get('/team-performance', [TeamController::class, 'performance']);
     Route::get('/team/{user}', [TeamController::class, 'show']);
     Route::get('/team-performance/data', [TeamController::class, 'performanceData']);
 

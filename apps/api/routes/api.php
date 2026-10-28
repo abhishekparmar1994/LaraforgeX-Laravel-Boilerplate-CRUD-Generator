@@ -6,6 +6,11 @@ use App\Domains\CrudGenerator\Http\Controllers\CrudGeneratorController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
+    // CRM Leads API route alias (supports web session & admin auth)
+    Route::middleware(['web', 'admin.auth'])->prefix('admin')->group(function (): void {
+        Route::get('/leads', [\App\Http\Controllers\Admin\LeadController::class, 'index']);
+    });
+
     // Web Installer API routes
     Route::prefix('install')->group(function (): void {
         Route::get('/requirements', [\App\Http\Controllers\InstallController::class, 'checkRequirements']);

@@ -1203,8 +1203,13 @@
     <main class="flex-1 min-w-0 flex flex-col overflow-x-hidden">
 
       <!-- Topbar (user dropdown, hamburger) -->
-      <div class="px-4 sm:px-5 lg:px-6 pt-5 mb-6">
+      <div class="px-4 sm:px-5 lg:px-6 pt-5 mb-3">
         @include('admin.includes.header')
+      </div>
+
+      <!-- Indian Solar Schemes Quick Links Toolbar -->
+      <div class="px-4 sm:px-5 lg:px-6 mb-3">
+        @include('admin.includes.solar_quick_links')
       </div>
 
       <!-- Page content -->

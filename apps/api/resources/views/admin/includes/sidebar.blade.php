@@ -7,14 +7,15 @@
     <div class="flex items-center justify-between px-2">
       <a href="/admin/dashboard" class="flex items-center gap-2.5 min-w-0 group">
         <div id="sidebar-logo-container"
-          class="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white font-display font-extrabold text-base shadow-md shrink-0 overflow-hidden group-hover:scale-105 transition-transform">
-          <i class="fa-solid fa-layer-group text-sm"></i>
+          class="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-amber-600 flex items-center justify-center text-white font-display font-extrabold text-base shadow-md shrink-0 overflow-hidden group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-solar-panel text-sm"></i>
         </div>
         <div class="min-w-0">
           <span id="sidebar-app-name"
-            class="logo-title-span font-display font-bold text-base text-slate-900 tracking-tight truncate block">WebForge<span
-              class="text-brand-600"> CRM</span></span>
-          <span class="text-[10px] font-semibold text-slate-400 block -mt-1 tracking-wider uppercase">Agency OS</span>
+            class="logo-title-span font-display font-bold text-base text-slate-900 tracking-tight truncate block">SolarPulse<span
+              class="text-amber-500"> CRM</span></span>
+          <span class="text-[10px] font-semibold text-slate-400 block -mt-1 tracking-wider uppercase">Solar EPC &
+            Rooftop OS</span>
         </div>
       </a>
       <button type="button"
@@ -55,7 +56,18 @@
       </div>
 
       <!-- ── CRM MODULES ────────────────────── -->
-      <p class="px-3 pt-4 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">CRM & Pipeline</p>
+      <p class="px-3 pt-4 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">CRM Lead Management</p>
+
+      <!-- Team Performance -->
+      <div class="relative group sidebar-group">
+        <a href="/admin/team-performance"
+          class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
+                  {{ request()->is('admin/team-performance*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i
+            class="fa-solid fa-trophy w-4 text-center {{ request()->is('admin/team-performance*') ? 'text-amber-500' : 'text-slate-400' }}"></i>
+          <span>Team Performance</span>
+        </a>
+      </div>
 
       <!-- Leads -->
       <div class="relative group sidebar-group">
@@ -63,8 +75,8 @@
           class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
                   {{ request()->is('admin/leads') && !request()->is('admin/leads/kanban') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i
-            class="fa-solid fa-filter w-4 text-center {{ request()->is('admin/leads') && !request()->is('admin/leads/kanban') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-          <span>Leads</span>
+            class="fa-solid fa-solar-panel w-4 text-center {{ request()->is('admin/leads') && !request()->is('admin/leads/kanban') ? 'text-amber-500' : 'text-slate-400' }}"></i>
+          <span>Solar Leads</span>
         </a>
       </div>
 
@@ -75,7 +87,18 @@
                   {{ request()->is('admin/leads/kanban*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
           <i
             class="fa-solid fa-table-columns w-4 text-center {{ request()->is('admin/leads/kanban*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-          <span>Sales Pipeline</span>
+          <span>EPC Solar Pipeline</span>
+        </a>
+      </div>
+
+      <!-- Follow-ups -->
+      <div class="relative group sidebar-group">
+        <a href="/admin/followups"
+          class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
+                  {{ request()->is('admin/followups*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+          <i
+            class="fa-solid fa-phone-volume w-4 text-center {{ request()->is('admin/followups*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
+          <span>Follow-ups</span>
         </a>
       </div>
 

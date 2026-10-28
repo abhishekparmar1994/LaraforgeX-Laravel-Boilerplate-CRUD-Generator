@@ -60,13 +60,21 @@ class FollowUpController extends Controller
             $query->where('assigned_to_user_id', $request->developer_id);
         }
 
-        $followups = $query->paginate(20);
+        $followups = $query->paginate(24);
+        $counts = [
+            'all' => FollowUp::count(),
+            'overdue' => FollowUp::where('scheduled_at', '<', Carbon::now()->startOfDay())->where('status', 'scheduled')->count(),
+            'today' => FollowUp::whereDate('scheduled_at', Carbon::today())->count(),
+            'upcoming' => FollowUp::where('scheduled_at', '>', Carbon::now()->endOfDay())->where('status', 'scheduled')->count(),
+            'completed' => FollowUp::where('status', 'completed')->count(),
+            'cancelled' => FollowUp::where('status', 'cancelled')->count(),
+        ];
         $developers = User::all();
         $leads = Lead::orderBy('company_name')->get();
         $clients = Client::orderBy('name')->get();
         $contacts = Contact::orderBy('first_name')->get();
 
-        return view('admin.followups.index', compact('followups', 'developers', 'leads', 'clients', 'contacts'));
+        return view('admin.followups.index', compact('followups', 'counts', 'developers', 'leads', 'clients', 'contacts'));
     }
 
     /**

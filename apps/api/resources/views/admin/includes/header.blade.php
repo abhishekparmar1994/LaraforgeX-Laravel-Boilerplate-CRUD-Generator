@@ -18,9 +18,9 @@
   <div class="flex-1 max-w-md relative hidden sm:block">
     <div class="relative">
       <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-      <input type="text" id="global-search-input" placeholder="Search leads, clients, projects, websites, tasks... (Ctrl+K)"
+      <input type="text" id="global-search-input" placeholder="Search customers, leads, projects, invoices... (Ctrl+K)"
         class="w-full bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition shadow-2xs">
-      <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] bg-slate-200 text-slate-500 font-mono px-1.5 py-0.5 rounded">/</span>
+      <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] bg-slate-200 text-slate-500 font-mono px-1.5 py-0.5 rounded">Ctrl K</span>
     </div>
 
     <!-- Search Results Dropdown -->
@@ -32,12 +32,20 @@
   <!-- Right: notification + quick actions + user dropdown -->
   <div class="flex items-center gap-2.5 shrink-0">
 
+    <!-- Money Action Button (Solar Payment / Invoice Collection) -->
+    <a href="/admin/clients"
+      class="h-9 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-emerald-600/20 transition cursor-pointer"
+      title="Record Payment / Collection">
+      <i class="fa-solid fa-money-bill-wave text-xs"></i>
+      <span class="hidden sm:inline">Money</span>
+    </a>
+
     <!-- Quick Action Button -->
     <div class="relative" id="quick-add-wrapper">
       <button id="quick-add-toggle"
-        class="h-9 px-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs flex items-center gap-2 shadow-sm shadow-brand-600/20 transition cursor-pointer"
+        class="h-9 w-9 sm:w-auto sm:px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm shadow-emerald-600/20 transition cursor-pointer"
         onclick="$('#quick-add-dropdown').toggleClass('hidden')">
-        <i class="fa-solid fa-plus text-[11px]"></i>
+        <i class="fa-solid fa-plus text-[12px]"></i>
         <span class="hidden md:inline">Quick Add</span>
       </button>
 

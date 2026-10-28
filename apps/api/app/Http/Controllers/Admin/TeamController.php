@@ -6,6 +6,8 @@ use App\Domains\User\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Lead;
+use App\Models\FollowUp;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -79,6 +81,37 @@ class TeamController extends Controller
             ->get();
 
         return view('admin.team.show', compact('user', 'assignedProjects', 'activeTasks', 'completedTasks'));
+    }
+
+    /**
+     * Purpose: Render Solar Team Performance Leaderboard ranked by conversions.
+     * Parameters: Request $request
+     * Return: View
+     */
+    public function performance(Request $request): View
+    {
+        $users = User::all()->map(function ($user) {
+            $leadsCount = Lead::where('assigned_to_user_id', $user->id)->count();
+            $wonCount = Lead::where('assigned_to_user_id', $user->id)->where('status', 'won')->count();
+            $lostCount = Lead::where('assigned_to_user_id', $user->id)->where('status', 'lost')->count();
+            $activeCount = Lead::where('assigned_to_user_id', $user->id)->whereNotIn('status', ['won', 'lost'])->count();
+            $activitiesCount = FollowUp::where('assigned_to_user_id', $user->id)->count();
+            $pipelineVal = (float) Lead::where('assigned_to_user_id', $user->id)->sum('estimated_budget');
+            $conversionRate = $leadsCount > 0 ? round(($wonCount / $leadsCount) * 100, 1) : 0;
+
+            $user->stats = [
+                'leads' => $leadsCount,
+                'active' => $activeCount,
+                'won' => $wonCount,
+                'lost' => $lostCount,
+                'rate' => $conversionRate,
+                'activities' => $activitiesCount,
+                'pipeline_value' => $pipelineVal,
+            ];
+            return $user;
+        })->sortByDesc(fn($u) => $u->stats['won'] * 100 + $u->stats['rate'])->values();
+
+        return view('admin.team.performance', compact('users'));
     }
 
     /**

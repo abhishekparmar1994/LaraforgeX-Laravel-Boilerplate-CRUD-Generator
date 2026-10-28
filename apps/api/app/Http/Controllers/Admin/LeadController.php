@@ -6,6 +6,7 @@ use App\Actions\ConvertLeadToClientAction;
 use App\Actions\LogActivityAction;
 use App\Domains\User\Models\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreLeadRequest;
 use App\Models\Lead;
 use App\Services\LeadImportService;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,20 +35,72 @@ class LeadController extends Controller
     }
 
     /**
-     * Display the leads list with advanced filters and pagination.
+     * Purpose: Display the leads list with advanced filters or return paginated JSON for AJAX DataTable.
+     * Parameters: Request $request
+     * Return: View|JsonResponse
+     * Side Effects: Executes database read queries.
      */
-    public function index(Request $request): View
+    public function index(Request $request): View|JsonResponse
+    {
+        $query = $this->buildLeadListQuery($request);
+        $perPage = (int) $request->get('per_page', 10);
+        $perPage = ($perPage < 5 || $perPage > 500) ? 10 : $perPage;
+
+        $leads = $query->paginate($perPage)->withQueryString();
+
+        if ($request->get('format') === 'json' || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'data' => $leads->items(),
+                'pagination' => [
+                    'total' => $leads->total(),
+                    'per_page' => $leads->perPage(),
+                    'current_page' => $leads->currentPage(),
+                    'last_page' => $leads->lastPage(),
+                    'from' => $leads->firstItem(),
+                    'to' => $leads->lastItem(),
+                ],
+            ]);
+        }
+
+        $developers = User::all();
+        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
+        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
+        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
+
+        return view('admin.leads.index', compact('leads', 'developers', 'cities', 'areas', 'industries'));
+    }
+
+    /**
+     * Purpose: Construct the base query with eager loads, search filters, and sorting.
+     * Parameters: Request $request
+     * Return: Builder
+     */
+    private function buildLeadListQuery(Request $request): Builder
     {
         $query = Lead::with('assignedDeveloper');
+        $this->applyLeadSearchFilters($query, $request);
+        $this->applyLeadCategoryFilters($query, $request);
+        $this->applyLeadSorting($query, $request);
 
-        // Multi-field search
+        return $query;
+    }
+
+    /**
+     * Purpose: Apply free-text multi-field search and location filters to the query.
+     * Parameters: Builder $query, Request $request
+     * Return: void
+     */
+    private function applyLeadSearchFilters(Builder $query, Request $request): void
+    {
         if ($request->filled('search')) {
-            $s = trim($request->search);
-            $query->where(function ($q) use ($s) {
+            $s = trim((string) $request->search);
+            $query->where(function (Builder $q) use ($s) {
                 $q->where('company_name', 'like', "%{$s}%")
                     ->orWhere('contact_person', 'like', "%{$s}%")
                     ->orWhere('email', 'like', "%{$s}%")
                     ->orWhere('phone', 'like', "%{$s}%")
+                    ->orWhere('website', 'like', "%{$s}%")
                     ->orWhere('industry', 'like', "%{$s}%")
                     ->orWhere('location', 'like', "%{$s}%")
                     ->orWhere('area_locality', 'like', "%{$s}%")
@@ -55,91 +108,57 @@ class LeadController extends Controller
             });
         }
 
-        // Website Status filter (NO = Hot Leads, YES = Has Website)
+        if ($request->filled('city')) {
+            $city = trim((string) $request->city);
+            $query->where(fn(Builder $q) => $q->where('location', 'like', "%{$city}%")->orWhere('area_locality', 'like', "%{$city}%")->orWhere('full_address', 'like', "%{$city}%"));
+        }
+
+        if ($request->filled('area')) {
+            $area = trim((string) $request->area);
+            $query->where(fn(Builder $q) => $q->where('area_locality', 'like', "%{$area}%")->orWhere('location', 'like', "%{$area}%")->orWhere('full_address', 'like', "%{$area}%"));
+        }
+    }
+
+    /**
+     * Purpose: Apply categorical dropdown filters (website, industry, status, priority, etc.).
+     * Parameters: Builder $query, Request $request
+     * Return: void
+     */
+    private function applyLeadCategoryFilters(Builder $query, Request $request): void
+    {
         if ($request->filled('has_website')) {
-            $webStatus = strtoupper(trim($request->has_website));
+            $webStatus = strtoupper(trim((string) $request->has_website));
             if ($webStatus === 'NO') {
-                $query->where(function ($q) {
-                    $q->where('has_website', 'NO')
-                        ->orWhereNull('website')
-                        ->orWhere('website', '')
-                        ->orWhere('website', 'N/A')
-                        ->orWhere('website', 'None');
-                });
+                $query->where(fn(Builder $q) => $q->where('has_website', 'NO')->orWhereNull('website')->orWhere('website', '')->orWhere('website', 'N/A')->orWhere('website', 'None'));
             } elseif ($webStatus === 'YES') {
-                $query->where('has_website', 'YES')
-                    ->whereNotNull('website')
-                    ->where('website', '!=', '')
-                    ->where('website', '!=', 'N/A')
-                    ->where('website', '!=', 'None');
+                $query->where('has_website', 'YES')->whereNotNull('website')->where('website', '!=', '')->where('website', '!=', 'N/A')->where('website', '!=', 'None');
             }
         }
 
-        // City filter
-        if ($request->filled('city')) {
-            $city = trim($request->city);
-            $query->where(function ($q) use ($city) {
-                $q->where('location', 'like', "%{$city}%")
-                    ->orWhere('area_locality', 'like', "%{$city}%")
-                    ->orWhere('full_address', 'like', "%{$city}%");
-            });
-        }
+        if ($request->filled('industry')) $query->where('industry', $request->industry);
+        if ($request->filled('status')) $query->where('status', $request->status);
+        if ($request->filled('priority')) $query->where('priority', $request->priority);
+        if ($request->filled('source')) $query->where('lead_source', $request->source);
+        if ($request->filled('developer_id')) $query->where('assigned_to_user_id', $request->developer_id);
+    }
 
-        // Area / Locality filter
-        if ($request->filled('area')) {
-            $area = trim($request->area);
-            $query->where(function ($q) use ($area) {
-                $q->where('area_locality', 'like', "%{$area}%")
-                    ->orWhere('location', 'like', "%{$area}%")
-                    ->orWhere('full_address', 'like', "%{$area}%");
-            });
-        }
+    /**
+     * Purpose: Apply column ordering to the leads query.
+     * Parameters: Builder $query, Request $request
+     * Return: void
+     */
+    private function applyLeadSorting(Builder $query, Request $request): void
+    {
+        $sortBy = (string) $request->get('sort_by', 'created_at');
+        $sortDir = (string) $request->get('sort_dir', 'desc');
+        $allowed = ['company_name', 'has_website', 'industry', 'phone', 'location', 'area_locality', 'rating', 'created_at', 'status', 'priority'];
 
-        // Industry Category filter
-        if ($request->filled('industry')) {
-            $query->where('industry', $request->industry);
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->filled('priority')) {
-            $query->where('priority', $request->priority);
-        }
-
-        if ($request->filled('source')) {
-            $query->where('lead_source', $request->source);
-        }
-
-        if ($request->filled('developer_id')) {
-            $query->where('assigned_to_user_id', $request->developer_id);
-        }
-
-        // Sorting
-        $sortBy = $request->get('sort_by', 'created_at');
-        $sortDir = $request->get('sort_dir', 'desc');
-        $allowedSorts = ['company_name', 'has_website', 'industry', 'phone', 'location', 'area_locality', 'rating', 'created_at', 'status', 'priority'];
-        if (in_array($sortBy, $allowedSorts)) {
+        if (in_array($sortBy, $allowed, true)) {
             $query->orderBy($sortBy, $sortDir === 'asc' ? 'asc' : 'desc');
-        } else {
-            $query->latest();
+            return;
         }
 
-        $perPage = (int) $request->get('per_page', 25);
-        if ($perPage < 5 || $perPage > 500) {
-            $perPage = 25;
-        }
-
-        $leads = $query->paginate($perPage)->withQueryString();
-        $developers = User::all();
-
-        // Populate filter dropdowns
-        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
-        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
-        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
-
-        return view('admin.leads.index', compact('leads', 'developers', 'cities', 'areas', 'industries'));
+        $query->latest();
     }
 
     /**
@@ -153,13 +172,13 @@ class LeadController extends Controller
     public function kanban(Request $request): View|JsonResponse
     {
         $stages = [
-            'new' => 'New',
-            'contacted' => 'Contacted',
-            'qualified' => 'Qualified',
-            'proposal_sent' => 'Proposal Sent',
-            'negotiation' => 'Negotiation',
-            'won' => 'Won',
-            'lost' => 'Lost',
+            'new' => '1. New Solar Lead',
+            'contacted' => '2. Site Survey Scheduled',
+            'qualified' => '3. Feasibility Approved',
+            'proposal_sent' => '4. Solar Proposal Sent',
+            'negotiation' => '5. Subsidy / Net Metering',
+            'won' => '6. Commissioned (Won)',
+            'lost' => '7. Lost / Drop',
         ];
 
         $baseQuery = $this->buildKanbanBaseQuery($request);
@@ -216,6 +235,7 @@ class LeadController extends Controller
                     ->orWhere('contact_person', 'like', "%{$s}%")
                     ->orWhere('email', 'like', "%{$s}%")
                     ->orWhere('phone', 'like', "%{$s}%")
+                    ->orWhere('website', 'like', "%{$s}%")
                     ->orWhere('industry', 'like', "%{$s}%")
                     ->orWhere('location', 'like', "%{$s}%")
                     ->orWhere('area_locality', 'like', "%{$s}%")
@@ -311,42 +331,30 @@ class LeadController extends Controller
     }
 
     /**
-     * Store a new lead.
+     * Purpose: Store a new solar lead into the system.
+     * Parameters: StoreLeadRequest $request
+     * Return: RedirectResponse|JsonResponse
+     * Side Effects: Inserts new lead record and logs activity.
      */
-    public function store(Request $request): RedirectResponse|JsonResponse
+    public function store(StoreLeadRequest $request): RedirectResponse|JsonResponse
     {
-        $validated = $request->validate([
-            'company_name' => 'required|string|max:255',
-            'contact_person' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:50',
-            'whatsapp' => 'nullable|string|max:50',
-            'website' => 'nullable|string|max:255',
-            'industry' => 'nullable|string|max:100',
-            'lead_source' => 'required|string|max:50',
-            'location' => 'nullable|string|max:100',
-            'requirement' => 'nullable|string',
-            'estimated_budget' => 'nullable|numeric|min:0',
-            'priority' => 'required|in:low,medium,high,urgent',
-            'status' => 'required|in:new,contacted,qualified,proposal_sent,negotiation,won,lost',
-            'assigned_to_user_id' => 'nullable|exists:users,id',
-            'next_followup_date' => 'nullable|date',
-            'notes' => 'nullable|string',
-        ]);
-
-        $lead = Lead::create($validated);
+        $lead = Lead::create($request->validated());
 
         $this->activityLogger->execute(
             $lead,
             'note',
-            "New Lead created for '{$lead->company_name}' ({$lead->contact_person})."
+            "New Solar Lead registered: '{$lead->company_name}' ({$lead->contact_person})."
         );
 
         if ($request->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Lead created successfully', 'lead' => $lead]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Solar lead created successfully',
+                'lead' => $lead,
+            ]);
         }
 
-        return redirect()->back()->with('success', 'Lead created successfully!');
+        return redirect()->back()->with('success', 'Solar lead registered successfully!');
     }
 
     /**
