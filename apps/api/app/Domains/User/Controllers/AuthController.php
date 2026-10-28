@@ -59,6 +59,17 @@ class AuthController extends Controller
 
         $result = $action->execute($dto);
 
+        $cookie = cookie(
+            name: 'laraforgex_auth_token',
+            value: $result['token'],
+            minutes: 60 * 24 * 7,
+            path: '/',
+            domain: null,
+            secure: false,
+            httpOnly: false,
+            sameSite: 'lax'
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Logged in successfully.',
@@ -66,7 +77,7 @@ class AuthController extends Controller
                 'token' => $result['token'],
                 'user' => new UserResource($result['user']),
             ]
-        ]);
+        ])->withCookie($cookie);
     }
 
     /**
@@ -202,7 +213,7 @@ class AuthController extends Controller
 
         // Clear all 2FA fields from the user record
         $user->forceFill([
-            'two_factor_secret'       => null,
+            'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
         ])->save();
@@ -284,8 +295,8 @@ class AuthController extends Controller
     public function changePassword(Request $request): JsonResponse
     {
         $request->validate([
-            'current_password'      => ['required', 'string'],
-            'password'              => ['required', 'string', 'min:8', 'confirmed'],
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required', 'string'],
         ]);
 
@@ -322,7 +333,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => new UserResource($request->user()->load('roles'))
+            'data' => new UserResource($request->user()->load('roles'))
         ]);
     }
 }

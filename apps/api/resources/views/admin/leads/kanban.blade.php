@@ -2,6 +2,43 @@
 
 @section('title', 'WebForge CRM — Sales Pipeline Kanban')
 
+@push('styles')
+<style>
+  /* High-Performance Kanban Card Virtualization */
+  .kanban-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 140px;
+    contain: layout style;
+  }
+
+  /* Prevent nested elements from firing unnecessary dragenter/dragleave events */
+  .kanban-card * {
+    pointer-events: none;
+  }
+  .kanban-card a,
+  .kanban-card button {
+    pointer-events: auto;
+  }
+
+  /* Instant 60 FPS Drag Optimization: disable layout thrashing & transitions during active drag */
+  body.is-kanban-dragging * {
+    cursor: grabbing !important;
+  }
+  body.is-kanban-dragging .kanban-card {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* High performance drop-target highlight */
+  .kanban-column.drag-hover {
+    background-color: rgba(238, 242, 255, 0.8) !important;
+    border-color: #6366f1 !important;
+    outline: 2px dashed #6366f1;
+    outline-offset: -2px;
+  }
+</style>
+@endpush
+
 @section('breadcrumbs')
   <nav class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
     <a href="/admin/dashboard" class="hover:text-brand-600 transition">Dashboard</a>
@@ -21,7 +58,7 @@
       <div class="flex items-center gap-2.5">
         <h2 class="text-xl font-extrabold text-slate-900">Sales Pipeline Kanban</h2>
         @php
-          $totalCount = array_sum(array_map('count', $leadsByStage));
+          $totalCount = array_sum($stageCounts ?? array_map('count', $leadsByStage));
           $totalVal = array_sum($totalBudgetByStage);
         @endphp
         <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200">
@@ -46,7 +83,7 @@
   <!-- Filter & Search Control Center -->
   <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-xs">
 
-    <!-- Row 2: Filter Form -->
+    <!-- Filter Form -->
     <form method="GET" action="/admin/leads/kanban" id="kanbanFilterForm" class="space-y-3">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5">
         <!-- Search Bar -->
@@ -148,89 +185,39 @@
           <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-200/60">
             <div>
               <span class="font-extrabold text-xs text-slate-800">{{ $stageName }}</span>
-              <span class="text-[10px] font-bold text-slate-400 block mt-0.5">₹{{ number_format($totalBudgetByStage[$stageKey], 0) }}</span>
+              <span class="text-[10px] font-bold text-slate-400 block mt-0.5">₹{{ number_format($totalBudgetByStage[$stageKey] ?? 0, 0) }}</span>
             </div>
-            <span class="h-5 px-2 rounded-full bg-white text-slate-700 font-extrabold text-[10px] flex items-center justify-center border border-slate-200 shadow-2xs">
-              {{ count($leadsByStage[$stageKey]) }}
+            <span class="column-count-badge h-5 px-2 rounded-full bg-white text-slate-700 font-extrabold text-[10px] flex items-center justify-center border border-slate-200 shadow-2xs">
+              {{ $stageCounts[$stageKey] ?? count($leadsByStage[$stageKey]) }}
             </span>
           </div>
 
           <!-- Cards Drop Zone -->
           <div class="kanban-column flex-1 overflow-y-auto space-y-2.5 min-h-[150px] p-0.5" data-stage="{{ $stageKey }}">
-            @forelse($leadsByStage[$stageKey] as $lead)
-              @php
-                $isNoWeb = strtoupper($lead->has_website) === 'NO' || empty($lead->website) || $lead->website === 'N/A';
-              @endphp
-              <div class="kanban-card bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-xs hover:shadow-md transition cursor-grab active:cursor-grabbing group relative {{ $isNoWeb ? 'border-l-4 border-l-rose-500' : 'border-l-4 border-l-emerald-500' }}"
-                   draggable="true" data-lead-id="{{ $lead->id }}">
-                
-                <!-- Top: Company & Priority -->
-                <div class="flex items-start justify-between gap-2">
-                  <a href="/admin/leads/{{ $lead->id }}" class="font-bold text-xs text-slate-900 group-hover:text-brand-600 transition leading-snug line-clamp-1" title="{{ $lead->company_name }}">
-                    {{ $lead->company_name }}
-                  </a>
-                  <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded shrink-0 {{ $lead->priority === 'urgent' ? 'bg-rose-100 text-rose-700' : ($lead->priority === 'high' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600') }}">
-                    {{ $lead->priority }}
-                  </span>
+            <div class="kanban-cards-wrapper space-y-2.5">
+              @forelse($leadsByStage[$stageKey] as $lead)
+                @include('admin.leads.partials.kanban-card', ['lead' => $lead])
+              @empty
+                <div class="empty-state-placeholder h-24 flex items-center justify-center text-center text-[11px] text-slate-400 italic">
+                  Drop leads here
                 </div>
+              @endforelse
+            </div>
 
-                <!-- Sub-info: Industry & Locality -->
-                <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
-                  <span class="truncate max-w-[150px] font-medium text-slate-600">{{ $lead->industry ?? 'General' }}</span>
-                  @if($lead->rating && $lead->rating !== 'N/A')
-                    <span class="font-bold text-amber-600"><i class="fa-solid fa-star text-[8px]"></i> {{ $lead->rating }}</span>
-                  @endif
-                </div>
-
-                <!-- Website Status Indicator -->
-                <div class="mt-2 flex items-center justify-between">
-                  @if($isNoWeb)
-                    <span class="inline-flex items-center gap-1 text-[9px] font-extrabold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
-                      <span class="w-1 h-1 rounded-full bg-rose-500"></span> NO Website (Hot Lead)
-                    </span>
-                  @else
-                    <span class="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                      <span class="w-1 h-1 rounded-full bg-emerald-500"></span> Has Website
-                    </span>
-                  @endif
-                  @if($lead->area_locality)
-                    <span class="text-[9px] text-slate-400 truncate max-w-[100px]">{{ $lead->area_locality }}</span>
-                  @endif
-                </div>
-
-                <!-- Value & Pipeline Days -->
-                <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
-                  <span class="font-extrabold text-xs text-emerald-600">₹{{ number_format($lead->estimated_budget, 0) }}</span>
-                  <span class="text-[10px] text-slate-400 font-medium">
-                    <i class="fa-regular fa-clock text-[9px]"></i> {{ $lead->days_in_pipeline }}d in pipe
-                  </span>
-                </div>
-
-                <!-- Footer: Dev Avatar & Follow-up -->
-                <div class="flex items-center justify-between mt-2 text-[10px] text-slate-400">
-                  <div class="flex items-center gap-1.5">
-                    @if($lead->assignedDeveloper)
-                      <span class="h-5 w-5 rounded-full bg-brand-50 text-brand-600 border border-brand-200 flex items-center justify-center font-bold text-[9px]" title="{{ $lead->assignedDeveloper->name }}">
-                        {{ substr($lead->assignedDeveloper->name, 0, 1) }}
-                      </span>
-                      <span class="truncate max-w-[80px] font-semibold text-slate-700">{{ $lead->assignedDeveloper->name }}</span>
-                    @else
-                      <span class="italic text-slate-300">Unassigned</span>
-                    @endif
-                  </div>
-                  @if($lead->phone && $lead->phone !== 'N/A')
-                    <a href="tel:{{ $lead->phone }}" class="text-[10px] font-bold text-slate-700 hover:text-brand-600" title="{{ $lead->phone }}">
-                      <i class="fa-solid fa-phone text-[8px] text-slate-400"></i> {{ substr($lead->phone, -10) }}
-                    </a>
-                  @endif
-                </div>
-
+            @php
+              $stgTotal = $stageCounts[$stageKey] ?? count($leadsByStage[$stageKey]);
+              $stgRendered = count($leadsByStage[$stageKey]);
+            @endphp
+            @if($stgTotal > $stgRendered)
+              <div class="load-more-box pt-2 pb-1 text-center" id="load-box-{{ $stageKey }}">
+                <button type="button" onclick="loadMoreLeads('{{ $stageKey }}')"
+                        class="w-full py-1.5 px-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-[11px] font-bold text-slate-600 hover:text-brand-600 transition shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer">
+                  <i class="fa-solid fa-angles-down text-[9px]"></i>
+                  <span>Load More (+{{ min(35, $stgTotal - $stgRendered) }})</span>
+                  <span class="text-[9px] text-slate-400 font-semibold" id="rem-badge-{{ $stageKey }}">({{ $stgTotal - $stgRendered }} left)</span>
+                </button>
               </div>
-            @empty
-              <div class="h-24 flex items-center justify-center text-center text-[11px] text-slate-400 italic">
-                Drop leads here
-              </div>
-            @endforelse
+            @endif
           </div>
 
         </div>
@@ -248,96 +235,75 @@
           <i class="fa-solid fa-file-excel"></i>
         </span>
         <div>
-          <h3 class="font-extrabold text-sm text-slate-900">Import Leads from Excel / CSV</h3>
-          <p class="text-[11px] text-slate-400 font-medium">Automatic deduplication & lead qualification</p>
+          <h3 class="font-bold text-slate-800 text-sm">Import Leads from Excel/CSV</h3>
+          <p class="text-[11px] text-slate-400">Upload your lead spreadsheet to batch import.</p>
         </div>
       </div>
-      <button onclick="$('#modal-import-leads').addClass('hidden')" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+      <button onclick="$('#modal-import-leads').addClass('hidden')" class="text-slate-400 hover:text-slate-600 text-xs">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
 
-    <form action="/admin/leads/import" method="POST" enctype="multipart/form-data" class="space-y-3.5">
+    <form action="/admin/leads/import" method="POST" enctype="multipart/form-data" class="space-y-3">
       @csrf
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1.5">Select Excel (.xlsx) or CSV File</label>
-        <input type="file" name="file" accept=".xlsx,.csv,.txt" required
-          class="w-full text-xs font-semibold text-slate-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer bg-slate-50 border border-slate-200 rounded-2xl p-2">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">Import Tag / User</label>
-        <input type="text" name="imported_by" value="{{ auth()->user()?->name ?? 'Excel Import' }}"
-          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-      </div>
-
-      <div class="p-3 bg-slate-50 border border-slate-200/70 rounded-2xl space-y-1">
-        <div class="flex items-center gap-1.5 text-slate-700 font-bold text-xs">
-          <i class="fa-solid fa-shield-halved text-emerald-600"></i> Smart Duplicate Protection
-        </div>
-        <p class="text-[11px] text-slate-500 leading-relaxed">
-          Leads with existing phone numbers or matching company names in the same location are automatically skipped to keep your database 100% clean.
-        </p>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Select File (.xlsx, .csv)</label>
+        <input type="file" name="file" accept=".xlsx,.csv" required
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100">
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-        <button type="button" onclick="closeImportModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition">Cancel</button>
+        <button type="button" onclick="$('#modal-import-leads').addClass('hidden')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition">Cancel</button>
         <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer">
-          <i class="fa-solid fa-upload mr-1"></i> Start Import
+          Import Now
         </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Modal: Create New Lead -->
+<!-- Modal: Quick Create Lead -->
 <div id="modal-create-lead" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 hidden">
-  <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] overflow-y-auto">
+  <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
     <div class="flex items-center justify-between border-b border-slate-100 pb-3">
       <div class="flex items-center gap-2">
         <span class="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-sm">
           <i class="fa-solid fa-user-plus"></i>
         </span>
         <div>
-          <h3 class="font-extrabold text-sm text-slate-900">Add New Business Lead</h3>
-          <p class="text-[11px] text-slate-400 font-medium">Create and qualify a prospective client</p>
+          <h3 class="font-bold text-slate-800 text-sm">Create New Pipeline Lead</h3>
+          <p class="text-[11px] text-slate-400">Add a prospective client to your sales funnel.</p>
         </div>
       </div>
-      <button type="button" onclick="closeCreateLeadModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+      <button onclick="closeCreateLeadModal()" class="text-slate-400 hover:text-slate-600 text-xs">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
 
     <form action="/admin/leads" method="POST" class="space-y-3">
       @csrf
-      <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">Company / Business Name *</label>
-        <input type="text" name="company_name" required placeholder="e.g. Acme Solar Solutions"
-          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-      </div>
-
       <div class="grid grid-cols-2 gap-2.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Company / Business Name *</label>
+          <input type="text" name="company_name" required placeholder="e.g. Apex Technologies"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
+        </div>
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Contact Person *</label>
-          <input type="text" name="contact_person" required placeholder="Full Name"
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
-          <input type="text" name="phone" placeholder="e.g. 098765 43210"
+          <input type="text" name="contact_person" required placeholder="e.g. John Doe"
             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-2.5">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
-          <input type="email" name="email" placeholder="contact@example.com"
+          <label class="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
+          <input type="text" name="phone" placeholder="e.g. +91 98765 43210"
             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Existing Website URL</label>
-          <input type="text" name="website" placeholder="https://example.com"
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+          <input type="email" name="email" placeholder="e.g. john@apex.com"
             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
         </div>
       </div>
@@ -345,7 +311,7 @@
       <div class="grid grid-cols-2 gap-2.5">
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Industry / Category</label>
-          <input type="text" name="industry" placeholder="e.g. Solar Energy"
+          <input type="text" name="industry" placeholder="e.g. Solar, Real Estate, Dental"
             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
         </div>
         <div>
@@ -418,101 +384,182 @@ function closeCreateLeadModal() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const cards = document.querySelectorAll('.kanban-card');
   const columns = document.querySelectorAll('.kanban-column');
 
   function updateColumnCounters() {
     columns.forEach(col => {
-      const stage = col.dataset.stage;
-      const count = col.querySelectorAll('.kanban-card').length;
-      const counterEl = col.closest('.shrink-0')?.querySelector('.rounded-full');
-      if (counterEl) counterEl.textContent = count;
+      const cardsWrapper = col.querySelector('.kanban-cards-wrapper') || col;
+      const count = cardsWrapper.querySelectorAll('.kanban-card').length;
+      const badge = col.closest('.shrink-0')?.querySelector('.column-count-badge');
+      if (badge) badge.textContent = count;
     });
   }
 
-  cards.forEach(card => {
-    card.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text/plain', card.dataset.leadId);
-      card.classList.add('opacity-50', 'scale-95');
-    });
-    card.addEventListener('dragend', () => {
-      card.classList.remove('opacity-50', 'scale-95');
+  // Event Delegation for Drag Start
+  document.addEventListener('dragstart', (e) => {
+    const card = e.target.closest('.kanban-card');
+    if (!card) return;
+
+    e.dataTransfer.setData('text/plain', card.dataset.leadId);
+    e.dataTransfer.effectAllowed = 'move';
+    document.body.classList.add('is-kanban-dragging');
+
+    // Paint drag ghost before dimming card
+    requestAnimationFrame(() => {
+      card.classList.add('opacity-40', 'scale-95');
     });
   });
 
+  // Event Delegation for Drag End
+  document.addEventListener('dragend', (e) => {
+    const card = e.target.closest('.kanban-card');
+    if (card) {
+      card.classList.remove('opacity-40', 'scale-95');
+    }
+    document.body.classList.remove('is-kanban-dragging');
+    document.querySelectorAll('.kanban-column').forEach(c => c.classList.remove('drag-hover'));
+  });
+
+  // Setup column drag targets
   columns.forEach(col => {
     col.addEventListener('dragover', (e) => {
       e.preventDefault();
-      col.classList.add('bg-brand-50/50', 'border-brand-300');
+      e.dataTransfer.dropEffect = 'move';
     });
-    col.addEventListener('dragleave', () => {
-      col.classList.remove('bg-brand-50/50', 'border-brand-300');
+
+    col.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      col.classList.add('drag-hover');
     });
+
+    col.addEventListener('dragleave', (e) => {
+      if (!col.contains(e.relatedTarget)) {
+        col.classList.remove('drag-hover');
+      }
+    });
+
     col.addEventListener('drop', (e) => {
       e.preventDefault();
-      col.classList.remove('bg-brand-50/50', 'border-brand-300');
+      col.classList.remove('drag-hover');
+
       const leadId = e.dataTransfer.getData('text/plain');
       const newStage = col.dataset.stage;
       const card = document.querySelector(`[data-lead-id="${leadId}"]`);
 
-      if (card && col) {
-        const prevColumn = card.parentElement;
-        col.appendChild(card);
-        updateColumnCounters();
+      if (!card || !col) return;
 
-        // 1. Sleek Card Loading State Overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'card-loading-overlay absolute inset-0 bg-white/85 backdrop-blur-[1px] rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-brand-600 shadow-sm z-30 transition-all animate-pulse';
-        overlay.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-brand-600 text-sm"></i><span class="text-[11px] font-extrabold tracking-tight">Updating Stage...</span>';
-        card.classList.add('relative', 'ring-2', 'ring-brand-500/40');
-        card.appendChild(overlay);
+      const cardsWrapper = col.querySelector('.kanban-cards-wrapper') || col;
+      const prevWrapper = card.parentElement;
+      const emptyState = cardsWrapper.querySelector('.empty-state-placeholder');
+      if (emptyState) emptyState.remove();
 
-        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
-        const url = "{{ url('/admin/leads') }}/" + leadId + "/stage";
+      // Immediate optimistic update
+      cardsWrapper.prepend(card);
+      updateColumnCounters();
 
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': token
-          },
-          body: JSON.stringify({ status: newStage, stage: newStage })
-        }).then(r => r.json()).then(data => {
-          overlay.remove();
-          card.classList.remove('ring-2', 'ring-brand-500/40');
+      // Lightweight saving feedback overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'card-loading-overlay absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold text-brand-600 z-30 animate-pulse';
+      overlay.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-brand-600 text-xs"></i><span class="text-[10px] font-bold">Saving...</span>';
+      card.classList.add('relative', 'ring-2', 'ring-brand-500/40');
+      card.appendChild(overlay);
 
-          if (data.success) {
-            // Success flash indicator
-            card.classList.add('ring-2', 'ring-emerald-500');
-            setTimeout(() => card.classList.remove('ring-2', 'ring-emerald-500'), 700);
+      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+      const url = '/admin/leads/' + leadId + '/stage';
 
-            const stageLabel = col.closest('.shrink-0')?.querySelector('.font-extrabold')?.textContent?.trim() || newStage;
-            const companyTitle = card.querySelector('a')?.textContent?.trim() || 'Lead';
-            if (typeof window.showToast === 'function') {
-              window.showToast('success', `${companyTitle} moved to "${stageLabel}"`);
-            }
-          } else {
-            // Revert on error
-            if (prevColumn) prevColumn.appendChild(card);
-            updateColumnCounters();
-            if (typeof window.showToast === 'function') {
-              window.showToast('error', data.message || 'Failed to update stage');
-            }
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': token
+        },
+        body: JSON.stringify({ status: newStage, stage: newStage })
+      })
+      .then(r => r.json())
+      .then(data => {
+        overlay.remove();
+        card.classList.remove('ring-2', 'ring-brand-500/40');
+
+        if (data.success) {
+          card.classList.add('ring-2', 'ring-emerald-500');
+          setTimeout(() => card.classList.remove('ring-2', 'ring-emerald-500'), 600);
+
+          const stageLabel = col.closest('.shrink-0')?.querySelector('.font-extrabold')?.textContent?.trim() || newStage;
+          const companyTitle = card.querySelector('a')?.textContent?.trim() || 'Lead';
+          if (typeof window.showToast === 'function') {
+            window.showToast('success', `${companyTitle} moved to "${stageLabel}"`);
           }
-        }).catch(err => {
-          console.error('Error moving lead stage:', err);
-          overlay.remove();
-          card.classList.remove('ring-2', 'ring-brand-500/40');
-          if (prevColumn) prevColumn.appendChild(card);
+        } else {
+          if (prevWrapper) prevWrapper.appendChild(card);
           updateColumnCounters();
           if (typeof window.showToast === 'function') {
-            window.showToast('error', 'Network error moving lead');
+            window.showToast('error', data.message || 'Failed to update stage');
           }
-        });
-      }
+        }
+      })
+      .catch(err => {
+        overlay.remove();
+        card.classList.remove('ring-2', 'ring-brand-500/40');
+        if (prevWrapper) prevWrapper.appendChild(card);
+        updateColumnCounters();
+        if (typeof window.showToast === 'function') {
+          window.showToast('error', 'Network error moving lead');
+        }
+      });
     });
   });
 });
+
+// High-speed AJAX pagination per column
+const stageOffsets = {};
+
+window.loadMoreLeads = function(stage) {
+  const col = document.querySelector(`.kanban-column[data-stage="${stage}"]`);
+  if (!col) return;
+  const cardsWrapper = col.querySelector('.kanban-cards-wrapper') || col;
+  const currentCount = cardsWrapper.querySelectorAll('.kanban-card').length;
+  const offset = stageOffsets[stage] || currentCount;
+  const loadBox = document.getElementById(`load-box-${stage}`);
+  const btn = loadBox ? loadBox.querySelector('button') : null;
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i><span>Loading...</span>';
+  }
+
+  const form = document.getElementById('kanbanFilterForm');
+  const params = new URLSearchParams(form ? new FormData(form) : []);
+  params.set('stage', stage);
+  params.set('offset', offset);
+  params.set('limit', 35);
+
+  fetch(`/admin/leads/kanban?${params.toString()}`, {
+    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success && data.html) {
+      cardsWrapper.insertAdjacentHTML('beforeend', data.html);
+      stageOffsets[stage] = offset + data.loaded;
+      if (loadBox) {
+        if (data.has_more) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-angles-down text-[9px]"></i><span>Load More (+${Math.min(35, data.remaining)})</span><span class="text-[9px] text-slate-400 font-semibold">(${data.remaining} left)</span>`;
+        } else {
+          loadBox.remove();
+        }
+      }
+    } else {
+      if (loadBox) loadBox.remove();
+    }
+  })
+  .catch(() => {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-rotate-right text-xs"></i><span>Retry Loading</span>';
+    }
+  });
+};
 </script>
 @endsection

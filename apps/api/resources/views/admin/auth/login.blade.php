@@ -36,6 +36,22 @@
         </div>
 
         <!-- Login credentials form -->
+        <div id="login-error-container" class="hidden">
+          <div class="p-4 bg-rose-50 border border-rose-200/90 rounded-2xl flex items-start gap-3 shadow-xs animate-shake">
+            <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-sm">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </span>
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-rose-900 leading-tight">Authentication Failed</h4>
+              <p id="login-error-text" class="text-xs font-semibold text-rose-700 mt-1 leading-snug break-words"></p>
+              <ul id="login-error-list" class="hidden list-disc list-inside text-[11px] font-semibold text-rose-600 mt-1.5 space-y-0.5"></ul>
+            </div>
+            <button type="button" onclick="$('#login-error-container').slideUp(180)" class="text-rose-400 hover:text-rose-600 transition cursor-pointer text-xs p-1 -mr-1 -mt-1 border-0 bg-transparent">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+
         <form id="login-form" class="space-y-5">
           <div class="space-y-1.5">
             <label for="email" class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email
@@ -48,6 +64,10 @@
                 class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition placeholder-slate-400"
                 placeholder="admin@laraforgex.com">
             </div>
+            <p id="email-error-msg" class="hidden text-[11px] font-semibold text-rose-600 mt-1 flex items-center gap-1">
+              <i class="fa-solid fa-circle-exclamation text-[10px]"></i>
+              <span class="msg-content"></span>
+            </p>
           </div>
 
           <div class="space-y-1.5 password-container">
@@ -64,6 +84,10 @@
                 <i id="toggle-password-icon" class="fa-regular fa-eye text-sm"></i>
               </button>
             </div>
+            <p id="password-error-msg" class="hidden text-[11px] font-semibold text-rose-600 mt-1 flex items-center gap-1">
+              <i class="fa-solid fa-circle-exclamation text-[10px]"></i>
+              <span class="msg-content"></span>
+            </p>
           </div>
 
           <div class="flex items-center justify-between text-xs font-semibold">
@@ -109,45 +133,7 @@
     </div>
   </div>
 
-  <!-- Two-Factor Authentication Modal Challenge -->
-  <div id="modal-2fa" class="fixed inset-0 z-50 overflow-y-auto hidden">
-    <div class="flex items-center justify-center min-h-screen px-4">
-      <!-- Overlay -->
-      <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"></div>
-
-      <!-- Modal Box -->
-      <div class="relative bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5">
-        <div class="text-center space-y-2">
-          <div
-            class="h-12 w-12 rounded-full bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 text-xl mx-auto">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900">Two-Factor Authentication</h3>
-          <p class="text-xs text-slate-500 font-medium">Please enter the 6-digit verification code from Google
-            Authenticator.</p>
-        </div>
-
-        <form id="form-2fa" class="space-y-4">
-          <div class="space-y-1">
-            <input id="code-2fa" type="text" maxlength="6" pattern="[0-9]{6}" required
-              class="w-full text-center tracking-widest text-lg font-mono bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-brand-500 placeholder-slate-300 focus:placeholder-transparent"
-              placeholder="000000" autocomplete="one-time-code">
-          </div>
-
-          <div class="flex gap-3">
-            <button type="button" id="close-2fa"
-              class="w-1/2 py-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 text-xs font-semibold transition cursor-pointer">
-              Cancel
-            </button>
-            <button type="submit"
-              class="w-1/2 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition cursor-pointer border-0">
-              Verify & Confirm
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+  @include('admin.auth.partials.two-factor-modal')
 @endsection
 
 @section('scripts')
@@ -156,7 +142,11 @@
       let isMagicLinkMode = false;
       let tempToken = null;
       let tempUser = null;
+      let recaptchaEnabled = false;
 
+      /**
+       * Purpose: Toggle between standard password login and magic link modes.
+       */
       $('#toggle-login-mode').click(function () {
         isMagicLinkMode = !isMagicLinkMode;
         if (isMagicLinkMode) {
@@ -165,32 +155,29 @@
           $('#toggle-login-mode').text('Password');
           $('#login-subtitle').text('Request a passwordless login link.');
           $('button[type="submit"]').html('<i class="fa-solid fa-envelope mr-2"></i> Request Link');
-        } else {
-          $('.password-container').slideDown(200);
-          $('#password').prop('required', true);
-          $('#toggle-login-mode').text('Magic Link');
-          $('#login-subtitle').text('Sign in to your LaraforgeX core panel');
-          $('button[type="submit"]').html('<i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Access Dashboard');
-          $('#magic-link-block').slideUp(200);
+          return;
         }
+        $('.password-container').slideDown(200);
+        $('#password').prop('required', true);
+        $('#toggle-login-mode').text('Magic Link');
+        $('#login-subtitle').text('Sign in to your LaraforgeX core panel');
+        $('button[type="submit"]').html('<i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Access Dashboard');
+        $('#magic-link-block').slideUp(200);
       });
 
-      let recaptchaEnabled = false;
-
+      /**
+       * Purpose: Check if Google reCAPTCHA is enabled on the server and inject script.
+       * Side Effects: DOM modification, script injection.
+       */
       async function checkReCaptcha() {
         try {
           const res = await axios.get('/auth/captcha-config');
-          if (res.data.success && res.data.data.recaptcha_enabled) {
+          if (res.data?.success && res.data?.data?.recaptcha_enabled) {
             recaptchaEnabled = true;
             const siteKey = res.data.data.recaptcha_site_key;
             if (siteKey) {
               $('#recaptcha-container').html(`<div class="g-recaptcha" data-sitekey="${siteKey}"></div>`).removeClass('hidden');
-              $('<script>', {
-                src: 'https://www.google.com/recaptcha/api.js',
-                async: true,
-                defer: true
-              }).appendTo('head');
-
+              $('<script>', { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }).appendTo('head');
             }
           }
         } catch (e) {
@@ -198,100 +185,242 @@
         }
       }
 
-      checkReCaptcha();
+      /**
+       * Purpose: Highlight invalid fields and populate error list.
+       * Parameters: fieldErrors (object), mainMsg (string)
+       * Return: boolean (whether list items were added)
+       */
+      function renderFieldErrors(fieldErrors, mainMsg) {
+        const $list = $('#login-error-list').empty().addClass('hidden');
+        if (!fieldErrors || typeof fieldErrors !== 'object' || Array.isArray(fieldErrors)) {
+          $('#email, #password').addClass('border-rose-400 ring-2 ring-rose-500/20');
+          return false;
+        }
 
-      $('#login-form').submit(async function (e) {
+        let hasList = false;
+        for (const [field, errs] of Object.entries(fieldErrors)) {
+          const fieldMsg = Array.isArray(errs) ? errs[0] : errs;
+          if (fieldMsg && fieldMsg !== mainMsg) {
+            $list.append(`<li>${fieldMsg}</li>`);
+            hasList = true;
+          }
+          if (field === 'email') {
+            $('#email').addClass('border-rose-400 ring-2 ring-rose-500/20');
+            $('#email-error-msg').removeClass('hidden').find('.msg-content').text(fieldMsg);
+          }
+          if (field === 'password') {
+            $('#password').addClass('border-rose-400 ring-2 ring-rose-500/20');
+            $('#password-error-msg').removeClass('hidden').find('.msg-content').text(fieldMsg);
+          }
+        }
+        if (hasList) $list.removeClass('hidden');
+        return hasList;
+      }
+
+      /**
+       * Purpose: Display authentication/validation error in the alert card and trigger toast.
+       * Parameters: msg (string), fieldErrors (object)
+       * Side Effects: Updates DOM alert container, triggers animation, shows toast.
+       */
+      function showLoginError(msg, fieldErrors = {}) {
+        const displayMsg = msg || 'Invalid login credentials.';
+        $('#login-error-text').text(displayMsg);
+        renderFieldErrors(fieldErrors, displayMsg);
+
+        const $alert = $('#login-error-container');
+        $alert.removeClass('hidden').hide().slideDown(180);
+        $alert.find('> div').removeClass('animate-shake');
+        void $alert[0].offsetWidth;
+        $alert.find('> div').addClass('animate-shake');
+
+        if (typeof window.showToast === 'function') {
+          window.showToast('error', displayMsg, 'Authentication Failed');
+        }
+      }
+
+      /**
+       * Purpose: Clear active error styles and hide inline alert banner.
+       */
+      function clearLoginErrors() {
+        $('#login-error-container').slideUp(150);
+        $('#email, #password').removeClass('border-rose-400 ring-2 ring-rose-500/20');
+        $('#email-error-msg, #password-error-msg').addClass('hidden').find('.msg-content').text('');
+      }
+
+      /**
+       * Purpose: Safely extract error message and field errors from an Axios error object.
+       * Parameters: err (Error), fallbackMsg (string)
+       * Return: Object { msg: string, fieldErrors: object }
+       */
+      function extractErrorData(err, fallbackMsg) {
+        let msg = fallbackMsg;
+        let fieldErrors = {};
+        if (err.response?.data) {
+          msg = err.response.data.message || msg;
+          if (err.response.data.errors && typeof err.response.data.errors === 'object') {
+            fieldErrors = err.response.data.errors;
+          }
+        } else if (err.message) {
+          msg = err.message;
+        }
+        return { msg, fieldErrors };
+      }
+
+      /**
+       * Purpose: Handle standard password-based login submission.
+       * Parameters: $btn (jQuery), origBtnHtml (string), payload (object)
+       */
+      async function handlePasswordLoginSubmit($btn, origBtnHtml, payload) {
+        try {
+          const response = await axios.post('/auth/login', payload);
+          if (!response.data.success) {
+            $btn.prop('disabled', false).html(origBtnHtml);
+            showLoginError(response.data.message || 'Login failed.');
+            return;
+          }
+
+          const data = response.data.data;
+          if (data.user?.two_factor_enabled) {
+            $btn.prop('disabled', false).html(origBtnHtml);
+            tempToken = data.token;
+            tempUser = data.user;
+            $('#modal-2fa').removeClass('hidden');
+            $('#code-2fa').focus();
+            return;
+          }
+
+          $btn.html('<i class="fa-solid fa-check mr-2"></i> Verified! Redirecting...');
+          handleLoginSuccess(data);
+        } catch (err) {
+          $btn.prop('disabled', false).html(origBtnHtml);
+          if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+          const { msg, fieldErrors } = extractErrorData(err, 'Invalid login credentials.');
+          showLoginError(msg, fieldErrors);
+        }
+      }
+
+      /**
+       * Purpose: Handle passwordless magic link request.
+       * Parameters: $btn (jQuery), origBtnHtml (string), email (string), recaptchaToken (string)
+       */
+      async function handleMagicLinkSubmit($btn, origBtnHtml, email, recaptchaToken) {
+        try {
+          const res = await axios.post('/auth/magic-link', { email, 'g-recaptcha-response': recaptchaToken });
+          $btn.prop('disabled', false).html(origBtnHtml);
+          if (!res.data.success) {
+            showLoginError(res.data.message || 'Failed to generate link.');
+            return;
+          }
+          const magicLink = res.data.data.link;
+          const verifyUrl = `/api/v1/auth/magic-login${new URL(magicLink).search}`;
+          $('#magic-link-display').text(magicLink);
+          $('#magic-link-anchor').attr('href', '#').off('click').on('click', async function (e) {
+            e.preventDefault();
+            try {
+              const vRes = await axios.get(verifyUrl);
+              if (vRes.data.success) handleLoginSuccess(vRes.data.data);
+            } catch (err) {
+              const { msg } = extractErrorData(err, 'Magic link verification failed.');
+              showLoginError(msg);
+            }
+          });
+          $('#magic-link-block').slideDown(200);
+          showToast('success', 'Magic login link generated successfully!');
+        } catch (err) {
+          $btn.prop('disabled', false).html(origBtnHtml);
+          if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+          const { msg, fieldErrors } = extractErrorData(err, 'Failed to generate magic link.');
+          showLoginError(msg, fieldErrors);
+        }
+      }
+
+      /**
+       * Purpose: Handle session persistence and redirect upon verified login.
+       * Parameters: data (object) containing token and user
+       * Side Effects: Writes to localStorage, sets session cookie, updates axios headers, redirects page.
+       */
+      function handleLoginSuccess(data) {
+        try {
+          if (data.token) {
+            localStorage.setItem('laraforgex_auth_token', data.token);
+            document.cookie = `laraforgex_auth_token=${encodeURIComponent(data.token)}; path=/; max-age=86400; SameSite=Lax`;
+          }
+          if (data.user) {
+            localStorage.setItem('laraforgex_user', JSON.stringify(data.user));
+          }
+          if (window.axios && data.token) {
+            window.axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+          }
+        } catch (e) {
+          console.warn('Storage persistence warning:', e);
+        }
+
+        if (typeof window.showToast === 'function') {
+          window.showToast('success', 'Authentication verified! Redirecting to dashboard...');
+        }
+
+        setTimeout(() => {
+          window.location.replace('/admin/dashboard');
+        }, 300);
+      }
+
+      /**
+       * Purpose: Handle 2FA verification submission.
+       * Parameters: $btn (jQuery), origBtn (string), code (string)
+       */
+      async function handleTwoFactorSubmit($btn, origBtn, code) {
+        try {
+          const res = await axios.post('/auth/2fa/verify', { code }, {
+            headers: { 'Authorization': `Bearer ${tempToken}` }
+          });
+          if (res.data.success) {
+            handleLoginSuccess({ token: tempToken, user: tempUser });
+            return;
+          }
+          $btn.prop('disabled', false).html(origBtn);
+          showLoginError(res.data.message || '2FA Verification failed.');
+        } catch (err) {
+          $btn.prop('disabled', false).html(origBtn);
+          const { msg } = extractErrorData(err, 'Invalid 2FA code.');
+          showLoginError(msg);
+        }
+      }
+
+      // Live typing error clearers
+      $('#email, #password').on('input', function () {
+        $(this).removeClass('border-rose-400 ring-2 ring-rose-500/20');
+        if ($(this).attr('id') === 'email') $('#email-error-msg').addClass('hidden');
+        if ($(this).attr('id') === 'password') $('#password-error-msg').addClass('hidden');
+      });
+
+      // Submit handlers
+      $('#login-form').submit(function (e) {
         e.preventDefault();
+        clearLoginErrors();
 
+        const $btn = $(this).find('button[type="submit"]');
+        const origBtnHtml = $btn.html();
         const email = $('#email').val();
         const password = $('#password').val();
         const remember = $('#remember').is(':checked');
         const recaptchaToken = (recaptchaEnabled && typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : null;
 
+        $btn.prop('disabled', true).html('<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Signing in...');
+
         if (isMagicLinkMode) {
-          try {
-            const response = await axios.post('/auth/magic-link', {
-              email,
-              'g-recaptcha-response': recaptchaToken
-            });
-            if (response.data.success) {
-              const magicLink = response.data.data.link;
-              const parsedUrl = new URL(magicLink);
-              const localVerifyUrl = `/api/v1/auth/magic-login${parsedUrl.search}`;
-
-              $('#magic-link-display').text(magicLink);
-              $('#magic-link-anchor').attr('href', '#').off('click').on('click', async function (e) {
-                e.preventDefault();
-                try {
-                  const verifyResponse = await axios.get(localVerifyUrl);
-                  if (verifyResponse.data.success) {
-                    handleLoginSuccess(verifyResponse.data.data);
-                  }
-                } catch (err) {
-                  handleAjaxError(err);
-                }
-              });
-
-              $('#magic-link-block').slideDown(200);
-              showToast('success', 'Magic login link generated successfully!');
-            }
-          } catch (err) {
-            if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-            handleAjaxError(err);
-          }
+          handleMagicLinkSubmit($btn, origBtnHtml, email, recaptchaToken);
         } else {
-          try {
-            const response = await axios.post('/auth/login', {
-              email,
-              password,
-              remember,
-              'g-recaptcha-response': recaptchaToken
-            });
-            if (response.data.success) {
-              const data = response.data.data;
-
-              if (data.user.two_factor_enabled) {
-                tempToken = data.token;
-                tempUser = data.user;
-                $('#modal-2fa').removeClass('hidden');
-                $('#code-2fa').focus();
-              } else {
-                handleLoginSuccess(data);
-              }
-            }
-          } catch (err) {
-            if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-            handleAjaxError(err);
-          }
+          handlePasswordLoginSubmit($btn, origBtnHtml, { email, password, remember, 'g-recaptcha-response': recaptchaToken });
         }
       });
 
-      $('#form-2fa').submit(async function (e) {
+      $('#form-2fa').submit(function (e) {
         e.preventDefault();
         const code = $('#code-2fa').val();
-
-        try {
-          const response = await axios.post('/auth/2fa/verify', { code }, {
-            headers: {
-              'Authorization': `Bearer ${tempToken}`
-            }
-          });
-
-          if (response.data.success) {
-            localStorage.setItem('laraforgex_auth_token', tempToken);
-            localStorage.setItem('laraforgex_user', JSON.stringify(tempUser));
-            document.cookie = "laraforgex_auth_token=" + tempToken + "; path=/; max-age=86400; SameSite=Lax";
-            if (window.axios) {
-              window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + tempToken;
-            }
-            showToast('success', 'Two factor authenticated successfully!');
-            setTimeout(() => {
-              window.location.href = '/admin/dashboard';
-            }, 800);
-          }
-        } catch (err) {
-          handleAjaxError(err, '2FA authentication check failed. Invalid code.');
-        }
+        const $btn = $(this).find('button[type="submit"]');
+        const origBtn = $btn.html();
+        $btn.prop('disabled', true).html('<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Verifying...');
+        handleTwoFactorSubmit($btn, origBtn, code);
       });
 
       $('#close-2fa').click(function () {
@@ -300,19 +429,7 @@
         $('#code-2fa').val('');
       });
 
-      function handleLoginSuccess(data) {
-        localStorage.setItem('laraforgex_auth_token', data.token);
-        localStorage.setItem('laraforgex_user', JSON.stringify(data.user));
-        document.cookie = "laraforgex_auth_token=" + data.token + "; path=/; max-age=86400; SameSite=Lax";
-        if (window.axios) {
-          window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
-        }
-
-        showToast('success', 'Authentication verified! Redirecting...');
-        setTimeout(() => {
-          window.location.href = '/admin/dashboard';
-        }, 800);
-      }
+      checkReCaptcha();
     });
   </script>
 @endsection

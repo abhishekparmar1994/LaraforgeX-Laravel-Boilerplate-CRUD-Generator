@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Gate;
  * PermissionController
  *
  * Manages the direct CRUD lifecycle for Spatie permissions.
- * Permissions are decoupled from roles — they are assigned to roles
+ * Permissions are decoupled from roles - they are assigned to roles
  * via the RoleController::syncPermissions flow.
  *
  * Dependencies: Spatie\Permission\Models\Permission (via custom Permission model)

@@ -57,7 +57,7 @@ class AdminAuthMiddleware
             return false;
         }
 
-        Auth::guard('web')->setUser($accessToken->tokenable);
+        Auth::guard('web')->login($accessToken->tokenable);
         return true;
     }
 }

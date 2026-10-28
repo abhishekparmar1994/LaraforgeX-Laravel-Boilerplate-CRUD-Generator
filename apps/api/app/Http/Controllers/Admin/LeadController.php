@@ -8,6 +8,7 @@ use App\Domains\User\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Services\LeadImportService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -143,8 +144,13 @@ class LeadController extends Controller
 
     /**
      * Display the visual Kanban pipeline board with filters.
+     *
+     * @param Request $request Filter parameters and optional AJAX stage pagination
+     * @return View|JsonResponse Kanban board view or AJAX stage leads payload
+     * @throws \Throwable If rendering fails
+     * @sideeffects Reads lead and user records, executes aggregate queries
      */
-    public function kanban(Request $request): View
+    public function kanban(Request $request): View|JsonResponse
     {
         $stages = [
             'new' => 'New',
@@ -156,10 +162,53 @@ class LeadController extends Controller
             'lost' => 'Lost',
         ];
 
-        // Base query with filters
+        $baseQuery = $this->buildKanbanBaseQuery($request);
+
+        // Instant AJAX Stage Leads Pagination (Infinite scroll / Load More)
+        if ($request->ajax() && $request->filled('stage')) {
+            return $this->loadStageLeadsAjax($request, $baseQuery);
+        }
+
+        $leadsByStage = [];
+        $totalBudgetByStage = [];
+        $stageCounts = [];
+        $initialCardLimit = 35;
+
+        foreach (array_keys($stages) as $stage) {
+            $stageBase = (clone $baseQuery)->where('status', $stage);
+            $stageCounts[$stage] = (clone $stageBase)->count();
+            $totalBudgetByStage[$stage] = (float) ((clone $stageBase)->sum('estimated_budget') ?? 0);
+            $leadsByStage[$stage] = (clone $stageBase)->latest()->limit($initialCardLimit)->get();
+        }
+
+        $developers = User::all();
+        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
+        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
+        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
+
+        return view('admin.leads.kanban', compact(
+            'stages',
+            'leadsByStage',
+            'totalBudgetByStage',
+            'stageCounts',
+            'developers',
+            'cities',
+            'areas',
+            'industries'
+        ));
+    }
+
+    /**
+     * Build scoped query with active search, category, location, and assignee filters.
+     *
+     * @param Request $request Active filter values
+     * @return Builder Scoped Lead Eloquent builder
+     * @sideeffects Prepares query conditions
+     */
+    private function buildKanbanBaseQuery(Request $request): Builder
+    {
         $baseQuery = Lead::with('assignedDeveloper');
 
-        // Multi-field search
         if ($request->filled('search')) {
             $s = trim($request->search);
             $baseQuery->where(function ($q) use ($s) {
@@ -174,7 +223,6 @@ class LeadController extends Controller
             });
         }
 
-        // Website Status filter
         if ($request->filled('has_website')) {
             $webStatus = strtoupper(trim($request->has_website));
             if ($webStatus === 'NO') {
@@ -194,7 +242,6 @@ class LeadController extends Controller
             }
         }
 
-        // City filter
         if ($request->filled('city')) {
             $city = trim($request->city);
             $baseQuery->where(function ($q) use ($city) {
@@ -204,7 +251,6 @@ class LeadController extends Controller
             });
         }
 
-        // Area / Locality filter
         if ($request->filled('area')) {
             $area = trim($request->area);
             $baseQuery->where(function ($q) use ($area) {
@@ -214,37 +260,54 @@ class LeadController extends Controller
             });
         }
 
-        // Industry Category filter
         if ($request->filled('industry')) {
             $baseQuery->where('industry', $request->industry);
         }
 
-        // Priority filter
         if ($request->filled('priority')) {
             $baseQuery->where('priority', $request->priority);
         }
 
-        // Assignee filter
         if ($request->filled('developer_id')) {
             $baseQuery->where('assigned_to_user_id', $request->developer_id);
         }
 
-        $leadsByStage = [];
-        $totalBudgetByStage = [];
+        return $baseQuery;
+    }
 
-        foreach (array_keys($stages) as $stage) {
-            $stageQuery = (clone $baseQuery)->where('status', $stage)->latest();
-            $leads = $stageQuery->get();
-            $leadsByStage[$stage] = $leads;
-            $totalBudgetByStage[$stage] = $leads->sum('estimated_budget');
+    /**
+     * Fetch subsequent paginated cards for a Kanban column via AJAX.
+     *
+     * @param Request $request Contains stage, offset, limit
+     * @param Builder $baseQuery Scoped query with active filters
+     * @return JsonResponse Rendered HTML cards and pagination metadata
+     * @sideeffects Queries next batch of cards and renders blade view
+     */
+    private function loadStageLeadsAjax(Request $request, Builder $baseQuery): JsonResponse
+    {
+        $stage = (string) $request->get('stage');
+        $offset = (int) $request->get('offset', 0);
+        $limit = (int) $request->get('limit', 35);
+
+        $stageBase = (clone $baseQuery)->where('status', $stage);
+        $totalCount = (clone $stageBase)->count();
+        $leads = (clone $stageBase)->latest()->skip($offset)->take($limit)->get();
+
+        $html = '';
+        foreach ($leads as $lead) {
+            $html .= view('admin.leads.partials.kanban-card', compact('lead'))->render();
         }
 
-        $developers = User::all();
-        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
-        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
-        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
+        $loadedSoFar = $offset + $leads->count();
 
-        return view('admin.leads.kanban', compact('stages', 'leadsByStage', 'totalBudgetByStage', 'developers', 'cities', 'areas', 'industries'));
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+            'loaded' => $leads->count(),
+            'total' => $totalCount,
+            'remaining' => max(0, $totalCount - $loadedSoFar),
+            'has_more' => $totalCount > $loadedSoFar,
+        ]);
     }
 
     /**
