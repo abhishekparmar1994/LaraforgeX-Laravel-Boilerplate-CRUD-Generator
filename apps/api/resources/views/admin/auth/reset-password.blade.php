@@ -51,8 +51,9 @@
             <input id="password" name="password" type="password" required 
               class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-10 py-3 text-sm text-slate-900 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition placeholder-slate-400" 
               placeholder="••••••••••••">
-            <button type="button" onclick="togglePasswordVisibility('password', 'toggle-password-icon-1')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition cursor-pointer border-0 bg-transparent">
-              <i id="toggle-password-icon-1" class="fa-regular fa-eye text-sm"></i>
+            <button type="button" onclick="togglePasswordVisibility('password')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition cursor-pointer border-0 bg-transparent" title="Toggle password visibility" aria-label="Toggle password visibility">
+              <span id="password-eye"><i class="fa-regular fa-eye text-sm"></i></span>
+              <span id="password-eye-slash" class="hidden"><i class="fa-regular fa-eye-slash text-sm"></i></span>
             </button>
           </div>
         </div>
@@ -66,8 +67,9 @@
             <input id="password_confirmation" name="password_confirmation" type="password" required 
               class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-10 py-3 text-sm text-slate-900 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition placeholder-slate-400" 
               placeholder="••••••••••••">
-            <button type="button" onclick="togglePasswordVisibility('password_confirmation', 'toggle-password-icon-2')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition cursor-pointer border-0 bg-transparent">
-              <i id="toggle-password-icon-2" class="fa-regular fa-eye text-sm"></i>
+            <button type="button" onclick="togglePasswordVisibility('password_confirmation')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition cursor-pointer border-0 bg-transparent" title="Toggle password visibility" aria-label="Toggle password visibility">
+              <span id="password_confirmation-eye"><i class="fa-regular fa-eye text-sm"></i></span>
+              <span id="password_confirmation-eye-slash" class="hidden"><i class="fa-regular fa-eye-slash text-sm"></i></span>
             </button>
           </div>
         </div>

@@ -248,9 +248,9 @@
       axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
       // Inject CSRF Token automatically
-      const csrfToken = $('meta[name="csrf-token"]').attr('content');
-      if (csrfToken) {
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+      const pageCsrfToken = $('meta[name="csrf-token"]').attr('content');
+      if (pageCsrfToken) {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = pageCsrfToken;
       }
 
 
@@ -391,18 +391,34 @@
         showToast('error', msg);
       };
 
-      // Toggle password visibility helper
+      /**
+       * Purpose: Toggle input type between password and text, updating the toggle icon.
+       * Parameters: inputId (string), iconId (string, optional)
+       * Return: void
+       * Side Effects: Updates DOM input type and toggles visibility of eye/slash icon elements.
+       */
       window.togglePasswordVisibility = function (inputId, iconId) {
-        const $input = $('#' + inputId);
-        const $icon = $('#' + iconId);
-        if (!$input.length || !$icon.length) return;
+        const input = document.getElementById(inputId);
+        if (!input) return;
 
-        if ($input.attr('type') === 'password') {
-          $input.attr('type', 'text');
-          $icon.removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-          $input.attr('type', 'password');
-          $icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+
+        // Toggle dual icon elements if present
+        const eyeEl = document.getElementById(inputId + '-eye') || (iconId ? document.getElementById(iconId + '-eye') : null);
+        const slashEl = document.getElementById(inputId + '-eye-slash') || (iconId ? document.getElementById(iconId + '-eye-slash') : null);
+
+        if (eyeEl && slashEl) {
+          eyeEl.classList.toggle('hidden', isPassword);
+          slashEl.classList.toggle('hidden', !isPassword);
+          return;
+        }
+
+        // Fallback for single icon element
+        const targetId = iconId || (inputId + '-icon');
+        const $icon = $('#' + targetId);
+        if ($icon.length) {
+          $icon.toggleClass('fa-eye', !isPassword).toggleClass('fa-eye-slash', isPassword);
         }
       };
 

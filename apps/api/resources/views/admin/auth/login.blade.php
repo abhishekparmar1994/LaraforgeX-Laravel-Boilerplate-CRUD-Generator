@@ -37,16 +37,20 @@
 
         <!-- Login credentials form -->
         <div id="login-error-container" class="hidden">
-          <div class="p-4 bg-rose-50 border border-rose-200/90 rounded-2xl flex items-start gap-3 shadow-xs animate-shake">
-            <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-sm">
+          <div
+            class="p-4 bg-rose-50 border border-rose-200/90 rounded-2xl flex items-start gap-3 shadow-xs animate-shake">
+            <span
+              class="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-sm">
               <i class="fa-solid fa-triangle-exclamation"></i>
             </span>
             <div class="flex-1 min-w-0">
               <h4 class="text-xs font-bold text-rose-900 leading-tight">Authentication Failed</h4>
               <p id="login-error-text" class="text-xs font-semibold text-rose-700 mt-1 leading-snug break-words"></p>
-              <ul id="login-error-list" class="hidden list-disc list-inside text-[11px] font-semibold text-rose-600 mt-1.5 space-y-0.5"></ul>
+              <ul id="login-error-list"
+                class="hidden list-disc list-inside text-[11px] font-semibold text-rose-600 mt-1.5 space-y-0.5"></ul>
             </div>
-            <button type="button" onclick="$('#login-error-container').slideUp(180)" class="text-rose-400 hover:text-rose-600 transition cursor-pointer text-xs p-1 -mr-1 -mt-1 border-0 bg-transparent">
+            <button type="button" onclick="$('#login-error-container').slideUp(180)"
+              class="text-rose-400 hover:text-rose-600 transition cursor-pointer text-xs p-1 -mr-1 -mt-1 border-0 bg-transparent">
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
@@ -79,12 +83,15 @@
               <input id="password" name="password" type="password" required
                 class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-10 py-3 text-sm text-slate-900 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition placeholder-slate-400"
                 placeholder="••••••••••••">
-              <button type="button" onclick="togglePasswordVisibility('password', 'toggle-password-icon')"
-                class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition cursor-pointer border-0 bg-transparent">
-                <i id="toggle-password-icon" class="fa-regular fa-eye text-sm"></i>
+              <button type="button" onclick="togglePasswordVisibility('password')"
+                class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition cursor-pointer border-0 bg-transparent"
+                title="Toggle password visibility" aria-label="Toggle password visibility">
+                <span id="password-eye"><i class="fa-regular fa-eye text-sm"></i></span>
+                <span id="password-eye-slash" class="hidden"><i class="fa-regular fa-eye-slash text-sm"></i></span>
               </button>
             </div>
-            <p id="password-error-msg" class="hidden text-[11px] font-semibold text-rose-600 mt-1 flex items-center gap-1">
+            <p id="password-error-msg"
+              class="hidden text-[11px] font-semibold text-rose-600 mt-1 flex items-center gap-1">
               <i class="fa-solid fa-circle-exclamation text-[10px]"></i>
               <span class="msg-content"></span>
             </p>
