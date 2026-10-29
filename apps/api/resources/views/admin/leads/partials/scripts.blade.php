@@ -250,20 +250,6 @@
   window.closeImportModal = () => $('#modal-import-leads').addClass('hidden');
   window.openCreateLeadModal = () => $('#modal-create-lead').removeClass('hidden');
   window.closeCreateLeadModal = () => $('#modal-create-lead').addClass('hidden');
-  window.openPromptModal = (title, prompt) => {
-    $('#promptModalTitle').text('Solar Feasibility & Sizing Pitch — ' + title);
-    $('#promptModalText').val(prompt);
-    $('#modal-view-prompt').removeClass('hidden');
-  };
-  window.closePromptModal = () => $('#modal-view-prompt').addClass('hidden');
-  window.copyPromptToClipboard = () => {
-    navigator.clipboard.writeText($('#promptModalText').val()).then(() => {
-      const $btn = $('#btnCopyPrompt');
-      const orig = $btn.html();
-      $btn.html('<i class="fa-solid fa-check mr-1"></i> Copied!').addClass('bg-emerald-600');
-      setTimeout(() => $btn.html(orig).removeClass('bg-emerald-600'), 2000);
-    });
-  };
 
   // Pre-populate initial pagination buttons
   const initialCurrent = {{ $leads->currentPage() }};

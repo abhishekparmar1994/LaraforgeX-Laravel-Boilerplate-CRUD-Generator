@@ -1,10 +1,10 @@
 @extends('admin.layouts.app')
 
-@section('title', 'WebForge CRM — Agency Executive Dashboard')
+@section('title', 'SolarPulse CRM — Solar EPC Executive Dashboard')
 
 @section('breadcrumbs')
   <nav class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-    <span class="text-slate-700">Agency Dashboard</span>
+    <span class="text-slate-700">Solar EPC Dashboard</span>
   </nav>
 @endsection
 
@@ -68,14 +68,14 @@
       <span class="text-[10px] text-indigo-600 font-bold mt-0.5 block">100% Retained</span>
     </div>
 
-    <!-- Active Websites -->
+    <!-- Active Solar Sites -->
     <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-xs col-span-1 xl:col-span-1">
       <div class="flex items-center justify-between">
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Websites</p>
-        <i class="fa-solid fa-globe text-emerald-500 text-xs"></i>
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Solar Sites</p>
+        <i class="fa-solid fa-solar-panel text-amber-500 text-xs"></i>
       </div>
       <h3 class="text-xl font-extrabold text-slate-900 mt-1">{{ $kpi['active_websites'] }}</h3>
-      <span class="text-[10px] text-emerald-600 font-bold mt-0.5 block">Online & Monitored</span>
+      <span class="text-[10px] text-amber-600 font-bold mt-0.5 block">Active Plants</span>
     </div>
 
     <!-- Projects in Progress -->
@@ -211,7 +211,7 @@
     <!-- Recent Activity Timeline -->
     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-3">
       <div class="flex items-center justify-between">
-        <h3 class="font-extrabold text-sm text-slate-900">Recent Agency Activity</h3>
+        <h3 class="font-extrabold text-sm text-slate-900">Recent Solar Activity</h3>
         <a href="/admin/activities" class="text-xs font-bold text-brand-600 hover:underline">Full Feed</a>
       </div>
       <div class="divide-y divide-slate-100 max-h-72 overflow-y-auto">
@@ -276,7 +276,7 @@
       if (document.querySelector("#revenue-chart")) {
         const revenueOptions = {
           series: [{
-            name: 'Collected Revenue ($)',
+            name: 'Collected Revenue (₹)',
             data: data.monthly_revenue.totals
           }],
           chart: {

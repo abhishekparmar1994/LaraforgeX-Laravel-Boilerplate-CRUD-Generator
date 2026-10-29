@@ -1,10 +1,11 @@
 @php
-  $isNoWeb = strtoupper($lead->has_website) === 'NO' || empty($lead->website) || $lead->website === 'N/A';
+  $isHot = $lead->priority === 'urgent' || $lead->priority === 'high';
+  $estKw = $lead->estimated_budget > 0 ? round($lead->estimated_budget / 55000, 1) : 3.0;
 @endphp
-<div class="kanban-card bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-xs hover:shadow-md transition cursor-grab active:cursor-grabbing group relative select-none {{ $isNoWeb ? 'border-l-4 border-l-rose-500' : 'border-l-4 border-l-emerald-500' }}"
+<div class="kanban-card bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-xs hover:shadow-md transition cursor-grab active:cursor-grabbing group relative select-none {{ $isHot ? 'border-l-4 border-l-amber-500' : 'border-l-4 border-l-emerald-500' }}"
      draggable="true" data-lead-id="{{ $lead->id }}">
   
-  <!-- Top: Company & Priority -->
+  <!-- Top: Customer Name & Priority -->
   <div class="flex items-start justify-between gap-2">
     <a href="/admin/leads/{{ $lead->id }}" class="font-bold text-xs text-slate-900 group-hover:text-brand-600 transition leading-snug line-clamp-1" title="{{ $lead->company_name }}">
       {{ $lead->company_name }}
@@ -14,25 +15,17 @@
     </span>
   </div>
 
-  <!-- Sub-info: Industry & Locality -->
+  <!-- Sub-info: Category & Locality -->
   <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
-    <span class="truncate max-w-[150px] font-medium text-slate-600">{{ $lead->industry ?? 'General' }}</span>
-    @if($lead->rating && $lead->rating !== 'N/A')
-      <span class="font-bold text-amber-600"><i class="fa-solid fa-star text-[8px]"></i> {{ $lead->rating }}</span>
-    @endif
+    <span class="truncate max-w-[150px] font-medium text-slate-600">{{ $lead->industry ?? 'Solar Rooftop' }}</span>
+    <span class="font-bold text-slate-500"><i class="fa-solid fa-solar-panel text-[9px] text-amber-500"></i> {{ $estKw }} kW</span>
   </div>
 
-  <!-- Website Status Indicator -->
+  <!-- Solar Qualification Indicator -->
   <div class="mt-2 flex items-center justify-between">
-    @if($isNoWeb)
-      <span class="inline-flex items-center gap-1 text-[9px] font-extrabold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
-        <span class="w-1 h-1 rounded-full bg-rose-500"></span> NO Website (Hot Lead)
-      </span>
-    @else
-      <span class="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-        <span class="w-1 h-1 rounded-full bg-emerald-500"></span> Has Website
-      </span>
-    @endif
+    <span class="inline-flex items-center gap-1 text-[9px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Surya Ghar Eligible
+    </span>
     @if($lead->area_locality)
       <span class="text-[9px] text-slate-400 truncate max-w-[100px]">{{ $lead->area_locality }}</span>
     @endif

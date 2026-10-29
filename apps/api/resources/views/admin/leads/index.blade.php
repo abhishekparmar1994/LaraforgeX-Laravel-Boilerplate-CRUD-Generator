@@ -60,7 +60,6 @@
 
 @include('admin.leads.partials.import-modal')
 @include('admin.leads.partials.create-modal')
-@include('admin.leads.partials.prompt-modal')
 
 @endsection
 

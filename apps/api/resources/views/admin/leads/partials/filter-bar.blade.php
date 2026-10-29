@@ -55,7 +55,7 @@
         </select>
 
         <select id="filter-developer" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer">
-          <option value="">👤 All Assignees</option>
+          <option value="">👤 All Solar Executives</option>
           @foreach($developers as $dev)
             <option value="{{ $dev->id }}">👤 {{ $dev->name }}</option>
           @endforeach

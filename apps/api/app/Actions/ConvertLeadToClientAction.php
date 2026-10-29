@@ -81,15 +81,15 @@ class ConvertLeadToClientAction
                 'notes' => $lead->notes,
             ]);
 
-            // 6. Optional: Create initial Project
+            // 6. Optional: Create initial Solar EPC Project
             if (!empty($options['create_project'])) {
-                $projectName = $options['project_name'] ?? ($lead->company_name . ' Website Project');
+                $projectName = $options['project_name'] ?? ($lead->company_name . ' Solar Rooftop System');
                 $project = Project::create([
                     'client_id' => $client->id,
                     'company_id' => $company->id,
                     'name' => $projectName,
-                    'project_type' => $options['project_type'] ?? 'Corporate Website',
-                    'description' => $lead->requirement ?? 'Initial project scope defined during lead qualification.',
+                    'project_type' => $options['project_type'] ?? 'Residential Rooftop (1-10 kW)',
+                    'description' => $lead->requirement ?? 'Initial solar EPC scope defined during lead qualification.',
                     'start_date' => now(),
                     'deadline' => now()->addMonths(2),
                     'budget' => $lead->estimated_budget,
@@ -99,16 +99,16 @@ class ConvertLeadToClientAction
                     'progress' => 5,
                 ]);
 
-                // Create initial Website record if requested
+                // Create initial Solar Plant record if requested
                 if (!empty($options['create_website'])) {
                     Website::create([
                         'client_id' => $client->id,
                         'company_id' => $company->id,
                         'project_id' => $project->id,
-                        'name' => $lead->company_name . ' Official Site',
+                        'name' => $lead->company_name . ' Solar Plant',
                         'domain' => $lead->website ? parse_url($lead->website, PHP_URL_HOST) ?? $lead->website : null,
                         'status' => 'planning',
-                        'technology' => 'Laravel / Nuxt / Tailwind',
+                        'technology' => 'Monocrystalline Bifacial / On-Grid Inverter',
                     ]);
                 }
             }

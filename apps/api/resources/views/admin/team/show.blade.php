@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('title', 'WebForge CRM — Developer Profile: ' . $user->name)
+@section('title', 'SolarPulse CRM — Executive Profile: ' . $user->name)
 
 @section('breadcrumbs')
   <nav class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
     <a href="/admin/dashboard" class="hover:text-brand-600 transition">Dashboard</a>
     <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
-    <a href="/admin/team" class="hover:text-brand-600 transition">Team</a>
+    <a href="/admin/team" class="hover:text-brand-600 transition">Executive Team</a>
     <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
     <span class="text-slate-700">{{ $user->name }}</span>
   </nav>
@@ -25,12 +25,12 @@
         <div>
           <h2 class="text-xl font-extrabold text-slate-900 leading-tight">{{ $user->name }}</h2>
           <p class="text-xs text-slate-500 font-medium mt-1">
-            {{ $user->email }} • Role: <span class="font-bold text-slate-700">{{ $user->roles->first() ? $user->roles->first()->name : 'Developer' }}</span>
+            {{ $user->email }} • Role: <span class="font-bold text-slate-700">{{ $user->roles->first() ? $user->roles->first()->name : 'Solar Executive' }}</span>
           </p>
         </div>
       </div>
       <a href="/admin/tasks/todo?developer_id={{ $user->id }}" class="px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs rounded-xl transition flex items-center gap-1.5">
-        <i class="fa-solid fa-circle-check"></i> View Todo List
+        <i class="fa-solid fa-circle-check"></i> View Action List
       </a>
     </div>
   </div>
@@ -40,7 +40,7 @@
 
     <!-- Assigned Projects -->
     <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs space-y-4">
-      <h3 class="font-extrabold text-sm text-slate-900">Active Assigned Projects ({{ count($assignedProjects) }})</h3>
+      <h3 class="font-extrabold text-sm text-slate-900">Active Solar EPC Projects ({{ count($assignedProjects) }})</h3>
       <div class="space-y-3">
         @forelse($assignedProjects as $proj)
           <div class="p-3.5 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between gap-3 text-xs">

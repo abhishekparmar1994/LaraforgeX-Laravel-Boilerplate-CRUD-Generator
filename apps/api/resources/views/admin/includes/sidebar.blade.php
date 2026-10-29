@@ -193,22 +193,12 @@
                   {{ request()->is('admin/calendar*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
               <i
                 class="fa-solid fa-calendar-days w-4 text-center {{ request()->is('admin/calendar*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-              <span>Agency Calendar</span>
+              <span>Operations Calendar</span>
             </a>
           </div>
 
           <!-- ── COMMUNICATION ──────────────────── -->
           <p class="px-3 pt-4 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Communication</p>
-
-          <div class="relative group sidebar-group">
-            <a href="/admin/followups"
-              class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150
-                  {{ request()->is('admin/followups*') ? 'bg-brand-50 text-brand-600 border-l-2 border-brand-500 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-              <i
-                class="fa-solid fa-phone-volume w-4 text-center {{ request()->is('admin/followups*') ? 'text-brand-500' : 'text-slate-400' }}"></i>
-              <span>Follow-ups</span>
-            </a>
-          </div>
 
           <div class="relative group sidebar-group">
             <a href="/admin/activities"
@@ -300,7 +290,7 @@
       </div>
       <div class="min-w-0 flex-1">
         <p class="text-xs font-bold text-slate-800 truncate">{{ auth()->user()->name ?? 'Rohan' }}</p>
-        <p class="text-[10px] font-medium text-slate-400 truncate">Lead Dev / Admin</p>
+        <p class="text-[10px] font-medium text-slate-400 truncate">Solar EPC Administrator</p>
       </div>
       <a href="/admin/login" title="Logout / Switch User" class="text-slate-400 hover:text-rose-600 transition text-sm">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>

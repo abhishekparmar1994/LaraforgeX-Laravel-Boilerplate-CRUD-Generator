@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'WebForge CRM — Developer Personal Todo List')
+@section('title', 'SolarPulse CRM — Executive Personal Action List')
 
 @section('breadcrumbs')
   <nav class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -8,24 +8,24 @@
     <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
     <a href="/admin/tasks" class="hover:text-brand-600 transition">Tasks</a>
     <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
-    <span class="text-slate-700">Developer Todo</span>
+    <span class="text-slate-700">Executive Action List</span>
   </nav>
 @endsection
 
 @section('content')
 <div class="space-y-6 font-sans max-w-5xl">
 
-  <!-- Header Card & Developer Switcher -->
+  <!-- Header Card & Executive Switcher -->
   <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
       <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
         <i class="fa-solid fa-circle-check text-amber-500"></i>
-        <span>Developer Action List</span>
+        <span>Solar Executive Action List</span>
       </h2>
       <p class="text-xs text-slate-500 font-medium mt-0.5">Focused personal checklist grouped by urgency and deadline.</p>
     </div>
 
-    <!-- Switch Developer Filter -->
+    <!-- Switch Executive Filter -->
     <div class="flex items-center gap-2">
       <label class="text-xs font-bold text-slate-400">View for:</label>
       <select onchange="window.location.href='/admin/tasks/todo?developer_id='+this.value" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
