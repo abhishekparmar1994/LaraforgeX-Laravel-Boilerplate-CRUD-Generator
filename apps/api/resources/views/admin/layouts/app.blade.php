@@ -31,7 +31,36 @@
     html.auth-checking body {
       display: none !important;
     }
+    body,
+    html,
+    input,
+    button,
+    select,
+    textarea,
+    table,
+    th,
+    td,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    span:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab):not(.fa-solid):not(.fa-regular),
+    a,
+    #admin-sidebar,
+    .font-sans,
+    .font-display {
+      font-family: 'Plus Jakarta Sans', 'Satoshi', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
   </style>
+
+  <!-- Plus Jakarta Sans & Satoshi Font Families (TailAdmin Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,800,700,600,500,400&display=swap" rel="stylesheet">
 
   <!-- Tailwind CDN (offline vendor) -->
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
@@ -114,6 +143,11 @@
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            heading: ['"Plus Jakarta Sans"', 'Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
           colors: {
             brand: {
               50: '#ebf0ff', 100: '#d6e0ff', 200: '#b3c7ff',
@@ -1433,6 +1467,35 @@
       window.showToast('error', msg);
     };
 
+    /**
+     * Purpose: Universal styled SweetAlert2 confirmation dialog for delete operations.
+     * Parameters: string|object options, function onConfirmed
+     */
+    window.confirmDelete = function (options, onConfirmed) {
+      const opts = typeof options === 'string' ? { title: options } : (options || {});
+      const title = opts.title || 'Are you sure?';
+      const text = opts.text || 'This record will be permanently deleted.';
+      const confirmText = opts.confirmText || 'Yes, delete';
+
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          title: title,
+          text: text,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#e11d48',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: `<i class="fa-solid fa-trash mr-1"></i> ${confirmText}`,
+          cancelButtonText: 'Cancel',
+          reverseButtons: true
+        }).then(res => {
+          if (res.isConfirmed && typeof onConfirmed === 'function') onConfirmed();
+        });
+      } else if (confirm(title)) {
+        if (typeof onConfirmed === 'function') onConfirmed();
+      }
+    };
+
     // ── Mobile Sidebar jQuery Helpers ─────────────────────────────
     window.openSidebar = function () {
       $('#admin-sidebar').removeClass('-translate-x-full');
@@ -1533,16 +1596,18 @@
     <i class="fa-solid fa-arrow-up text-sm"></i>
   </button>
 
-  <!-- ── Global Floating AI Agent Chatbox ─────────────────────── -->
+  <!-- ── Global Floating AI Agent Chatbox (Temporarily Hidden) ─────────────────────── -->
+  {{--
   @if(!request()->is('admin/ai-agent*'))
     @include('admin.includes.floating_ai_agent')
   @endif
+  --}}
 
   <!-- Universal i18n Translations -->
   <script src="{{ asset('vendor/i18n/translations.js') }}"></script>
 
   {{-- Universal DataTable — also consumable by student/teacher portals via the same public URL --}}
-  <script src="{{ asset('vendor/datatable/datatable.js') }}"></script>
+  <script src="{{ asset('vendor/datatable/datatable.js') }}?v={{ file_exists(public_path('vendor/datatable/datatable.js')) ? filemtime(public_path('vendor/datatable/datatable.js')) : time() }}"></script>
 
   @yield('scripts')
 </body>

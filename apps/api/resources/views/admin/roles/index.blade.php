@@ -111,7 +111,7 @@ $(document).ready(function() {
         ).join(' ') || '<span class="text-slate-400 italic text-xs">Direct permissions undefined</span>';
 
         const parentName = role.parent ? role.parent.name : '<span class="text-slate-400 italic">None</span>';
-        const isSystemRole = ['administrator', 'educator', 'student'].includes(role.name);
+        const isSystemRole = role.name === 'administrator';
 
         const actions = isSystemRole ? '' : `
             <button onclick="deleteRole('${role.id}')" class="px-2.5 py-1.5 rounded bg-rose-50 hover:bg-rose-100 border border-rose-100 text-rose-600 font-semibold text-xs transition">Delete</button>
@@ -225,7 +225,7 @@ $(document).ready(function() {
             $('#role-modal-title').text('Edit Role Parameters');
             $('#role-edit-id').val(role.id);
             $('#role-name').val(role.name);
-            if (['administrator', 'educator', 'student'].includes(role.name)) {
+            if (role.name === 'administrator') {
                 $('#role-name').prop('readonly', true);
             } else {
                 $('#role-name').prop('readonly', false);

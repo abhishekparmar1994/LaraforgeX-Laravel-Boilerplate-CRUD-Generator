@@ -16,8 +16,8 @@
   <!-- Header -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
     <div>
-      <h2 class="text-xl font-extrabold text-slate-900">Agency Tasks & Deliverables</h2>
-      <p class="text-xs text-slate-500 font-medium mt-0.5">Track developer action items, sprint backlog, and project deliverables.</p>
+      <h2 class="text-xl font-extrabold text-slate-900">Solar Tasks & Deliverables</h2>
+      <p class="text-xs text-slate-500 font-medium mt-0.5">Track executive action items, project backlog, and solar deliverables.</p>
     </div>
     <div class="flex items-center gap-2">
       <a href="/admin/tasks/kanban" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
@@ -60,7 +60,7 @@
       </div>
       <div>
         <select name="developer_id" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700">
-          <option value="">All Developers</option>
+          <option value="">All Executives</option>
           @foreach($developers as $dev)
             <option value="{{ $dev->id }}" {{ request('developer_id') == $dev->id ? 'selected' : '' }}>{{ $dev->name }}</option>
           @endforeach
@@ -76,14 +76,14 @@
   <!-- Tasks Table -->
   <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
+      <table class="datatable w-full text-left text-xs">
         <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
           <tr>
             <th class="px-4 py-3.5 w-10">Done</th>
             <th class="px-4 py-3.5">Task Title & Project</th>
             <th class="px-4 py-3.5">Status</th>
             <th class="px-4 py-3.5">Priority</th>
-            <th class="px-4 py-3.5">Assigned Developer</th>
+            <th class="px-4 py-3.5">Assigned Executive</th>
             <th class="px-4 py-3.5">Due Date</th>
             <th class="px-4 py-3.5 text-right">Actions</th>
           </tr>
@@ -190,7 +190,7 @@
             </select>
           </div>
           <div>
-            <label class="font-bold text-slate-700 block mb-1">Assign Developer</label>
+            <label class="font-bold text-slate-700 block mb-1">Assign Executive</label>
             <select name="assigned_to_user_id" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-semibold">
               @foreach($developers as $d)
                 <option value="{{ $d->id }}">{{ $d->name }}</option>
@@ -231,7 +231,7 @@
 <script>
   async function toggleTask(taskId) {
     try {
-      const res = await axios.post(`{{ url('/admin/tasks') }}/${taskId}/toggle`);
+      const res = await axios.post(`/admin/tasks/${taskId}/toggle`, {}, { baseURL: '' });
       if (res.data && res.data.success) {
         if (typeof window.showToast === 'function') {
           window.showToast('success', res.data.status === 'completed' ? 'Task marked as completed' : 'Task re-opened');
@@ -248,23 +248,23 @@
     }
   }
 
-  async function confirmDeleteTask(taskId) {
-    if (confirm('Delete this task?')) {
+  /**
+   * Purpose: SweetAlert2 confirmation dialog to delete task.
+   * Parameters: string taskId
+   */
+  function confirmDeleteTask(taskId) {
+    window.confirmDelete({
+      title: 'Delete this task?',
+      text: 'This operation task will be permanently removed.'
+    }, async () => {
       try {
-        await axios.delete(`{{ url('/admin/tasks') }}/${taskId}`);
-        if (typeof window.showToast === 'function') {
-          window.showToast('success', 'Task deleted');
-        }
+        await axios.delete(`/admin/tasks/${taskId}`, { baseURL: '' });
+        if (typeof window.showToast === 'function') window.showToast('success', 'Task deleted');
         setTimeout(() => location.reload(), 300);
       } catch(e) {
-        console.error('Failed to delete task:', e);
-        if (typeof window.showToast === 'function') {
-          window.showToast('error', 'Failed to delete task');
-        } else {
-          alert('Failed to delete task');
-        }
+        window.handleAjaxError(e, 'Failed to delete task');
       }
-    }
+    });
   }
 </script>
 @endsection

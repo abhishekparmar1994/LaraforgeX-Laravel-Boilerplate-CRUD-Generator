@@ -66,7 +66,7 @@
       </div>
       <div>
         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Budget Allocation</span>
-        <span class="font-extrabold text-slate-900 text-sm">${{ number_format($project->budget, 0) }}</span>
+        <span class="font-extrabold text-slate-900 text-sm">₹{{ number_format($project->budget, 0) }}</span>
       </div>
       <div>
         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Logged Hours</span>
@@ -139,6 +139,9 @@
           @endforelse
         </div>
       </div>
+
+      <!-- Solar Bill of Materials (BOM) -->
+      @include('admin.projects.partials.bom')
 
     </div>
 
@@ -215,7 +218,7 @@
           <input type="text" name="title" required placeholder="e.g. Implement payment gateway webhook" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-semibold">
         </div>
         <div>
-          <label class="font-bold text-slate-700 block mb-1">Assign Developer</label>
+          <label class="font-bold text-slate-700 block mb-1">Assign Solar Executive</label>
           <select name="assigned_to_user_id" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-semibold">
             @foreach($developers as $d)
               <option value="{{ $d->id }}">{{ $d->name }}</option>
@@ -251,19 +254,29 @@
 <script>
   async function toggleTaskCompletion(taskId) {
     try {
-      await axios.post(`/admin/tasks/${taskId}/toggle`);
+      await axios.post(`/admin/tasks/${taskId}/toggle`, {}, { baseURL: '' });
       location.reload();
     } catch(e) {
-      alert('Error updating task');
+      console.error('Task toggle error:', e);
+      if (typeof showToast === 'function') {
+        showToast('error', 'Error updating task');
+      } else {
+        alert('Error updating task');
+      }
     }
   }
 
   async function toggleMilestone(milestoneId) {
     try {
-      await axios.post(`/admin/milestones/${milestoneId}/toggle`);
+      await axios.post(`/admin/milestones/${milestoneId}/toggle`, {}, { baseURL: '' });
       location.reload();
     } catch(e) {
-      alert('Error toggling milestone');
+      console.error('Milestone toggle error:', e);
+      if (typeof showToast === 'function') {
+        showToast('error', 'Error toggling milestone');
+      } else {
+        alert('Error toggling milestone');
+      }
     }
   }
 </script>

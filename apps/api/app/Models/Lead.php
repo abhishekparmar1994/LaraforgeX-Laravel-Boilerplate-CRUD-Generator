@@ -26,8 +26,13 @@ class Lead extends Model
     protected $fillable = [
         'company_name',
         'contact_person',
+        'first_name',
+        'last_name',
+        'salutation',
+        'designation',
         'email',
         'phone',
+        'alternate_phone',
         'whatsapp',
         'consumer_number',
         'discom',
@@ -36,12 +41,16 @@ class Lead extends Model
         'solar_capacity_kw',
         'subsidy_amount',
         'product_group',
+        'product_group_id',
         'customer_group',
+        'customer_group_id',
         'lead_potential',
         'lead_type',
+        'roof_type',
         'society_name',
         'approval_status',
         'franchise',
+        'lead_list',
         'website',
         'industry',
         'products_services',
@@ -49,10 +58,13 @@ class Lead extends Model
         'scraped_by',
         'location',
         'area_locality',
+        'address_line_1',
+        'address_line_2',
         'full_address',
         'pincode',
         'city',
         'state',
+        'country',
         'rating',
         'total_reviews',
         'requirement',
@@ -60,9 +72,13 @@ class Lead extends Model
         'estimated_budget',
         'priority',
         'status',
+        'stage',
+        'tags',
         'assigned_to_user_id',
         'last_contact_date',
         'next_followup_date',
+        'follow_up_type',
+        'followup_notes',
         'notes',
     ];
 
@@ -84,6 +100,22 @@ class Lead extends Model
     public function assignedDeveloper(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to_user_id');
+    }
+
+    /**
+     * Associated Solar Product Group.
+     */
+    public function solarProductGroup(): BelongsTo
+    {
+        return $this->belongsTo(SolarProductGroup::class, 'product_group_id');
+    }
+
+    /**
+     * Associated Solar Customer Group.
+     */
+    public function solarCustomerGroup(): BelongsTo
+    {
+        return $this->belongsTo(SolarCustomerGroup::class, 'customer_group_id');
     }
 
     /**

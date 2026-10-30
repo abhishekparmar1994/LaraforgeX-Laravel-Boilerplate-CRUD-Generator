@@ -4,37 +4,51 @@
     <div>
       <label class="block text-[11px] font-bold text-slate-700 mb-1">Product Group</label>
       <div class="flex gap-1.5">
-        <select name="product_group" id="lead-product-group"
+        <select name="product_group" id="lead-product-group" onchange="handleProductGroupChange(this)"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
           <option value="">Select product group</option>
-          <option value="Residential Rooftop (1-10 kW)" selected>Residential Rooftop (1-10 kW)</option>
-          <option value="Commercial & Industrial (C&I)">Commercial & Industrial (C&I)</option>
-          <option value="Housing Society Common Meter">Housing Society Common Meter</option>
-          <option value="Solar Water Pump (PM KUSUM)">Solar Water Pump (PM KUSUM)</option>
-          <option value="Ground Mounted Solar Farm">Ground Mounted Solar Farm</option>
+          @if(isset($productGroups) && count($productGroups))
+            @foreach($productGroups as $pg)
+              <option value="{{ $pg->name }}" data-id="{{ $pg->id }}" {{ $loop->first ? 'selected' : '' }}>{{ $pg->name }}</option>
+            @endforeach
+          @else
+            <option value="Residential Rooftop (1-10 kW)" data-id="1" selected>Residential Rooftop (1-10 kW)</option>
+            <option value="Commercial & Industrial (C&I)" data-id="2">Commercial & Industrial (C&I)</option>
+            <option value="Housing Society Common Meter" data-id="3">Housing Society Common Meter</option>
+            <option value="Solar Water Pump (PM KUSUM)" data-id="4">Solar Water Pump (PM KUSUM)</option>
+            <option value="Ground Mounted Solar Farm" data-id="5">Ground Mounted Solar Farm</option>
+          @endif
         </select>
-        <button type="button" class="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center text-xs shrink-0 cursor-pointer">
+        <button type="button" onclick="openQuickAddGroupModal('product_group')" title="Add New Product Group" class="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center text-xs shrink-0 cursor-pointer shadow-xs transition">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
+      <input type="hidden" name="product_group_id" id="lead-product-group-id" value="{{ isset($productGroups) && count($productGroups) ? $productGroups[0]->id : 1 }}">
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="product_group"></p>
     </div>
 
     <div>
       <label class="block text-[11px] font-bold text-slate-700 mb-1">Customer Group</label>
       <div class="flex gap-1.5">
-        <select name="customer_group" id="lead-customer-group"
+        <select name="customer_group" id="lead-customer-group" onchange="handleCustomerGroupChange(this)"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
           <option value="">Select customer group</option>
-          <option value="Individual Homeowner" selected>Individual Homeowner</option>
-          <option value="Bungalow / Villa Owner">Bungalow / Villa Owner</option>
-          <option value="Apartment Society / RWA">Apartment Society / RWA</option>
-          <option value="Commercial Enterprise">Commercial Enterprise</option>
-          <option value="Manufacturing / Factory">Manufacturing / Factory</option>
+          @if(isset($customerGroups) && count($customerGroups))
+            @foreach($customerGroups as $cg)
+              <option value="{{ $cg->name }}" data-id="{{ $cg->id }}" data-product-group-id="{{ $cg->product_group_id }}" {{ $loop->first ? 'selected' : '' }}>{{ $cg->name }}</option>
+            @endforeach
+          @else
+            <option value="Individual Homeowner" data-id="1" data-product-group-id="1" selected>Individual Homeowner</option>
+            <option value="Bungalow / Villa Owner" data-id="2" data-product-group-id="1">Bungalow / Villa Owner</option>
+            <option value="Commercial Enterprise" data-id="4" data-product-group-id="2">Commercial Enterprise</option>
+          @endif
         </select>
-        <button type="button" class="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center text-xs shrink-0 cursor-pointer">
+        <button type="button" onclick="openQuickAddGroupModal('customer_group')" title="Add New Customer Group" class="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center text-xs shrink-0 cursor-pointer shadow-xs transition">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
+      <input type="hidden" name="customer_group_id" id="lead-customer-group-id" value="{{ isset($customerGroups) && count($customerGroups) ? $customerGroups[0]->id : 1 }}">
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="customer_group"></p>
     </div>
 
     <div>
@@ -44,6 +58,10 @@
         <input type="number" step="0.01" name="deal_size" id="lead-deal-size" placeholder="0.00"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
       </div>
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="deal_size"></p>
+      @if(isset($errors) && $errors->has('deal_size'))
+        <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-circle-exclamation text-[10px]"></i> <span>{{ $errors->first('deal_size') }}</span></p>
+      @endif
     </div>
   </div>
 
@@ -58,6 +76,7 @@
         <option value="Medium">Medium (Considering)</option>
         <option value="Low">Low (Price Inquiry)</option>
       </select>
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="lead_potential"></p>
     </div>
 
     <div>
@@ -70,6 +89,7 @@
         <option value="Referral">Customer Referral</option>
         <option value="Exhibition / Stall">Solar Expo / Stalls</option>
       </select>
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="lead_source"></p>
     </div>
 
     <div>
@@ -81,6 +101,7 @@
         <option value="Industrial">Industrial High Tension (HT)</option>
         <option value="Institutional">School / Hospital / Trust</option>
       </select>
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="lead_type"></p>
     </div>
   </div>
 
@@ -93,12 +114,20 @@
           oninput="handleBillChange(this.value)"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
       </div>
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="monthly_bill"></p>
+      @if(isset($errors) && $errors->has('monthly_bill'))
+        <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-circle-exclamation text-[10px]"></i> <span>{{ $errors->first('monthly_bill') }}</span></p>
+      @endif
     </div>
 
     <div>
       <label class="block text-[11px] font-bold text-slate-700 mb-1">Consumer Account No.</label>
-      <input type="text" name="consumer_no" id="lead-consumer-no" placeholder="DISCOM consumer number"
+      <input type="text" name="consumer_number" id="lead-consumer-no" placeholder="DISCOM consumer number"
         class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="consumer_number"></p>
+      @if(isset($errors) && $errors->has('consumer_number'))
+        <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-circle-exclamation text-[10px]"></i> <span>{{ $errors->first('consumer_number') }}</span></p>
+      @endif
     </div>
 
     <div>
@@ -116,6 +145,7 @@
         <option value="MSEDCL">MSEDCL (Maharashtra)</option>
         <option value="BESCOM">BESCOM (Karnataka)</option>
       </select>
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="discom"></p>
     </div>
   </div>
 
@@ -124,6 +154,10 @@
       <label class="block text-[11px] font-bold text-slate-700 mb-1">Sanctioned Load (kW)</label>
       <input type="number" step="0.5" name="sanctioned_load" id="lead-sanctioned-load" placeholder="e.g. 5"
         class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
+      <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="sanctioned_load"></p>
+      @if(isset($errors) && $errors->has('sanctioned_load'))
+        <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-circle-exclamation text-[10px]"></i> <span>{{ $errors->first('sanctioned_load') }}</span></p>
+      @endif
     </div>
   </div>
 

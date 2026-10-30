@@ -239,7 +239,7 @@
 <script>
   $(document).ready(async function () {
     try {
-      const res = await axios.get('/admin/crm/analytics');
+      const res = await axios.get('/admin/crm/analytics', { baseURL: '' });
       const data = res.data;
 
       // 1. Pipeline Bar Chart
@@ -322,7 +322,7 @@
 
   async function completeFollowup(id) {
     try {
-      await axios.post(`/admin/followups/${id}/complete`);
+      await axios.post(`/admin/followups/${id}/complete`, {}, { baseURL: '' });
       location.reload();
     } catch(e) {
       alert('Error updating follow-up');

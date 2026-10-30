@@ -131,6 +131,14 @@ class Project extends Model
     }
 
     /**
+     * Bill of materials (BOM) allocated to this solar plant project.
+     */
+    public function bom(): HasMany
+    {
+        return $this->hasMany(SolarProjectBom::class, 'project_id')->with(['material.category', 'material.company']);
+    }
+
+    /**
      * Polymorphic notes.
      */
     public function notes(): MorphMany

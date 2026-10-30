@@ -25,8 +25,21 @@
   </div>
 
   <!-- Filter Bar -->
-  <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
-    <form method="GET" action="/admin/contacts" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+  <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
+    <!-- SolarMitra Stakeholder Classification Pills -->
+    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+      <span class="text-slate-400 font-bold uppercase text-[10px] mr-1">Category:</span>
+      <a href="/admin/contacts" class="px-3 py-1 rounded-xl font-bold transition {{ !request('contact_type') ? 'bg-amber-500 text-white shadow-2xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">All Contacts</a>
+      <a href="/admin/contacts?contact_type=client" class="px-3 py-1 rounded-xl font-bold transition {{ request('contact_type') === 'client' ? 'bg-amber-500 text-white shadow-2xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">Clients</a>
+      <a href="/admin/contacts?contact_type=contractor" class="px-3 py-1 rounded-xl font-bold transition {{ request('contact_type') === 'contractor' ? 'bg-amber-500 text-white shadow-2xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">Contractors (Civil & EPC)</a>
+      <a href="/admin/contacts?contact_type=supplier" class="px-3 py-1 rounded-xl font-bold transition {{ request('contact_type') === 'supplier' ? 'bg-amber-500 text-white shadow-2xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">Suppliers & Distributors</a>
+      <a href="/admin/contacts?contact_type=staff" class="px-3 py-1 rounded-xl font-bold transition {{ request('contact_type') === 'staff' ? 'bg-amber-500 text-white shadow-2xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">Staff & Engineers</a>
+    </div>
+
+    <form method="GET" action="/admin/contacts" class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100">
+      @if(request('contact_type'))
+        <input type="hidden" name="contact_type" value="{{ request('contact_type') }}">
+      @endif
       <div>
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search name, job title, email, phone..."
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
@@ -49,7 +62,7 @@
   <!-- Contacts Table -->
   <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
+      <table class="datatable w-full text-left text-xs">
         <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
           <tr>
             <th class="px-4 py-3.5">Name & Job Title</th>
@@ -67,7 +80,16 @@
                 <a href="/admin/contacts/{{ $contact->id }}" class="font-bold text-slate-900 hover:text-brand-600 block text-xs">
                   {{ $contact->name }}
                 </a>
-                <span class="text-[11px] text-slate-400 font-semibold block mt-0.5">{{ $contact->job_title ?: 'Stakeholder' }}</span>
+                <span class="text-[11px] text-slate-400 font-semibold block mt-0.5">
+                  {{ $contact->job_title ?: 'Stakeholder' }}
+                  @if($contact->contact_type === 'contractor')
+                    • <span class="text-amber-600 font-bold">Contractor</span>
+                  @elseif($contact->contact_type === 'supplier')
+                    • <span class="text-blue-600 font-bold">Supplier</span>
+                  @elseif($contact->contact_type === 'staff')
+                    • <span class="text-purple-600 font-bold">Staff</span>
+                  @endif
+                </span>
               </td>
               <td class="px-4 py-3.5 font-bold text-slate-800">
                 {{ $contact->company ? $contact->company->name : 'Independent' }}

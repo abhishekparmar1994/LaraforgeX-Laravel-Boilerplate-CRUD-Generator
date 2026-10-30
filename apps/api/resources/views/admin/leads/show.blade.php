@@ -65,6 +65,7 @@
 
 <!-- ── MODALS ────────────────────────────────────────────────── -->
 @include('admin.leads.partials.show.modals')
+@include('admin.leads.partials.show.solar-sizing-modal')
 
 <!-- ── SCRIPTS ───────────────────────────────────────────────── -->
 @include('admin.leads.partials.show.scripts')

@@ -48,7 +48,7 @@
   <!-- Clients Table -->
   <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
+      <table class="datatable w-full text-left text-xs">
         <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
           <tr>
             <th class="px-4 py-3.5">Client & Code</th>

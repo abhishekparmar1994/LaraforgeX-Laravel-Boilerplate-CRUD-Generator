@@ -134,10 +134,10 @@ class RoleController extends Controller
 
         $role = Role::findOrFail($id);
         
-        if (in_array($role->name, ['administrator', 'educator', 'student'])) {
+        if ($role->name === 'administrator') {
             return response()->json([
                 'success' => false,
-                'message' => 'System default roles cannot be deleted.'
+                'message' => 'System root administrator role cannot be deleted.'
             ], 422);
         }
 

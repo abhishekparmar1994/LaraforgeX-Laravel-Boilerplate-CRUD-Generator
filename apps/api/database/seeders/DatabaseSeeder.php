@@ -69,34 +69,21 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $teacherRole = Role::updateOrCreate(
-            ['name' => 'educator', 'guard_name' => 'web'],
+        $executiveRole = Role::updateOrCreate(
+            ['name' => 'executive', 'guard_name' => 'web'],
             [
-                'description' => 'Instructors who manage courses and student registrations',
+                'description' => 'Solar EPC Executive handling pipeline, site surveys, sizing and customer proposals',
                 'parent_id' => $adminRole->id
             ]
         );
 
-        $studentRole = Role::updateOrCreate(
-            ['name' => 'student', 'guard_name' => 'web'],
-            [
-                'description' => 'Registered students who consume content and view catalogs',
-                'parent_id' => $teacherRole->id
-            ]
-        );
-
         // 3. Assign direct permissions to roles
-        $studentRole->syncPermissions([
-            'courses.view',
-            'media.view'
-        ]);
-
-        $teacherRole->syncPermissions([
-            'courses.create',
-            'courses.edit',
-            'courses.delete',
+        $executiveRole->syncPermissions([
+            'users.view',
+            'media.view',
             'media.upload',
-            'users.view'
+            'settings.view',
+            'roles.view'
         ]);
 
         $allPermissionNames = Permission::pluck('name')->toArray();
@@ -130,29 +117,17 @@ class DatabaseSeeder extends Seeder
         );
         $developerUser->assignRole($developerRole);
 
-        $teacherUser = User::updateOrCreate(
-            ['email' => 'teacher@laraforgex.com'],
+        $executiveUser = User::updateOrCreate(
+            ['email' => 'executive@laraforgex.com'],
             [
                 'id' => '1a8fd9a7-e1ba-4f2e-89a1-cb9e8c4e47aa',
-                'name' => 'Jane Teacher',
+                'name' => 'Solar Executive',
                 'password' => Hash::make('SecurePassword123!'),
                 'status' => 'active',
                 'email_verified_at' => now(),
             ]
         );
-        $teacherUser->assignRole($teacherRole);
-
-        $studentUser = User::updateOrCreate(
-            ['email' => 'student@laraforgex.com'],
-            [
-                'id' => '2b8fd9a7-e1ba-4f2e-89a1-cb9e8c4e47ab',
-                'name' => 'Bob Student',
-                'password' => Hash::make('SecurePassword123!'),
-                'status' => 'active',
-                'email_verified_at' => now(),
-            ]
-        );
-        $studentUser->assignRole($studentRole);
+        $executiveUser->assignRole($executiveRole);
 
 
         // 5. Seed Platform Settings

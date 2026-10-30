@@ -193,8 +193,11 @@
       }
   }
 
-  async function deleteWebhook(id) {
-      if (confirm('Delete this webhook endpoint?')) {
+  function deleteWebhook(id) {
+      window.confirmDelete({
+          title: 'Delete Webhook Endpoint?',
+          text: 'This automated webhook subscription will be permanently removed.'
+      }, async () => {
           try {
               const res = await axios.delete(`/webhooks/${id}`);
               if (res.data.success) {
@@ -204,7 +207,7 @@
           } catch (err) {
               handleAjaxError(err, 'Failed to delete webhook.');
           }
-      }
+      });
   }
 </script>
 @endsection

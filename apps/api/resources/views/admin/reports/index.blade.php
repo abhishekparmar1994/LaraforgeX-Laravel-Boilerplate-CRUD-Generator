@@ -23,11 +23,11 @@
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
     <div class="bg-white border border-slate-200 p-5 rounded-3xl shadow-xs">
       <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block">Total Collected Revenue</span>
-      <h3 class="text-2xl font-extrabold text-emerald-700 mt-1">${{ number_format($totalRevenue, 0) }}</h3>
+      <h3 class="text-2xl font-extrabold text-emerald-700 mt-1">₹{{ number_format($totalRevenue, 0) }}</h3>
     </div>
     <div class="bg-white border border-slate-200 p-5 rounded-3xl shadow-xs">
       <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider block">Pending Collections</span>
-      <h3 class="text-2xl font-extrabold text-amber-700 mt-1">${{ number_format($pendingRevenue, 0) }}</h3>
+      <h3 class="text-2xl font-extrabold text-amber-700 mt-1">₹{{ number_format($pendingRevenue, 0) }}</h3>
     </div>
     <div class="bg-white border border-slate-200 p-5 rounded-3xl shadow-xs">
       <span class="text-[10px] font-bold text-brand-600 uppercase tracking-wider block">Pipeline Conversion Rate</span>
@@ -48,7 +48,7 @@
     <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs space-y-4">
       <h3 class="font-extrabold text-sm text-slate-900">Project Types & Total Budget Value</h3>
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
+        <table class="datatable w-full text-left text-xs">
           <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase text-[10px]">
             <tr>
               <th class="px-3 py-2.5">Type</th>
@@ -61,7 +61,7 @@
               <tr>
                 <td class="px-3 py-2.5 font-bold text-slate-900">{{ $pt->project_type }}</td>
                 <td class="px-3 py-2.5">{{ $pt->count }}</td>
-                <td class="px-3 py-2.5 text-right font-extrabold text-emerald-600">${{ number_format($pt->total_budget, 0) }}</td>
+                <td class="px-3 py-2.5 text-right font-extrabold text-emerald-600" data-sort="{{ $pt->total_budget }}">₹{{ number_format($pt->total_budget, 0) }}</td>
               </tr>
             @empty
               <tr><td colspan="3" class="p-4 text-center text-slate-400">No project type data.</td></tr>
@@ -75,7 +75,7 @@
     <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs space-y-4">
       <h3 class="font-extrabold text-sm text-slate-900">Lead Acquisition Channels</h3>
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
+        <table class="datatable w-full text-left text-xs">
           <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase text-[10px]">
             <tr>
               <th class="px-3 py-2.5">Channel / Source</th>
@@ -88,7 +88,7 @@
               <tr>
                 <td class="px-3 py-2.5 font-bold text-slate-900">{{ $ls->lead_source }}</td>
                 <td class="px-3 py-2.5">{{ $ls->count }}</td>
-                <td class="px-3 py-2.5 text-right font-extrabold text-slate-800">${{ number_format($ls->total_budget, 0) }}</td>
+                <td class="px-3 py-2.5 text-right font-extrabold text-slate-800" data-sort="{{ $ls->total_budget }}">₹{{ number_format($ls->total_budget, 0) }}</td>
               </tr>
             @empty
               <tr><td colspan="3" class="p-4 text-center text-slate-400">No lead source data.</td></tr>

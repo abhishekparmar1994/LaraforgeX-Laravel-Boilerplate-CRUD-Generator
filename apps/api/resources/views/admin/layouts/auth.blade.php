@@ -24,12 +24,19 @@
   <!-- Local Offline Tailwind JS (Play CDN script loaded locally) -->
   <script src="{{ asset('vendor/tailwind/tailwind.js') }}"></script>
 
+  <!-- Plus Jakarta Sans & Satoshi Fonts (TailAdmin Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,800,700,600,500,400&display=swap" rel="stylesheet">
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'Satoshi', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'Satoshi', 'sans-serif'],
           },
           colors: {
             brand: {
@@ -50,6 +57,9 @@
     };
   </script>
   <style>
+    body, html, input, button, select, textarea {
+      font-family: 'Plus Jakarta Sans', 'Satoshi', sans-serif !important;
+    }
 
     /* ── Toast Multi-Theme & Screen Position Engine ─────────────── */
     #laraforgex-toast-container {

@@ -122,6 +122,8 @@ class ProjectController extends Controller
             'payments',
             'activities.user',
             'notes.user',
+            'bom.material.category',
+            'bom.material.company',
         ]);
 
         $clients = Client::orderBy('name')->get();

@@ -45,7 +45,11 @@ class ContactController extends Controller
             $query->where('company_id', $request->company_id);
         }
 
-        $contacts = $query->paginate(15);
+        if ($request->filled('contact_type')) {
+            $query->where('contact_type', $request->contact_type);
+        }
+
+        $contacts = $query->paginate(20);
         $companies = Company::orderBy('name')->get();
 
         return view('admin.contacts.index', compact('contacts', 'companies'));

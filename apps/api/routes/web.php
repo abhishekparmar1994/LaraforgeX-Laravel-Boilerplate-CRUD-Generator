@@ -35,6 +35,7 @@ Route::middleware(['admin.auth'])->group(function () {
         Artisan::call('route:clear');
         Artisan::call('view:clear');
         Artisan::call('optimize:clear');
+
         return "All caches cleared successfully";
     });
 
@@ -94,6 +95,8 @@ Route::prefix('admin')->middleware(['admin.auth'])->group(function () {
     // CRM — Leads & Pipeline
     Route::get('/leads', [LeadController::class, 'index']);
     Route::get('/leads/kanban', [LeadController::class, 'kanban']);
+    Route::get('/leads/sample-template', [LeadController::class, 'downloadSampleTemplate'])->name('admin.leads.sample-template');
+    Route::get('/leads/sample-csv', [LeadController::class, 'downloadSampleTemplate']);
     Route::post('/leads', [LeadController::class, 'store']);
     Route::post('/leads/import', [LeadController::class, 'import']);
     Route::get('/leads/{lead}', [LeadController::class, 'show']);
@@ -101,6 +104,12 @@ Route::prefix('admin')->middleware(['admin.auth'])->group(function () {
     Route::post('/leads/{lead}/stage', [LeadController::class, 'updateStage']);
     Route::post('/leads/{lead}/convert', [LeadController::class, 'convert']);
     Route::delete('/leads/{lead}', [LeadController::class, 'destroy']);
+
+    // CRM — Solar Product & Customer Groups
+    Route::get('/solar-product-groups', [\App\Http\Controllers\Admin\SolarGroupController::class, 'indexProductGroups']);
+    Route::post('/solar-product-groups', [\App\Http\Controllers\Admin\SolarGroupController::class, 'storeProductGroup']);
+    Route::get('/solar-customer-groups', [\App\Http\Controllers\Admin\SolarGroupController::class, 'indexCustomerGroups']);
+    Route::post('/solar-customer-groups', [\App\Http\Controllers\Admin\SolarGroupController::class, 'storeCustomerGroup']);
 
     // CRM — Companies
     Route::get('/companies', [CompanyController::class, 'index']);
@@ -140,6 +149,14 @@ Route::prefix('admin')->middleware(['admin.auth'])->group(function () {
     Route::put('/projects/{project}', [ProjectController::class, 'update']);
     Route::post('/projects/{project}/milestones', [ProjectController::class, 'storeMilestone']);
     Route::post('/milestones/{milestone}/toggle', [ProjectController::class, 'toggleMilestone']);
+    Route::post('/projects/{project}/bom', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'storeBomItem']);
+    Route::put('/bom/{bom}', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'updateBomItem']);
+    Route::delete('/bom/{bom}', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'destroyBomItem']);
+
+    // Solar Materials Catalog & Categories
+    Route::get('/materials', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'index']);
+    Route::get('/materials/categories', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'categories']);
+    Route::post('/materials', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'store']);
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
 
     // Projects — Tasks, Kanban & Todo

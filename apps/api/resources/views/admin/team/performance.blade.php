@@ -48,7 +48,7 @@
     </div>
 
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
+      <table id="team-performance-table" class="datatable w-full text-left text-xs">
         <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
           <tr>
             <th class="px-4 py-3.5 text-center w-12">#</th>
@@ -70,12 +70,12 @@
               $medal = $rank === 1 ? 'bg-amber-400 text-white' : ($rank === 2 ? 'bg-slate-300 text-slate-800' : ($rank === 3 ? 'bg-amber-700 text-white' : 'bg-slate-100 text-slate-600'));
             @endphp
             <tr class="hover:bg-slate-50/80 transition">
-              <td class="px-4 py-3.5 text-center">
+              <td class="px-4 py-3.5 text-center" data-sort="{{ $rank }}">
                 <span class="w-6 h-6 rounded-full inline-flex items-center justify-center font-black text-[10px] {{ $medal }}">
                   {{ $rank }}
                 </span>
               </td>
-              <td class="px-4 py-3.5">
+              <td class="px-4 py-3.5" data-sort="{{ $u->name }}">
                 <a href="/admin/team/{{ $u->id }}" class="flex items-center gap-2.5 group">
                   <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-extrabold text-xs flex items-center justify-center shrink-0 group-hover:bg-amber-50 group-hover:text-amber-600 transition">
                     {{ $initial }}
@@ -88,21 +88,21 @@
                   </div>
                 </a>
               </td>
-              <td class="px-4 py-3.5 text-center font-bold text-slate-800">{{ $u->stats['leads'] }}</td>
-              <td class="px-4 py-3.5 text-center font-bold text-slate-600">{{ $u->stats['active'] }}</td>
-              <td class="px-4 py-3.5 text-center">
+              <td class="px-4 py-3.5 text-center font-bold text-slate-800" data-sort="{{ $u->stats['leads'] }}">{{ $u->stats['leads'] }}</td>
+              <td class="px-4 py-3.5 text-center font-bold text-slate-600" data-sort="{{ $u->stats['active'] }}">{{ $u->stats['active'] }}</td>
+              <td class="px-4 py-3.5 text-center" data-sort="{{ $u->stats['won'] }}">
                 <span class="px-2 py-0.5 rounded-lg font-black text-xs {{ $u->stats['won'] > 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-400' }}">
                   {{ $u->stats['won'] }}
                 </span>
               </td>
-              <td class="px-4 py-3.5 text-center font-semibold text-rose-500">{{ $u->stats['lost'] }}</td>
-              <td class="px-4 py-3.5 text-center">
+              <td class="px-4 py-3.5 text-center font-semibold text-rose-500" data-sort="{{ $u->stats['lost'] }}">{{ $u->stats['lost'] }}</td>
+              <td class="px-4 py-3.5 text-center" data-sort="{{ $u->stats['rate'] }}">
                 <span class="font-extrabold text-xs {{ $u->stats['rate'] >= 5 ? 'text-emerald-600' : ($u->stats['rate'] > 0 ? 'text-amber-600' : 'text-slate-400') }}">
                   {{ $u->stats['rate'] }}%
                 </span>
               </td>
-              <td class="px-4 py-3.5 text-center font-bold text-slate-700">{{ $u->stats['activities'] }}</td>
-              <td class="px-4 py-3.5 text-right font-extrabold text-slate-900">
+              <td class="px-4 py-3.5 text-center font-bold text-slate-700" data-sort="{{ $u->stats['activities'] }}">{{ $u->stats['activities'] }}</td>
+              <td class="px-4 py-3.5 text-right font-extrabold text-slate-900" data-sort="{{ $u->stats['pipeline_value'] }}">
                 ₹ {{ number_format($u->stats['pipeline_value'] / 100000, 2) }} L
               </td>
             </tr>

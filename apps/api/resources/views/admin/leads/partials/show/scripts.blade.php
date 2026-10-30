@@ -4,7 +4,7 @@ async function updateLeadField(field, val) {
     const data = {};
     data[field] = val;
 
-    const res = await axios.put('/admin/leads/{{ $lead->id }}', data);
+    const res = await axios.put('/admin/leads/{{ $lead->id }}', data, { baseURL: '' });
     if (res.data?.success) {
       if (window.showToast) {
         window.showToast('success', 'Lead ' + field.replace(/_/g, ' ') + ' updated.');
@@ -103,18 +103,121 @@ async function markFollowupComplete(id) {
   }
 }
 
-async function deleteFollowup(id) {
-  if (!confirm('Are you sure you want to delete this scheduled follow-up?')) return;
+function deleteFollowup(id) {
+  window.confirmDelete({
+    title: 'Delete Follow-up?',
+    text: 'Are you sure you want to delete this scheduled solar follow-up?'
+  }, async () => {
+    try {
+      const res = await axios.delete('/admin/followups/' + id, { baseURL: '' });
+      if (res.data?.success) {
+        const item = document.getElementById('followup-item-' + id);
+        if (item) item.remove();
+        if (window.showToast) window.showToast('success', 'Follow-up deleted.');
+      }
+    } catch (err) {
+      if (window.showToast) window.showToast('error', 'Failed to delete follow-up.');
+    }
+  });
+}
+
+/**
+ * Open Solar Sizing & PM Surya Ghar Subsidy edit modal.
+ */
+function openSolarSizingModal() {
+  const modal = document.getElementById('modal-edit-solar-sizing');
+  if (modal) {
+    modal.classList.remove('hidden');
+    calcSolarMetrics();
+  }
+}
+
+/**
+ * Close Solar Sizing edit modal.
+ */
+function closeSolarSizingModal() {
+  const modal = document.getElementById('modal-edit-solar-sizing');
+  if (modal) modal.classList.add('hidden');
+}
+
+/**
+ * Apply preset sizing values (3kW, 5kW, 10kW, etc.)
+ */
+function applySizingPreset(kw, budget, subsidy) {
+  const kwEl = document.getElementById('modal_kw');
+  const bEl = document.getElementById('modal_budget');
+  const sEl = document.getElementById('modal_subsidy');
+  if (kwEl) kwEl.value = kw;
+  if (bEl) bEl.value = budget;
+  if (sEl) sEl.value = subsidy;
+  calcSolarMetrics();
+}
+
+/**
+ * Re-calculate solar ROI metrics in real time in the modal.
+ */
+function calcSolarMetrics() {
+  const kw = parseFloat(document.getElementById('modal_kw')?.value) || 3.0;
+  let budget = parseFloat(document.getElementById('modal_budget')?.value) || (kw * 55000);
+  let subsidy = parseFloat(document.getElementById('modal_subsidy')?.value);
+
+  if (isNaN(subsidy)) {
+    subsidy = kw <= 1.0 ? 30000 : (kw <= 2.0 ? 60000 : 78000);
+    const subEl = document.getElementById('modal_subsidy');
+    if (subEl) subEl.value = subsidy;
+  }
+
+  const net = Math.max(0, budget - subsidy);
+  const netPreview = document.getElementById('modal_net_preview');
+  if (netPreview) netPreview.value = net.toLocaleString('en-IN');
+
+  const units = Math.round(kw * 1400);
+  const savings = Math.round(units * 7.5);
+  const payback = savings > 0 ? (net / savings).toFixed(1) : 3.0;
+
+  const uEl = document.getElementById('preview_units');
+  const sEl = document.getElementById('preview_savings');
+  const pEl = document.getElementById('preview_payback');
+  if (uEl) uEl.innerText = units.toLocaleString('en-IN') + ' Units';
+  if (sEl) sEl.innerText = '₹' + savings.toLocaleString('en-IN') + '/yr';
+  if (pEl) pEl.innerText = '~' + payback + ' Years';
+}
+
+/**
+ * Submit updated solar sizing & subsidy parameters via AJAX.
+ */
+async function saveSolarSizing(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSaveSizing');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
+  }
+
   try {
-    const res = await axios.delete('/admin/followups/' + id);
+    const payload = {
+      solar_capacity_kw: parseFloat(document.getElementById('modal_kw')?.value) || 3.0,
+      estimated_budget: parseFloat(document.getElementById('modal_budget')?.value) || 0,
+      subsidy_amount: parseFloat(document.getElementById('modal_subsidy')?.value) || 0,
+      monthly_bill: parseFloat(document.getElementById('modal_monthly_bill')?.value) || 0,
+      sanctioned_load: parseFloat(document.getElementById('modal_sanctioned_load')?.value) || 0,
+      consumer_number: document.getElementById('modal_consumer_number')?.value || '',
+      discom: document.getElementById('modal_discom')?.value || 'MGVCL',
+    };
+
+    const res = await axios.put('/admin/leads/{{ $lead->id }}', payload, { baseURL: '' });
     if (res.data?.success) {
-      const item = document.getElementById('followup-item-' + id);
-      if (item) item.remove();
-      if (window.showToast) window.showToast('success', 'Follow-up deleted.');
+      if (window.showToast) window.showToast('success', 'Solar sizing and subsidy updated!');
+      closeSolarSizingModal();
+      setTimeout(() => window.location.reload(), 400);
     }
   } catch (err) {
-    console.error('Delete follow-up error:', err);
-    if (window.showToast) window.showToast('error', 'Failed to delete follow-up.');
+    console.error('Save sizing error:', err);
+    if (window.showToast) window.showToast('error', 'Failed to update solar sizing.');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Sizing & Update';
+    }
   }
 }
 </script>

@@ -28,26 +28,26 @@
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
     <div class="bg-white border border-slate-200 p-4 rounded-3xl shadow-xs">
       <span class="text-[10px] font-bold text-slate-400 uppercase block">Total Invoiced</span>
-      <h3 class="text-xl font-extrabold text-slate-900 mt-1">${{ number_format($stats['total_invoiced'], 0) }}</h3>
+      <h3 class="text-xl font-extrabold text-slate-900 mt-1">₹{{ number_format($stats['total_invoiced'], 0) }}</h3>
     </div>
     <div class="bg-white border border-slate-200 p-4 rounded-3xl shadow-xs">
       <span class="text-[10px] font-bold text-emerald-600 uppercase block">Collected Revenue</span>
-      <h3 class="text-xl font-extrabold text-emerald-700 mt-1">${{ number_format($stats['total_paid'], 0) }}</h3>
+      <h3 class="text-xl font-extrabold text-emerald-700 mt-1">₹{{ number_format($stats['total_paid'], 0) }}</h3>
     </div>
     <div class="bg-white border border-slate-200 p-4 rounded-3xl shadow-xs">
       <span class="text-[10px] font-bold text-amber-600 uppercase block">Pending Balance</span>
-      <h3 class="text-xl font-extrabold text-amber-700 mt-1">${{ number_format($stats['total_pending'], 0) }}</h3>
+      <h3 class="text-xl font-extrabold text-amber-700 mt-1">₹{{ number_format($stats['total_pending'], 0) }}</h3>
     </div>
     <div class="bg-white border border-slate-200 p-4 rounded-3xl shadow-xs">
       <span class="text-[10px] font-bold text-rose-600 uppercase block">Overdue Invoices</span>
-      <h3 class="text-xl font-extrabold text-rose-700 mt-1">${{ number_format($stats['total_overdue'], 0) }}</h3>
+      <h3 class="text-xl font-extrabold text-rose-700 mt-1">₹{{ number_format($stats['total_overdue'], 0) }}</h3>
     </div>
   </div>
 
   <!-- Invoices Table -->
   <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-xs">
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
+      <table class="datatable w-full text-left text-xs">
         <thead class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
           <tr>
             <th class="px-4 py-3.5">Invoice #</th>
@@ -69,8 +69,8 @@
                 <span class="font-bold text-slate-800 block">{{ $pay->client ? $pay->client->name : 'N/A' }}</span>
                 <span class="text-[11px] text-slate-400">{{ $pay->project ? $pay->project->name : 'General Retainer' }}</span>
               </td>
-              <td class="px-4 py-3.5 font-extrabold text-sm text-slate-900">
-                ${{ number_format($pay->amount, 2) }}
+              <td class="px-4 py-3.5 font-extrabold text-sm text-slate-900" data-sort="{{ $pay->amount }}">
+                ₹{{ number_format($pay->amount, 2) }}
               </td>
               <td class="px-4 py-3.5 font-semibold text-slate-600">
                 {{ $pay->payment_method }}
@@ -177,15 +177,30 @@
 </div>
 
 <script>
-  async function confirmDeletePayment(id) {
-    if (confirm('Delete this invoice record?')) {
+  /**
+   * Purpose: SweetAlert2 confirmation dialog to delete solar billing invoice.
+   * Parameters: number|string id
+   */
+  function confirmDeletePayment(id) {
+    window.confirmDelete({
+      title: 'Delete Invoice Record?',
+      text: 'This payment invoice will be permanently removed from solar project billing.'
+    }, async () => {
       try {
-        await axios.delete(`/admin/payments/${id}`);
+        await axios.delete(`/admin/payments/${id}`, { baseURL: '' });
+        if (typeof window.showToast === 'function') {
+          window.showToast('success', 'Invoice record deleted.');
+        }
         location.reload();
       } catch(e) {
-        alert('Failed to delete payment record');
+        try {
+          await axios.delete(`/payments/${id}`);
+          location.reload();
+        } catch(e2) {
+          window.handleAjaxError(e2, 'Failed to delete payment record.');
+        }
       }
-    }
+    });
   }
 </script>
 @endsection

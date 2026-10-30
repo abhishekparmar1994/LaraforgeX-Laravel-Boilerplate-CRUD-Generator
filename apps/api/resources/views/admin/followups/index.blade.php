@@ -107,16 +107,36 @@
 @section('scripts')
 <script>
   function completeFollowup(id) {
-    if (!confirm('Mark this solar follow-up as completed?')) return;
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        title: 'Complete Follow-up?',
+        text: 'Mark this solar client follow-up as successfully resolved.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#059669',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: '<i class="fa-solid fa-check mr-1"></i> Yes, complete',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+      }).then(res => {
+        if (res.isConfirmed) submitFollowupComplete(id);
+      });
+    } else if (confirm('Mark this solar follow-up as completed?')) {
+      submitFollowupComplete(id);
+    }
+  }
+
+  function submitFollowupComplete(id) {
     $.ajax({
       url: `/admin/followups/${id}/complete`,
       type: 'POST',
       data: { _token: '{{ csrf_token() }}' },
       success: function() {
+        if (typeof window.showToast === 'function') window.showToast('success', 'Follow-up completed');
         window.location.reload();
       },
       error: function() {
-        alert('Could not complete follow-up. Please try again.');
+        window.showToast ? window.showToast('error', 'Could not complete follow-up.') : alert('Could not complete follow-up.');
       }
     });
   }

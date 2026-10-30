@@ -259,16 +259,20 @@
               openConversation(c.id, c.title);
             });
 
-            item.find('.btn-delete-conv').on('click', async function (e) {
+            item.find('.btn-delete-conv').on('click', function (e) {
               e.stopPropagation();
-              if (!confirm('Delete this conversation?')) return;
-              try {
-                await axios.delete(`/agent/conversations/${c.id}`);
-                if (activeConversationId === c.id) $('#btn-new-chat').click();
-                loadConversations();
-              } catch (err) {
-                alert('Failed to delete conversation.');
-              }
+              window.confirmDelete({
+                title: 'Delete Conversation?',
+                text: 'This AI chat conversation will be permanently removed.'
+              }, async () => {
+                try {
+                  await axios.delete(`/agent/conversations/${c.id}`);
+                  if (activeConversationId === c.id) $('#btn-new-chat').click();
+                  loadConversations();
+                } catch (err) {
+                  window.handleAjaxError(err, 'Failed to delete conversation.');
+                }
+              });
             });
 
             $el.append(item);

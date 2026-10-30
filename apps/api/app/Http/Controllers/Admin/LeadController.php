@@ -9,11 +9,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLeadRequest;
 use App\Models\Lead;
 use App\Services\LeadImportService;
+use App\Services\SampleTemplateService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Controller for managing CRM Leads and Kanban pipeline.
@@ -23,15 +25,18 @@ class LeadController extends Controller
     protected ConvertLeadToClientAction $convertAction;
     protected LogActivityAction $activityLogger;
     protected LeadImportService $importService;
+    protected SampleTemplateService $templateService;
 
     public function __construct(
         ConvertLeadToClientAction $convertAction,
         LogActivityAction $activityLogger,
-        LeadImportService $importService
+        LeadImportService $importService,
+        SampleTemplateService $templateService
     ) {
         $this->convertAction = $convertAction;
         $this->activityLogger = $activityLogger;
         $this->importService = $importService;
+        $this->templateService = $templateService;
     }
 
     /**
@@ -135,11 +140,16 @@ class LeadController extends Controller
             }
         }
 
-        if ($request->filled('industry')) $query->where('industry', $request->industry);
-        if ($request->filled('status')) $query->where('status', $request->status);
-        if ($request->filled('priority')) $query->where('priority', $request->priority);
-        if ($request->filled('source')) $query->where('lead_source', $request->source);
-        if ($request->filled('developer_id')) $query->where('assigned_to_user_id', $request->developer_id);
+        if ($request->filled('industry'))
+            $query->where('industry', $request->industry);
+        if ($request->filled('status'))
+            $query->where('status', $request->status);
+        if ($request->filled('priority'))
+            $query->where('priority', $request->priority);
+        if ($request->filled('source'))
+            $query->where('lead_source', $request->source);
+        if ($request->filled('developer_id'))
+            $query->where('assigned_to_user_id', $request->developer_id);
     }
 
     /**
@@ -346,7 +356,7 @@ class LeadController extends Controller
             "New Solar Lead registered: '{$lead->company_name}' ({$lead->contact_person})."
         );
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson() || $request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Solar lead created successfully',
@@ -420,7 +430,7 @@ class LeadController extends Controller
             );
         }
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson() || $request->expectsJson()) {
             return response()->json(['success' => true, 'message' => 'Lead updated successfully', 'lead' => $lead]);
         }
 
@@ -466,7 +476,7 @@ class LeadController extends Controller
         $options = $request->only(['job_title', 'create_project', 'project_name', 'project_type', 'create_website']);
         $client = $this->convertAction->execute($lead, $options);
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson() || $request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Lead converted to Client successfully!',
@@ -513,6 +523,27 @@ class LeadController extends Controller
             }
             return redirect()->back()->with('error', 'Import failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Purpose: Download pre-formatted sample Excel/CSV template for bulk solar lead import.
+     * Parameters: None
+     * Return: StreamedResponse
+     * Errors: None
+     * Side Effects: Streams CSV file download to client browser.
+     */
+    public function downloadSampleTemplate(): StreamedResponse
+    {
+        $csv = $this->templateService->getSolarLeadsSampleCsv();
+        $filename = 'solar_leads_sample_template.csv';
+
+        return response()->streamDownload(function () use ($csv) {
+            echo $csv;
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Cache-Control' => 'no-store, no-cache',
+        ]);
     }
 
     /**

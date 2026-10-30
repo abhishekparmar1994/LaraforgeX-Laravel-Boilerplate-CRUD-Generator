@@ -161,7 +161,7 @@
 <script>
   async function toggleTodoTask(taskId) {
     try {
-      const res = await axios.post(`{{ url('/admin/tasks') }}/${taskId}/toggle`);
+      const res = await axios.post(`/admin/tasks/${taskId}/toggle`, {}, { baseURL: '' });
       if (res.data && res.data.success) {
         if (typeof window.showToast === 'function') {
           window.showToast('success', res.data.status === 'completed' ? 'Task completed' : 'Task reopened');

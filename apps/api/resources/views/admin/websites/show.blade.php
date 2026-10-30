@@ -284,7 +284,7 @@
 <script>
   async function revealPassword(credentialId) {
     try {
-      const res = await axios.post(`/admin/credentials/${credentialId}/reveal`);
+      const res = await axios.post(`/admin/credentials/${credentialId}/reveal`, {}, { baseURL: '' });
       const pass = res.data.password;
       $(`#cred-pass-${credentialId}`).text(pass).addClass('text-slate-900 font-bold select-all');
     } catch(e) {
@@ -292,15 +292,18 @@
     }
   }
 
-  async function deleteCredential(credentialId) {
-    if (confirm('Delete this credential from vault?')) {
+  function deleteCredential(credentialId) {
+    window.confirmDelete({
+      title: 'Delete Credential?',
+      text: 'Are you sure you want to delete this credential from vault?'
+    }, async () => {
       try {
-        await axios.delete(`/admin/credentials/${credentialId}`);
+        await axios.delete(`/admin/credentials/${credentialId}`, { baseURL: '' });
         location.reload();
       } catch(e) {
-        alert('Failed to delete credential');
+        window.handleAjaxError(e, 'Failed to delete credential');
       }
-    }
+    });
   }
 </script>
 @endsection
