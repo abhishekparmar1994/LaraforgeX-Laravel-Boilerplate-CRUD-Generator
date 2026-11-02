@@ -16,23 +16,43 @@
           const targetIdx = stages.indexOf(val);
 
           stageBtns.forEach((btn, idx) => {
-            btn.className = 'stage-btn relative group py-2.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer border';
+            btn.className = 'stage-btn w-full relative group py-2.5 px-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer border';
             const badge = btn.querySelector('span');
 
             if (idx === targetIdx) {
-              btn.classList.add('bg-amber-600', 'text-white', 'border-amber-600', 'shadow-md', 'shadow-amber-600/25', 'ring-2', 'ring-amber-500/20');
-              badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black bg-white text-amber-600';
+              btn.classList.add('bg-gradient-to-r', 'from-amber-500', 'via-amber-600', 'to-orange-500', 'text-white', 'border-amber-500', 'shadow-md', 'shadow-amber-500/25', 'ring-2', 'ring-amber-400/40');
+              badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black bg-white text-amber-600 shadow-2xs shrink-0';
               badge.innerHTML = (idx + 1);
             } else if (idx < targetIdx) {
-              btn.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200', 'hover:bg-emerald-100');
-              badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black bg-emerald-600 text-white';
+              btn.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200', 'hover:bg-emerald-100/90', 'shadow-2xs');
+              badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black bg-emerald-600 text-white shrink-0';
               badge.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i>';
             } else {
-              btn.classList.add('bg-white', 'hover:bg-slate-100', 'text-slate-600', 'border-slate-200');
-              badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black bg-slate-100 text-slate-500';
+              btn.classList.add('bg-white', 'hover:bg-slate-50', 'text-slate-600', 'border-slate-200/90', 'shadow-2xs');
+              badge.className = 'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black bg-slate-100 text-slate-500 border border-slate-200 shrink-0';
               badge.innerHTML = (idx + 1);
             }
           });
+
+          // Live update the chain chevron connectors
+          const connectors = document.querySelectorAll('.stage-connector i');
+          connectors.forEach((conn, cIdx) => {
+            conn.className = 'fa-solid fa-chevron-right text-[10px] transition-colors';
+            if (cIdx < targetIdx) {
+              conn.classList.add('text-emerald-500');
+            } else if (cIdx === targetIdx) {
+              conn.classList.add('text-amber-500');
+            } else {
+              conn.classList.add('text-slate-300');
+            }
+          });
+
+          // Live update the progress badge
+          const progBadge = document.getElementById('pipeline-progress-badge');
+          if (progBadge) {
+            const pct = Math.round(((targetIdx + 1) / stages.length) * 100);
+            progBadge.textContent = `Stage ${targetIdx + 1} of ${stages.length} • ${pct}%`;
+          }
         }
       }
     } catch (err) {

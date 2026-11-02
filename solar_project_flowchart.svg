@@ -1,0 +1,436 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 2620" width="1200" height="2620" style="background:#0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="50%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    
+    <linearGradient id="p1Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="p2Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c2410c" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="p3Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4338ca" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <linearGradient id="p4Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="p5Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6d28d9" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <linearGradient id="p6Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0369a1" />
+      <stop offset="100%" stop-color="#0ea5e9" />
+    </linearGradient>
+    <linearGradient id="p7Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#14b8a6" />
+    </linearGradient>
+    <linearGradient id="p8Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#15803d" />
+      <stop offset="100%" stop-color="#22c55e" />
+    </linearGradient>
+
+    <!-- Arrowhead markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#94a3b8" />
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f59e0b" />
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#22c55e" />
+    </marker>
+    
+    <!-- Drop Shadows -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- ==================== HEADER ==================== -->
+  <g transform="translate(60, 40)">
+    <rect width="1080" height="100" rx="20" fill="#1e293b" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
+    <circle cx="55" cy="50" r="28" fill="url(#headerGrad)" />
+    <!-- Sun icon -->
+    <path d="M55 34 v-4 M55 70 v-4 M39 50 h-4 M75 50 h-4 M44 39 l-3 -3 M69 64 l-3 -3 M44 61 l-3 3 M69 36 l-3 3" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+    <circle cx="55" cy="50" r="8" fill="#ffffff" />
+    
+    <text x="100" y="44" fill="#f8fafc" font-size="22" font-weight="800" letter-spacing="-0.5">Solar EPC &amp; Rooftop OS — Project Lifecycle</text>
+    <text x="100" y="68" fill="#94a3b8" font-size="13" font-weight="500">End-to-End Architectural Flow: Lead Intake → Sizing &amp; Proposal → Client Conversion → BOM Procurement → Grid Sync &amp; DBT Subsidy</text>
+  </g>
+
+  <!-- ==================== PHASE 1: LEAD INTAKE ==================== -->
+  <g transform="translate(60, 165)">
+    <rect width="1080" height="235" rx="20" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)" />
+    <!-- Header Badge -->
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p1Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 1: LEAD INTAKE &amp; QUALIFICATION (STAGE 1: NEW LEAD)</text>
+    
+    <!-- Step 1.1 -->
+    <g transform="translate(24, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#f59e0b" font-size="13" font-weight="700">1. Ingestion Sources</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Bulk Excel / CSV Import (Auto-skip dupes)</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Direct CRM Manual Entry (+ Quick Add)</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Inbound Web Inquiries / Scraped Leads</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Route: /admin/leads/import</text>
+    </g>
+
+    <line x1="354" y1="135" x2="384" y2="135" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrowAmber)" />
+
+    <!-- Step 1.2 -->
+    <g transform="translate(390, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#f59e0b" font-size="13" font-weight="700">2. Consumer &amp; Grid Discovery</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• DISCOM: UGVCL, MGVCL, DGVCL, PGVCL</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Consumer Number (HT / LT Connection)</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Monthly Power Bill (₹) &amp; Sanctioned Load</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">DB: crm_leads (Address, Locality, Pincode)</text>
+    </g>
+
+    <line x1="720" y1="135" x2="750" y2="135" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrowAmber)" />
+
+    <!-- Step 1.3 -->
+    <g transform="translate(756, 60)">
+      <rect width="300" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#f59e0b" font-size="13" font-weight="700">3. Assignment &amp; Sizing Triage</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Auto-assigned to Solar EPC Executive</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Set Deal Priority (Urgent, High, Normal)</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Preliminary rooftop potential screening</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Action: Assigned to Omkar / Rohan / Bhavik</text>
+    </g>
+  </g>
+
+  <!-- Connector Phase 1 -> Phase 2 -->
+  <line x1="600" y1="400" x2="600" y2="435" stroke="#64748b" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 2: SURVEY & ASSESSMENT ==================== -->
+  <g transform="translate(60, 440)">
+    <rect width="1080" height="235" rx="20" fill="#1e293b" stroke="#ea580c" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p2Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 2: SITE SURVEY &amp; PRELIMINARY ASSESSMENT (STAGE 2: SITE SURVEY)</text>
+
+    <!-- Step 2.1 -->
+    <g transform="translate(24, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#fb923c" font-size="13" font-weight="700">1. Instant Executive Follow-up</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• 1-Click WhatsApp deep link with template</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Direct phone dialer &amp; scheduling</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Follow-up Command Center reminder</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Status: Overdue / Today / Upcoming</text>
+    </g>
+
+    <line x1="354" y1="135" x2="384" y2="135" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 2.2 -->
+    <g transform="translate(390, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#fb923c" font-size="13" font-weight="700">2. Technical Rooftop Inspection</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Shadow-free area (sq. ft.) measurement</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Roof structural load check (RCC / Tin / Tile)</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Azimuth, tilt angle &amp; parapet shadowing</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Field Audit: Engineer verifies feasibility</text>
+    </g>
+
+    <line x1="720" y1="135" x2="750" y2="135" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 2.3 -->
+    <g transform="translate(756, 60)">
+      <rect width="300" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#fb923c" font-size="13" font-weight="700">3. Status Progression</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Site Survey logged into CRM timeline</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Follow-up marked 'Done'</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Advance lead stage to 'Site Survey'</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Pipeline: Stage 2 Complete</text>
+    </g>
+  </g>
+
+  <!-- Connector Phase 2 -> Phase 3 -->
+  <line x1="600" y1="675" x2="600" y2="710" stroke="#64748b" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 3: SOLAR SIZING & SUBSIDY ==================== -->
+  <g transform="translate(60, 715)">
+    <rect width="1080" height="235" rx="20" fill="#1e293b" stroke="#6366f1" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p3Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 3: SOLAR SIZING &amp; PM SURYA GHAR FEASIBILITY (STAGE 3: FEASIBILITY OK)</text>
+
+    <!-- Step 3.1 -->
+    <g transform="translate(24, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#818cf8" font-size="13" font-weight="700">1. Sizing Calculation Engine</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Power Consumption = Bill / Tariff Rate</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Capacity (kW) = Monthly Units / 120</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Capped against Sanctioned DISCOM Load</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Result: 3 kW, 5 kW, 10 kW, 25 kW System</text>
+    </g>
+
+    <line x1="354" y1="135" x2="384" y2="135" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 3.2 -->
+    <g transform="translate(390, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#818cf8" font-size="13" font-weight="700">2. Central DBT Subsidy Formula</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Up to 1 kW: ₹33,000 Direct Subsidy</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• 2 kW System: ₹66,000 Direct Subsidy</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• 3 kW &amp; Above: ₹78,000 (Maximum Cap)</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">PM Surya Ghar Muft Bijli Yojana</text>
+    </g>
+
+    <line x1="720" y1="135" x2="750" y2="135" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 3.3 -->
+    <g transform="translate(756, 60)">
+      <rect width="300" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#818cf8" font-size="13" font-weight="700">3. Financial ROI &amp; Payback</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Net Cost = System Cost - DBT Subsidy</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Annual Electricity Bill Savings (₹)</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Payback period: ~3.5 to 4.5 Years</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Pipeline: Stage 3 (Feasibility OK)</text>
+    </g>
+  </g>
+
+  <!-- Connector Phase 3 -> Phase 4 -->
+  <line x1="600" y1="950" x2="600" y2="985" stroke="#64748b" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 4: PROPOSAL & NET METERING ==================== -->
+  <g transform="translate(60, 990)">
+    <rect width="1080" height="235" rx="20" fill="#1e293b" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p4Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 4: PROPOSAL, DISCOM NET-METERING &amp; CLOSING (STAGES 4 &amp; 5)</text>
+
+    <!-- Step 4.1 -->
+    <g transform="translate(24, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#34d399" font-size="13" font-weight="700">1. Sizing Sheet &amp; Quotation</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Generate EPC Turnkey Proposal</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Modules: Waaree / Tata Power Bifacial</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Inverters: Sungrow / Solis / Growatt</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Pipeline: Stage 4 (Proposal Sent)</text>
+    </g>
+
+    <line x1="354" y1="135" x2="384" y2="135" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 4.2 -->
+    <g transform="translate(390, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#34d399" font-size="13" font-weight="700">2. Portal Links &amp; DISCOM Sync</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• PM Surya Ghar National Portal registration</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• DCR Portal module serial validation</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Jan Samarth portal collateral-free loan</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">DISCOM: Feasibility letter approved</text>
+    </g>
+
+    <line x1="720" y1="135" x2="750" y2="135" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 4.3 -->
+    <g transform="translate(756, 60)">
+      <rect width="300" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#34d399" font-size="13" font-weight="700">3. EPC Turnkey Contract Won</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Consumer signs installation agreement</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Advance project booking payment received</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Pipeline updated to Stage 5 (Net Metering)</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Deal Ready for Project Conversion</text>
+    </g>
+  </g>
+
+  <!-- Connector Phase 4 -> Phase 5 -->
+  <line x1="600" y1="1225" x2="600" y2="1260" stroke="#64748b" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 5: CONVERSION TO PROJECT ==================== -->
+  <g transform="translate(60, 1265)">
+    <rect width="1080" height="245" rx="20" fill="#1e293b" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p5Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 5: AUTOMATED CLIENT &amp; SOLAR PROJECT CONVERSION (STAGE 6: WON)</text>
+
+    <!-- Trigger -->
+    <g transform="translate(24, 60)">
+      <rect width="260" height="160" rx="12" fill="#0f172a" stroke="#8b5cf6" stroke-width="1" />
+      <text x="16" y="30" fill="#a78bfa" font-size="13" font-weight="700">Trigger: Convert Button</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• User clicks:</text>
+      <text x="16" y="75" fill="#f59e0b" font-size="12" font-weight="700">"Convert to Solar Project"</text>
+      <text x="16" y="100" fill="#cbd5e1" font-size="12">• Selects Segment (Residential / C&amp;I / KUSUM)</text>
+      <text x="16" y="125" fill="#cbd5e1" font-size="12">• Runs DB Transaction</text>
+    </g>
+
+    <line x1="294" y1="140" x2="324" y2="140" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Atomic Entities Created -->
+    <g transform="translate(330, 60)">
+      <rect width="726" height="160" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="20" y="30" fill="#a78bfa" font-size="13" font-weight="700">ConvertLeadToClientAction — Synchronized Records Created:</text>
+      
+      <rect x="20" y="45" width="220" height="100" rx="8" fill="#1e293b" />
+      <text x="32" y="70" fill="#38bdf8" font-size="12" font-weight="700">1. Client &amp; Company</text>
+      <text x="32" y="92" fill="#cbd5e1" font-size="11">• Code: CLI-10XX</text>
+      <text x="32" y="110" fill="#cbd5e1" font-size="11">• Company profile created</text>
+      <text x="32" y="128" fill="#cbd5e1" font-size="11">• Primary contact linked</text>
+
+      <rect x="252" y="45" width="220" height="100" rx="8" fill="#1e293b" />
+      <text x="264" y="70" fill="#38bdf8" font-size="12" font-weight="700">2. Solar EPC Project</text>
+      <text x="264" y="92" fill="#cbd5e1" font-size="11">• Table: crm_projects</text>
+      <text x="264" y="110" fill="#cbd5e1" font-size="11">• Contract Budget (₹)</text>
+      <text x="264" y="128" fill="#cbd5e1" font-size="11">• PM &amp; Devs assigned</text>
+
+      <rect x="484" y="45" width="222" height="100" rx="8" fill="#1e293b" />
+      <text x="496" y="70" fill="#38bdf8" font-size="12" font-weight="700">3. Plant &amp; Won Status</text>
+      <text x="496" y="92" fill="#cbd5e1" font-size="11">• Table: crm_websites (Plant)</text>
+      <text x="496" y="110" fill="#cbd5e1" font-size="11">• Inverter &amp; Net Meter sync</text>
+      <text x="496" y="128" fill="#4ade80" font-size="11" font-weight="700">• Lead marked: WON ✓</text>
+    </g>
+  </g>
+
+  <!-- Connector Phase 5 -> Phase 6 -->
+  <line x1="600" y1="1510" x2="600" y2="1545" stroke="#64748b" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 6: BOM PROCUREMENT ==================== -->
+  <g transform="translate(60, 1550)">
+    <rect width="1080" height="235" rx="20" fill="#1e293b" stroke="#0ea5e9" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p6Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 6: SOLAR BILL OF MATERIALS (BOM) &amp; KIT ALLOCATION</text>
+
+    <!-- Step 6.1 -->
+    <g transform="translate(24, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#38bdf8" font-size="13" font-weight="700">1. Master Materials Catalog</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Solar PV Modules (Panels: Bifacial / TOPCon)</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Solar Inverters (On-Grid String / Hybrid)</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• ACDB / DCDB, Earthing &amp; Cables</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Route: /admin/materials</text>
+    </g>
+
+    <line x1="354" y1="135" x2="384" y2="135" stroke="#0ea5e9" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 6.2 -->
+    <g transform="translate(390, 60)">
+      <rect width="320" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#38bdf8" font-size="13" font-weight="700">2. Itemized Kit Allocation</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Assign item quantity, rate &amp; GST %</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Track status: Allocated → Installed</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Record module &amp; inverter serial numbers</text>
+      <text x="16" y="121" fill="#94a3b8" font-size="11">Table: crm_solar_project_bom</text>
+    </g>
+
+    <line x1="720" y1="135" x2="750" y2="135" stroke="#0ea5e9" stroke-width="2" marker-end="url(#arrow)" />
+
+    <!-- Step 6.3 -->
+    <g transform="translate(756, 60)">
+      <rect width="300" height="150" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#38bdf8" font-size="13" font-weight="700">3. Gross Margin Live Tracking</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Total Allocated BOM Cost (₹)</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Plant Project Value: ₹ Contract Amount</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Gross Margin % = (Value - BOM) / Value</text>
+      <text x="16" y="121" fill="#4ade80" font-size="11" font-weight="700">Protects EPC Project Profitability</text>
+    </g>
+  </g>
+
+  <!-- Connector Phase 6 -> Phase 7 -->
+  <line x1="600" y1="1785" x2="600" y2="1820" stroke="#64748b" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 7: SITE EXECUTION & MILESTONES ==================== -->
+  <g transform="translate(60, 1825)">
+    <rect width="1080" height="245" rx="20" fill="#1e293b" stroke="#14b8a6" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p7Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 7: ON-SITE INSTALLATION &amp; DELIVERY MILESTONES</text>
+
+    <!-- Grid of 4 Milestones -->
+    <g transform="translate(24, 60)">
+      <rect width="245" height="160" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="14" y="28" fill="#2dd4bf" font-size="12" font-weight="700">M1: Structure &amp; MMS</text>
+      <text x="14" y="52" fill="#cbd5e1" font-size="11">• Civil foundation ready</text>
+      <text x="14" y="72" fill="#cbd5e1" font-size="11">• HDG structure erection</text>
+      <text x="14" y="92" fill="#cbd5e1" font-size="11">• Anchor fastener testing</text>
+      <text x="14" y="130" fill="#94a3b8" font-size="10">Progress: 25% Complete</text>
+    </g>
+
+    <line x1="279" y1="140" x2="299" y2="140" stroke="#14b8a6" stroke-width="2" marker-end="url(#arrow)" />
+
+    <g transform="translate(305, 60)">
+      <rect width="245" height="160" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="14" y="28" fill="#2dd4bf" font-size="12" font-weight="700">M2: Modules &amp; DC Wiring</text>
+      <text x="14" y="52" fill="#cbd5e1" font-size="11">• Solar panel clamping</text>
+      <text x="14" y="72" fill="#cbd5e1" font-size="11">• String creation &amp; Voc test</text>
+      <text x="14" y="92" fill="#cbd5e1" font-size="11">• DC UV cable laying</text>
+      <text x="14" y="130" fill="#94a3b8" font-size="10">Progress: 50% Complete</text>
+    </g>
+
+    <line x1="560" y1="140" x2="580" y2="140" stroke="#14b8a6" stroke-width="2" marker-end="url(#arrow)" />
+
+    <g transform="translate(586, 60)">
+      <rect width="245" height="160" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="14" y="28" fill="#2dd4bf" font-size="12" font-weight="700">M3: Inverter &amp; AC Wiring</text>
+      <text x="14" y="52" fill="#cbd5e1" font-size="11">• Inverter wall mounting</text>
+      <text x="14" y="72" fill="#cbd5e1" font-size="11">• ACDB &amp; DCDB termination</text>
+      <text x="14" y="92" fill="#cbd5e1" font-size="11">• MC4 connectors &amp; SPD</text>
+      <text x="14" y="130" fill="#94a3b8" font-size="10">Progress: 75% Complete</text>
+    </g>
+
+    <line x1="841" y1="140" x2="861" y2="140" stroke="#14b8a6" stroke-width="2" marker-end="url(#arrow)" />
+
+    <g transform="translate(867, 60)">
+      <rect width="189" height="160" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="12" y="28" fill="#2dd4bf" font-size="12" font-weight="700">M4: Earthing &amp; LA</text>
+      <text x="12" y="52" fill="#cbd5e1" font-size="11">• 3-Pit chemical earthing</text>
+      <text x="12" y="72" fill="#cbd5e1" font-size="11">• Resistance &lt; 5 Ohms</text>
+      <text x="12" y="92" fill="#cbd5e1" font-size="11">• Lightning Arrester mast</text>
+      <text x="12" y="130" fill="#94a3b8" font-size="10">Ready for Inspection</text>
+    </g>
+  </g>
+
+  <!-- Connector Phase 7 -> Phase 8 -->
+  <line x1="600" y1="2070" x2="600" y2="2105" stroke="#64748b" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrowGreen)" />
+
+  <!-- ==================== PHASE 8: CEI, GRID SYNC & COMMISSIONING ==================== -->
+  <g transform="translate(60, 2110)">
+    <rect width="1080" height="250" rx="20" fill="#1e293b" stroke="#22c55e" stroke-width="2" filter="url(#shadow)" />
+    <path d="M 0 20 Q 0 0 20 0 L 1060 0 Q 1080 0 1080 20 L 1080 44 L 0 44 Z" fill="url(#p8Grad)" />
+    <text x="24" y="28" fill="#ffffff" font-size="13" font-weight="800" letter-spacing="1">PHASE 8: CEI CLEARANCE, NET-METER GRID SYNC &amp; DBT SUBSIDY PAYOUT (100% COMPLETE)</text>
+
+    <!-- Step 8.1 -->
+    <g transform="translate(24, 60)">
+      <rect width="320" height="165" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#4ade80" font-size="13" font-weight="700">1. CEI Electrical Clearance</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Chief Electrical Inspectorate inspection</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Earthing resistance &amp; insulation testing</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Electrical safety compliance certificate</text>
+      <text x="16" y="125" fill="#94a3b8" font-size="11">Milestone: Safety Approved</text>
+    </g>
+
+    <line x1="354" y1="140" x2="384" y2="140" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowGreen)" />
+
+    <!-- Step 8.2 -->
+    <g transform="translate(390, 60)">
+      <rect width="320" height="165" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1" />
+      <text x="16" y="30" fill="#4ade80" font-size="13" font-weight="700">2. Net Metering &amp; Grid Sync</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• DISCOM testing laboratory meter test</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• Bi-directional Net Meter replacement</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Grid Synchronization &amp; Solar Inverter boot</text>
+      <text x="16" y="125" fill="#94a3b8" font-size="11">Active Export / Import Generation</text>
+    </g>
+
+    <line x1="720" y1="140" x2="750" y2="140" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowGreen)" />
+
+    <!-- Step 8.3 -->
+    <g transform="translate(756, 60)">
+      <rect width="300" height="165" rx="12" fill="#0f172a" stroke="#22c55e" stroke-width="1.5" />
+      <text x="16" y="30" fill="#4ade80" font-size="13" font-weight="700">3. DBT Subsidy &amp; Handover</text>
+      <text x="16" y="55" fill="#cbd5e1" font-size="12">• Joint Inspection Report (JIR) submitted</text>
+      <text x="16" y="77" fill="#cbd5e1" font-size="12">• PM Surya Ghar DBT ₹33k–₹78k released</text>
+      <text x="16" y="99" fill="#cbd5e1" font-size="12">• Customer Handover &amp; Warranty Pack</text>
+      <text x="16" y="125" fill="#22c55e" font-size="12" font-weight="800">★ Project Status: 100% Completed</text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="2400" text-anchor="middle" fill="#64748b" font-size="12">LaraforgeX Solar EPC &amp; Rooftop Operating System • Generated for Project Lifecycle Documentation</text>
+</svg>
+

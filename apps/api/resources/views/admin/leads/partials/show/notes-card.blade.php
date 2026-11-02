@@ -21,6 +21,7 @@
       <button type="submit"
         class="px-4 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer">
         Post Note
+
       </button>
     </div>
   </form>
