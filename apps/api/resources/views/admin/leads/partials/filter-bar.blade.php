@@ -25,11 +25,12 @@
         @endforeach
       </select>
 
-      <select id="filter-industry" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
-        <option value="">🏢 All Sectors ({{ count($industries) }})</option>
-        @foreach($industries as $ind)
-          <option value="{{ $ind }}">{{ $ind }}</option>
-        @endforeach
+      <select id="filter-priority" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
+        <option value="">🔥 All Priorities</option>
+        <option value="urgent">⚡ Urgent / High kW</option>
+        <option value="high">Commercial C&I</option>
+        <option value="medium">Residential Rooftop</option>
+        <option value="low">Standard Inquiry</option>
       </select>
     </div>
 
@@ -44,14 +45,6 @@
           <option value="negotiation">5. Subsidy / Net-Metering</option>
           <option value="won">6. Commissioned & Handed Over</option>
           <option value="lost">7. Lost / Drop</option>
-        </select>
-
-        <select id="filter-priority" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer">
-          <option value="">🔥 All Priorities</option>
-          <option value="urgent">⚡ Urgent / High kW</option>
-          <option value="high">Commercial C&I</option>
-          <option value="medium">Residential Rooftop</option>
-          <option value="low">Standard Inquiry</option>
         </select>
 
         <select id="filter-developer" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer">
@@ -74,11 +67,20 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <button type="button" id="btn-clear-filters" class="px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+        <button type="button" id="btn-clear-filters"
+          class="{{ request()->anyFilled(['search', 'city', 'area', 'status', 'priority', 'developer_id']) ? '' : 'hidden' }} px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer">
           <i class="fa-solid fa-xmark text-[10px]"></i> Clear Filters
+        </button>
+        <button type="button" id="btn-apply-filters" class="px-5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center gap-1.5">
+          <i class="fa-solid fa-filter text-[11px]"></i> Apply Filters
         </button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  window.LEADS_CITY_AREA_MAP = @json($cityAreaMap ?? []);
+  window.LEADS_ALL_AREAS = @json($areas ?? []);
+</script>
 

@@ -54,103 +54,129 @@
 @section('content')
   <div class="space-y-5 font-sans">
 
-    <!-- Header -->
+    <!-- Header (Mirrored identically with Leads Table/Card View) -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
         <div class="flex items-center gap-2.5">
-          <h2 class="text-xl font-extrabold text-slate-900">EPC Solar Pipeline Kanban</h2>
+          <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-solar-panel text-amber-500"></i> Solar Energy & Rooftop Leads
+          </h2>
           @php
             $totalCount = array_sum($stageCounts ?? array_map('count', $leadsByStage));
             $totalVal = array_sum($totalBudgetByStage);
           @endphp
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200">
-            {{ number_format($totalCount) }} Leads (₹{{ number_format($totalVal, 0) }})
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+            {{ number_format($totalCount) }} Solar Leads
           </span>
         </div>
-        <p class="text-xs text-slate-500 font-medium mt-0.5">Drag and drop leads between pipeline deal stages. Live
-          updates & total value calculations.</p>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">
+          Showing {{ number_format($totalCount) }} commercial, industrial & residential solar inquiries across pipeline
+          stages
+        </p>
       </div>
-      <div class="flex items-center gap-2">
-        <a href="/admin/leads"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
-          <i class="fa-solid fa-list"></i> Table View
-        </a>
-        <button onclick="$('#modal-import-leads').removeClass('hidden')"
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- Triple View Switcher: Card | Table | Kanban -->
+        <div class="inline-flex rounded-xl bg-slate-100 p-0.5 border border-slate-200">
+          <a href="/admin/leads?view=card"
+            class="px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 flex items-center">
+            <i class="fa-solid fa-grip mr-1"></i> Card
+          </a>
+          <a href="/admin/leads"
+            class="px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 flex items-center">
+            <i class="fa-solid fa-table-list mr-1"></i> Table
+          </a>
+          <button type="button"
+            class="px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-default bg-white text-emerald-700 shadow-2xs flex items-center">
+            <i class="fa-solid fa-table-columns mr-1"></i> Kanban
+          </button>
+        </div>
+
+        <button type="button" onclick="openImportModal()"
           class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-sm shadow-emerald-600/20 transition cursor-pointer">
-          <i class="fa-solid fa-file-excel"></i> Import Excel
+          <i class="fa-solid fa-file-excel"></i> Import Solar Leads
         </button>
-        <button onclick="$('#modal-create-lead').removeClass('hidden')"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-sm shadow-brand-600/20 transition cursor-pointer">
-          <i class="fa-solid fa-plus"></i> New Lead
+        <button type="button" onclick="openCreateLeadModal()"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-sm shadow-amber-500/20 transition cursor-pointer">
+          <i class="fa-solid fa-plus"></i> Add Solar Lead
         </button>
       </div>
     </div>
 
-    <!-- Filter & Search Control Center -->
+    <!-- Filter & Search Control Center (Identical Layout to Table/Card View) -->
     <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-xs">
 
       <!-- Filter Form -->
       <form method="GET" action="/admin/leads/kanban" id="kanbanFilterForm" class="space-y-3">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5">
           <!-- Search Bar -->
-          <div class="relative lg:col-span-2">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-            <input type="text" name="search" value="{{ request('search') }}"
-              placeholder="Search business, phone, category..."
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition">
+          <div class="relative sm:col-span-2 md:col-span-3 lg:col-span-3">
+            <i
+              class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+            <input type="text" name="search" id="kanban-filter-search" value="{{ request('search') }}"
+              placeholder="Search customer, company, phone, locality, address..."
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition">
+            @if(request('search'))
+              <a href="/admin/leads/kanban"
+                class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs cursor-pointer">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </a>
+            @endif
           </div>
 
           <!-- City Filter -->
-          <div>
-            <select name="city" onchange="document.getElementById('kanbanFilterForm').submit()"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
-              <option value="">🏙️ All Cities</option>
-              @foreach($cities as $c)
-                <option value="{{ $c }}" {{ request('city') === $c ? 'selected' : '' }}>{{ $c }}</option>
-              @endforeach
-            </select>
-          </div>
+          <select name="city" id="kanban-filter-city" onchange="handleKanbanCityChange(this.value)"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
+            <option value="">🏙️ All Cities</option>
+            @foreach($cities as $c)
+              <option value="{{ $c }}" {{ request('city') === $c ? 'selected' : '' }}>{{ $c }}</option>
+            @endforeach
+          </select>
 
-          <!-- Area / Locality Filter -->
-          <div>
-            <select name="area" onchange="document.getElementById('kanbanFilterForm').submit()"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
-              <option value="">📍 All Areas ({{ count($areas) }})</option>
-              @foreach($areas as $ar)
-                <option value="{{ $ar }}" {{ request('area') === $ar ? 'selected' : '' }}>{{ $ar }}</option>
-              @endforeach
-            </select>
-          </div>
-
-          <!-- Industry / Category Type Filter -->
-          <div>
-            <select name="industry" onchange="document.getElementById('kanbanFilterForm').submit()"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
-              <option value="">🏢 All Categories ({{ count($industries) }})</option>
-              @foreach($industries as $ind)
-                <option value="{{ $ind }}" {{ request('industry') === $ind ? 'selected' : '' }}>{{ $ind }}</option>
-              @endforeach
-            </select>
-          </div>
+          <!-- Area / Locality Filter (Dependent on City) -->
+          <select name="area" id="kanban-filter-area" onchange="document.getElementById('kanbanFilterForm').submit()"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
+            <option value="">📍 All Areas ({{ count($areas) }})</option>
+            @foreach($areas as $ar)
+              <option value="{{ $ar }}" {{ request('area') === $ar ? 'selected' : '' }}>{{ $ar }}</option>
+            @endforeach
+          </select>
 
           <!-- Deal Priority Filter -->
-          <div>
-            <select name="priority" onchange="document.getElementById('kanbanFilterForm').submit()"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
-              <option value="">⚡ All Priorities</option>
-              <option value="urgent" {{ request('priority') === 'urgent' ? 'selected' : '' }}>🔥 Urgent Priority</option>
-              <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>⚡ High Priority</option>
-              <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>⭐ Medium Priority</option>
-              <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>💤 Low Priority</option>
-            </select>
-          </div>
+          <select name="priority" id="kanban-filter-priority"
+            onchange="document.getElementById('kanbanFilterForm').submit()"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
+            <option value="">🔥 All Priorities</option>
+            <option value="urgent" {{ request('priority') === 'urgent' ? 'selected' : '' }}>⚡ Urgent / High kW</option>
+            <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>Commercial C&I</option>
+            <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>Residential Rooftop</option>
+            <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>Standard Inquiry</option>
+          </select>
         </div>
 
-        <!-- Bottom Controls: Assignee & Actions -->
+        <!-- Bottom Controls: Pipeline Stage & Assignee & Actions -->
         <div class="flex items-center justify-between gap-3 pt-2 border-t border-slate-100 flex-wrap">
           <div class="flex items-center gap-2.5 flex-wrap">
+            <!-- Pipeline Stage Filter -->
+            <select name="status" id="kanban-filter-status"
+              onchange="document.getElementById('kanbanFilterForm').submit()"
+              class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer">
+              <option value="">⚡ All Pipeline Stages</option>
+              <option value="new" {{ request('status') === 'new' ? 'selected' : '' }}>1. New Solar Lead</option>
+              <option value="contacted" {{ request('status') === 'contacted' ? 'selected' : '' }}>2. Site Survey Scheduled
+              </option>
+              <option value="qualified" {{ request('status') === 'qualified' ? 'selected' : '' }}>3. Feasibility Approved
+              </option>
+              <option value="proposal_sent" {{ request('status') === 'proposal_sent' ? 'selected' : '' }}>4. Sizing &
+                Quotation Sent</option>
+              <option value="negotiation" {{ request('status') === 'negotiation' ? 'selected' : '' }}>5. Subsidy /
+                Net-Metering</option>
+              <option value="won" {{ request('status') === 'won' ? 'selected' : '' }}>6. Commissioned & Handed Over</option>
+              <option value="lost" {{ request('status') === 'lost' ? 'selected' : '' }}>7. Lost / Drop</option>
+            </select>
+
             <!-- Solar Executive Assignee Filter -->
-            <select name="developer_id" onchange="document.getElementById('kanbanFilterForm').submit()"
+            <select name="developer_id" id="kanban-filter-developer"
+              onchange="document.getElementById('kanbanFilterForm').submit()"
               class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none cursor-pointer">
               <option value="">👤 All Solar Executives</option>
               @foreach($developers as $dev)
@@ -162,7 +188,7 @@
 
           <!-- Action Buttons -->
           <div class="flex items-center gap-2">
-            @if(request()->anyFilled(['search', 'city', 'area', 'industry', 'priority', 'developer_id']))
+            @if(request()->anyFilled(['search', 'city', 'area', 'status', 'priority', 'developer_id']))
               <a href="/admin/leads/kanban"
                 class="px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition flex items-center gap-1">
                 <i class="fa-solid fa-xmark text-[10px]"></i> Clear Filters
@@ -235,111 +261,8 @@
   <!-- Modal: Import Leads Excel/CSV -->
   @include('admin.leads.partials.import-modal')
 
-  <!-- Modal: Quick Create Lead -->
-  <div id="modal-create-lead"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 hidden">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-2">
-          <span class="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-sm">
-            <i class="fa-solid fa-user-plus"></i>
-          </span>
-          <div>
-            <h3 class="font-bold text-slate-800 text-sm">Create New Pipeline Lead</h3>
-            <p class="text-[11px] text-slate-400">Add a prospective client to your sales funnel.</p>
-          </div>
-        </div>
-        <button onclick="closeCreateLeadModal()" class="text-slate-400 hover:text-slate-600 text-xs">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <form action="/admin/leads" method="POST" class="space-y-3">
-        @csrf
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Company / Business Name *</label>
-            <input type="text" name="company_name" required placeholder="e.g. Apex Technologies"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Contact Person *</label>
-            <input type="text" name="contact_person" required placeholder="e.g. John Doe"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
-            <input type="text" name="phone" placeholder="e.g. +91 98765 43210"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
-            <input type="email" name="email" placeholder="e.g. john@apex.com"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Industry / Category</label>
-            <input type="text" name="industry" placeholder="e.g. Solar, Real Estate, Dental"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Area / Locality</label>
-            <input type="text" name="location" placeholder="e.g. Alkapuri, Vadodara"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-2.5">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Priority</label>
-            <select name="priority"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700">
-              <option value="urgent">Urgent (Hot)</option>
-              <option value="high">High</option>
-              <option value="medium" selected>Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Status</label>
-            <select name="status"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700">
-              <option value="new" selected>New</option>
-              <option value="contacted">Contacted</option>
-              <option value="qualified">Qualified</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Lead Source</label>
-            <input type="text" name="lead_source" value="Manual Entry"
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Solar Rooftop Requirements & Notes</label>
-          <textarea name="requirement" rows="3"
-            placeholder="Describe solar system requirements, rooftop type, shadow conditions..."
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500"></textarea>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-          <button type="button" onclick="closeCreateLeadModal()"
-            class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition">Cancel</button>
-          <button type="submit"
-            class="px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer">
-            Create Lead
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <!-- Modal: Create Solar Lead Multi-Step Wizard -->
+  @include('admin.leads.partials.create-modal')
 
   <script>
     function openImportModal() {
@@ -539,6 +462,31 @@
             btn.innerHTML = '<i class="fa-solid fa-rotate-right text-xs"></i><span>Retry Loading</span>';
           }
         });
+    };
+
+    const KANBAN_CITY_AREA_MAP = @json($cityAreaMap ?? []);
+    const KANBAN_ALL_AREAS = @json($areas ?? []);
+
+    window.handleKanbanCityChange = function (selectedCity) {
+      const areaSelect = document.getElementById('kanban-filter-area');
+      if (areaSelect) {
+        let areasList = [];
+        if (selectedCity && KANBAN_CITY_AREA_MAP[selectedCity]) {
+          areasList = KANBAN_CITY_AREA_MAP[selectedCity];
+        } else if (!selectedCity) {
+          areasList = KANBAN_ALL_AREAS;
+        }
+
+        areaSelect.innerHTML = `<option value="">📍 All Areas (${areasList.length})</option>`;
+        areasList.forEach(ar => {
+          const opt = document.createElement('option');
+          opt.value = ar;
+          opt.textContent = ar;
+          areaSelect.appendChild(opt);
+        });
+      }
+
+      document.getElementById('kanbanFilterForm').submit();
     };
   </script>
 @endsection

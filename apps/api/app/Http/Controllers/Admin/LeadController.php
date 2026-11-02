@@ -69,11 +69,12 @@ class LeadController extends Controller
         }
 
         $developers = User::all();
-        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
-        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
-        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
+        $locationData = $this->resolveLocationFilterData($request);
+        $cities = $locationData['cities'];
+        $areas = $locationData['areas'];
+        $cityAreaMap = $locationData['cityAreaMap'];
 
-        return view('admin.leads.index', compact('leads', 'developers', 'cities', 'areas', 'industries'));
+        return view('admin.leads.index', compact('leads', 'developers', 'cities', 'areas', 'cityAreaMap'));
     }
 
     /**
@@ -191,6 +192,10 @@ class LeadController extends Controller
             'lost' => '7. Lost / Drop',
         ];
 
+        if ($request->filled('status') && isset($stages[$request->status])) {
+            $stages = [$request->status => $stages[$request->status]];
+        }
+
         $baseQuery = $this->buildKanbanBaseQuery($request);
 
         // Instant AJAX Stage Leads Pagination (Infinite scroll / Load More)
@@ -211,9 +216,10 @@ class LeadController extends Controller
         }
 
         $developers = User::all();
-        $cities = ['Vadodara', 'Ahmedabad', 'Rajkot', 'Pune', 'Surat', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Indore', 'Jaipur'];
-        $areas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality');
-        $industries = Lead::whereNotNull('industry')->where('industry', '!=', '')->distinct()->orderBy('industry')->pluck('industry');
+        $locationData = $this->resolveLocationFilterData($request);
+        $cities = $locationData['cities'];
+        $areas = $locationData['areas'];
+        $cityAreaMap = $locationData['cityAreaMap'];
 
         return view('admin.leads.kanban', compact(
             'stages',
@@ -223,8 +229,46 @@ class LeadController extends Controller
             'developers',
             'cities',
             'areas',
-            'industries'
+            'cityAreaMap'
         ));
+    }
+
+    /**
+     * Resolve unique cities, areas, and city-to-areas lookup mapping.
+     *
+     * @param Request $request
+     * @return array{cities: array, areas: array, cityAreaMap: array}
+     */
+    private function resolveLocationFilterData(Request $request): array
+    {
+        $defaultCities = ['Vadodara', 'Ahmedabad', 'Surat', 'Rajkot', 'Bharuch', 'Anand', 'Nadiad', 'Gandhinagar', 'Pune', 'Mumbai'];
+        $dbCities = Lead::whereNotNull('city')->where('city', '!=', '')->distinct()->pluck('city')->toArray();
+        $cities = collect(array_unique(array_merge($defaultCities, $dbCities)))->filter()->sort()->values()->all();
+
+        $allAreas = Lead::whereNotNull('area_locality')->where('area_locality', '!=', '')->distinct()->orderBy('area_locality')->pluck('area_locality')->toArray();
+
+        $pairs = Lead::whereNotNull('city')->where('city', '!=', '')
+            ->whereNotNull('area_locality')->where('area_locality', '!=', '')
+            ->select('city', 'area_locality')->distinct()->orderBy('area_locality')->get();
+
+        $cityAreaMap = [];
+        foreach ($pairs as $p) {
+            $c = trim((string) $p->city);
+            $a = trim((string) $p->area_locality);
+            if ($c !== '' && $a !== '') {
+                $cityAreaMap[$c][] = $a;
+            }
+        }
+        foreach ($cityAreaMap as $k => $vals) {
+            $cityAreaMap[$k] = array_values(array_unique($vals));
+        }
+
+        $selectedCity = $request->input('city');
+        $areas = ($selectedCity && isset($cityAreaMap[$selectedCity]))
+            ? $cityAreaMap[$selectedCity]
+            : $allAreas;
+
+        return compact('cities', 'areas', 'cityAreaMap');
     }
 
     /**

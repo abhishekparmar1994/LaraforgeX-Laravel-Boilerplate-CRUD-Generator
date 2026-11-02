@@ -5,7 +5,7 @@
 (function ($) {
   'use strict';
 
-  let leadsState = { page: 1, perPage: 10, sortBy: 'created_at', sortDir: 'desc', search: '', city: '', area: '', industry: '', hasWebsite: '', status: '', priority: '', developerId: '', isLoading: false };
+  let leadsState = { page: 1, perPage: 10, sortBy: 'created_at', sortDir: 'desc', search: '', city: '', area: '', hasWebsite: '', status: '', priority: '', developerId: '', isLoading: false };
 
   /**
    * Purpose: Fetch leads from server via AJAX and update table UI.
@@ -29,7 +29,6 @@
       if (leadsState.search) params.search = leadsState.search;
       if (leadsState.city) params.city = leadsState.city;
       if (leadsState.area) params.area = leadsState.area;
-      if (leadsState.industry) params.industry = leadsState.industry;
       if (leadsState.hasWebsite) params.has_website = leadsState.hasWebsite;
       if (leadsState.status) params.status = leadsState.status;
       if (leadsState.priority) params.priority = leadsState.priority;
@@ -169,6 +168,7 @@
     leadsState.page = 1;
     $('#filter-search, #dt-quick-search').val(val);
     $('#btn-clear-search, #dt-quick-clear').toggleClass('hidden', !val);
+    updateClearFiltersVisibility();
 
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(() => {
@@ -208,13 +208,62 @@
     handlePerPageChange($(this).val());
   });
 
-  $('#filter-city, #filter-area, #filter-industry, #filter-status, #filter-priority, #filter-developer').on('change', function () {
-    leadsState.city = $('#filter-city').val();
+  /**
+   * Dynamically update the Area dropdown based on selected City.
+   */
+  function syncAreaOptions(selectedCity, targetSelector, currentVal) {
+    const $target = $(targetSelector);
+    if (!$target.length) return;
+
+    const map = window.LEADS_CITY_AREA_MAP || {};
+    const all = window.LEADS_ALL_AREAS || [];
+    let areasList = [];
+
+    if (selectedCity && map[selectedCity]) {
+      areasList = map[selectedCity];
+    } else if (!selectedCity) {
+      areasList = all;
+    }
+
+    $target.empty();
+    $target.append(`<option value="">📍 All Areas (${areasList.length})</option>`);
+    areasList.forEach(ar => {
+      const isSel = (ar === currentVal) ? 'selected' : '';
+      $target.append(`<option value="${ar}" ${isSel}>${ar}</option>`);
+    });
+  }
+
+  /**
+   * Toggle visibility of the "Clear Filters" button based on active filters.
+   */
+  function updateClearFiltersVisibility() {
+    const hasActive = Boolean(
+      $('#filter-search').val()?.trim() ||
+      $('#filter-city').val() ||
+      $('#filter-area').val() ||
+      $('#filter-status').val() ||
+      $('#filter-priority').val() ||
+      $('#filter-developer').val()
+    );
+    $('#btn-clear-filters').toggleClass('hidden', !hasActive);
+  }
+
+  $('#filter-city').on('change', function () {
+    const selectedCity = $(this).val();
+    leadsState.city = selectedCity;
+    leadsState.area = '';
+    syncAreaOptions(selectedCity, '#filter-area', '');
+    updateClearFiltersVisibility();
+    leadsState.page = 1;
+    fetchLeads();
+  });
+
+  $('#filter-area, #filter-status, #filter-priority, #filter-developer').on('change', function () {
     leadsState.area = $('#filter-area').val();
-    leadsState.industry = $('#filter-industry').val();
     leadsState.status = $('#filter-status').val();
     leadsState.priority = $('#filter-priority').val();
     leadsState.developerId = $('#filter-developer').val();
+    updateClearFiltersVisibility();
     leadsState.page = 1;
     fetchLeads();
   });
@@ -230,11 +279,31 @@
   $('#btn-clear-filters').on('click', function () {
     $('#filter-search, #dt-quick-search').val('');
     $('#btn-clear-search, #dt-quick-clear').addClass('hidden');
-    $('#filter-city, #filter-area, #filter-industry, #filter-status, #filter-priority, #filter-developer').val('');
+    $('#filter-city').val('');
+    syncAreaOptions('', '#filter-area', '');
+    $('#filter-area, #filter-status, #filter-priority, #filter-developer').val('');
     $('#filter-per-page, #dt-page-size').val('10');
-    leadsState = { page: 1, perPage: 10, sortBy: 'created_at', sortDir: 'desc', search: '', city: '', area: '', industry: '', hasWebsite: '', status: '', priority: '', developerId: '', isLoading: false };
+    leadsState = { page: 1, perPage: 10, sortBy: 'created_at', sortDir: 'desc', search: '', city: '', area: '', hasWebsite: '', status: '', priority: '', developerId: '', isLoading: false };
+    updateClearFiltersVisibility();
     $('.dt-sort-wrap').html(SORT_SVGS.none);
     fetchLeads();
+  });
+
+  $('#btn-apply-filters').on('click', function () {
+    leadsState.search = $('#filter-search').val();
+    leadsState.city = $('#filter-city').val();
+    leadsState.area = $('#filter-area').val();
+    leadsState.status = $('#filter-status').val();
+    leadsState.priority = $('#filter-priority').val();
+    leadsState.developerId = $('#filter-developer').val();
+    updateClearFiltersVisibility();
+    leadsState.page = 1;
+    fetchLeads();
+  });
+
+  // Initial check on load
+  $(function () {
+    updateClearFiltersVisibility();
   });
 
   // Modal & View Mode helpers

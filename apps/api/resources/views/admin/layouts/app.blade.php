@@ -47,7 +47,7 @@
     h4,
     h5,
     h6,
-    span:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab):not(.fa-solid):not(.fa-regular),
+    span:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fal):not(.fad):not(.fab):not(.fa-solid):not(.fa-regular):not(.fc-icon):not([class*="fc-"]),
     a,
     #admin-sidebar,
     .font-sans,
