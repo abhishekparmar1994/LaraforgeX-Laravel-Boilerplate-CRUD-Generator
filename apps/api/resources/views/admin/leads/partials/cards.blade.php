@@ -80,16 +80,21 @@
           </div>
         </div>
 
-        <!-- Bottom: Time ago + Assigned Executive -->
+        <!-- Bottom: Time ago + Assigned Executive & Delete Action -->
         <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] font-bold text-slate-400">
           <span class="flex items-center gap-1">
             <i class="fa-regular fa-clock text-[9px]"></i>
             {{ $lead->created_at ? $lead->created_at->diffForHumans() : 'Recently' }}
           </span>
-          <span class="flex items-center gap-1 text-slate-600 truncate max-w-[140px]">
-            <i class="fa-regular fa-user text-[9px]"></i>
-            {{ $lead->assignedDeveloper->name ?? 'Unassigned' }}
-          </span>
+          <div class="flex items-center gap-2">
+            <span class="flex items-center gap-1 text-slate-600 truncate max-w-[120px]">
+              <i class="fa-regular fa-user text-[9px]"></i>
+              {{ $lead->assignedDeveloper->name ?? 'Unassigned' }}
+            </span>
+            <button type="button" onclick="confirmDeleteLead('{{ $lead->id }}', '{{ addslashes($lead->company_name) }}')" class="text-slate-400 hover:text-rose-600 transition cursor-pointer p-0.5" title="Delete Lead">
+              <i class="fa-regular fa-trash-can text-xs"></i>
+            </button>
+          </div>
         </div>
       </div>
     @empty

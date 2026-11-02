@@ -157,6 +157,9 @@ Route::prefix('admin')->middleware(['admin.auth'])->group(function () {
     Route::get('/materials', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'index']);
     Route::get('/materials/categories', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'categories']);
     Route::post('/materials', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'store']);
+    Route::get('/materials/{material}', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'show']);
+    Route::put('/materials/{material}', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'update']);
+    Route::delete('/materials/{material}', [\App\Http\Controllers\Admin\SolarMaterialController::class, 'destroy']);
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
 
     // Projects — Tasks, Kanban & Todo

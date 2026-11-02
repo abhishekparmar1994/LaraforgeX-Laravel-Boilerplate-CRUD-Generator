@@ -34,6 +34,16 @@ class FollowUpController extends Controller
     {
         $query = FollowUp::with(['lead', 'client', 'contact', 'assignedTo'])->orderBy('scheduled_at', 'asc');
 
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('notes', 'like', "%{$search}%")
+                    ->orWhereHas('lead', fn($l) => $l->where('company_name', 'like', "%{$search}%")->orWhere('contact_person', 'like', "%{$search}%"))
+                    ->orWhereHas('client', fn($c) => $c->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('contact', fn($ct) => $ct->where('first_name', 'like', "%{$search}%")->orWhere('last_name', 'like', "%{$search}%"));
+            });
+        }
+
         if ($request->filled('filter')) {
             if ($request->filter === 'today') {
                 $query->whereDate('scheduled_at', Carbon::today());
@@ -60,7 +70,9 @@ class FollowUpController extends Controller
             $query->where('assigned_to_user_id', $request->developer_id);
         }
 
-        $followups = $query->paginate(24);
+        $perPage = (int) $request->get('per_page', 9);
+        $perPage = in_array($perPage, [6, 9, 18, 27, 45, 90]) ? $perPage : 9;
+        $followups = $query->paginate($perPage)->withQueryString();
         $counts = [
             'all' => FollowUp::count(),
             'overdue' => FollowUp::where('scheduled_at', '<', Carbon::now()->startOfDay())->where('status', 'scheduled')->count(),

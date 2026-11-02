@@ -554,8 +554,11 @@ class LeadController extends Controller
         $companyName = $lead->company_name;
         $lead->delete();
 
-        if (request()->ajax()) {
-            return response()->json(['success' => true, 'message' => "Lead '{$companyName}' removed."]);
+        if (request()->ajax() || request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Lead '{$companyName}' deleted successfully."
+            ]);
         }
 
         return redirect('/admin/leads')->with('success', "Lead '{$companyName}' deleted successfully.");

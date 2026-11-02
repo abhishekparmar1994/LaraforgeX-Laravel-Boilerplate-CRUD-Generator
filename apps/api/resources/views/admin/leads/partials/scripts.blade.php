@@ -92,7 +92,12 @@
       <td class="px-4 py-3.5"><a href="/admin/leads/${lead.id}" class="font-bold text-slate-900 hover:text-brand-600 block text-xs">${escapeHtml(lead.company_name)}</a><span class="text-[11px] text-slate-400 block mt-0.5">${escapeHtml(lead.contact_person || 'Owner')} ${lead.email && lead.email !== 'N/A' ? '• ' + escapeHtml(lead.email) : ''}</span></td>
       <td class="px-4 py-3.5 whitespace-nowrap">${phoneHtml}</td>
       <td class="px-4 py-3.5 text-slate-600">${escapeHtml(lead.area_locality || lead.location || 'Vadodara')}</td>
-      <td class="px-4 py-3.5 text-right whitespace-nowrap"><a href="/admin/leads/${lead.id}" class="p-1.5 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition inline-block" title="View 360 Profile"><i class="fa-solid fa-arrow-right text-xs"></i></a></td>
+      <td class="px-4 py-3.5 text-right whitespace-nowrap">
+        <div class="inline-flex items-center justify-end gap-1">
+          <a href="/admin/leads/${lead.id}" class="p-1.5 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition inline-block" title="View 360 Profile"><i class="fa-solid fa-arrow-right text-xs"></i></a>
+          <button type="button" onclick="confirmDeleteLead('${lead.id}', '${escapeHtml(lead.company_name).replace(/'/g, "\\'")}')" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Delete Lead"><i class="fa-regular fa-trash-can text-xs"></i></button>
+        </div>
+      </td>
     </tr>`;
   }
 
@@ -125,6 +130,7 @@
   function escapeHtml(str) {
     return String(str || '').replace(/[&<>"']/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[m]);
   }
+  window.escapeHtml = escapeHtml;
 
   const SORT_SVGS = {
     none: '<svg class="w-2.5 h-2.5 text-slate-300" viewBox="0 0 320 512" fill="currentColor"><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>',
@@ -250,6 +256,32 @@
   window.closeImportModal = () => $('#modal-import-leads').addClass('hidden');
   window.openCreateLeadModal = () => $('#modal-create-lead').removeClass('hidden');
   window.closeCreateLeadModal = () => $('#modal-create-lead').addClass('hidden');
+
+  /**
+   * Purpose: SweetAlert2 confirmation dialog to delete lead record.
+   * Parameters: string leadId, string leadName, boolean redirectOnSuccess
+   */
+  window.confirmDeleteLead = function(leadId, leadName, redirectOnSuccess = false) {
+    window.confirmDelete({
+      title: 'Delete Solar Lead?',
+      text: `Are you sure you want to delete "${leadName || 'this lead'}"? All linked records will be permanently removed.`,
+      confirmText: 'Yes, delete lead'
+    }, async () => {
+      try {
+        const res = await axios.delete(`/admin/leads/${leadId}`, { baseURL: '' });
+        if (typeof window.showToast === 'function') {
+          window.showToast('success', res.data?.message || 'Lead deleted successfully.');
+        }
+        if (redirectOnSuccess) {
+          setTimeout(() => { window.location.href = '/admin/leads'; }, 400);
+        } else {
+          fetchLeads();
+        }
+      } catch (err) {
+        window.handleAjaxError(err, 'Failed to delete lead.');
+      }
+    });
+  };
 
   // Pre-populate initial pagination buttons
   const initialCurrent = {{ $leads->currentPage() }};

@@ -140,9 +140,6 @@
         </div>
       </div>
 
-      <!-- Solar Bill of Materials (BOM) -->
-      @include('admin.projects.partials.bom')
-
     </div>
 
     <!-- Right Column: Links & Activities -->
@@ -196,6 +193,9 @@
     </div>
 
   </div>
+
+  <!-- Full-Width Solar Bill of Materials (BOM) Kit Allocation Section -->
+  @include('admin.projects.partials.bom')
 
 </div>
 

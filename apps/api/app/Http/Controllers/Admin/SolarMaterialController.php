@@ -96,6 +96,69 @@ class SolarMaterialController extends Controller
     }
 
     /**
+     * Purpose: Retrieve details of a specific solar material catalog item.
+     * Parameters: SolarMaterial $material
+     * Return: JsonResponse
+     */
+    public function show(SolarMaterial $material): JsonResponse
+    {
+        $material->load(['category', 'company']);
+
+        return response()->json([
+            'success' => true,
+            'material' => $material,
+        ]);
+    }
+
+    /**
+     * Purpose: Update catalog specifications or pricing for an existing material.
+     * Parameters: Request $request, SolarMaterial $material
+     * Return: RedirectResponse|JsonResponse
+     */
+    public function update(Request $request, SolarMaterial $material): RedirectResponse|JsonResponse
+    {
+        $validated = $request->validate([
+            'category_id' => 'required|exists:crm_solar_material_categories,id',
+            'company_id' => 'nullable|exists:crm_solar_material_companies,id',
+            'name' => 'required|string|max:255',
+            'model_number' => 'nullable|string|max:150',
+            'specifications' => 'nullable|string|max:255',
+            'unit' => 'required|string|max:50',
+            'purchase_price' => 'required|numeric|min:0',
+            'selling_price' => 'required|numeric|min:0',
+            'gst_percent' => 'required|numeric|min:0|max:100',
+            'warranty_years' => 'required|integer|min:0',
+            'in_stock' => 'required|integer|min:0',
+        ]);
+
+        $material->update($validated);
+        $this->activityLogger->execute($material, 'status_change', "Catalog item '{$material->name}' updated.");
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Material updated successfully', 'material' => $material->fresh(['category', 'company'])]);
+        }
+
+        return redirect()->back()->with('success', 'Solar material updated successfully!');
+    }
+
+    /**
+     * Purpose: Delete a material catalog item.
+     * Parameters: Request $request, SolarMaterial $material
+     * Return: RedirectResponse|JsonResponse
+     */
+    public function destroy(Request $request, SolarMaterial $material): RedirectResponse|JsonResponse
+    {
+        $name = $material->name;
+        $material->delete();
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => "Material '{$name}' deleted successfully"]);
+        }
+
+        return redirect()->back()->with('success', 'Material removed from catalog.');
+    }
+
+    /**
      * Allocate material item to a project's Bill of Materials (BOM).
      */
     public function storeBomItem(Request $request, Project $project): JsonResponse|RedirectResponse

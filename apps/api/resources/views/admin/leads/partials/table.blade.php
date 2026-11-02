@@ -97,9 +97,14 @@
             </td>
             <td class="px-4 py-3.5 text-slate-600"><span>{{ $lead->area_locality ?? $lead->location ?? 'Vadodara' }}</span></td>
             <td class="px-4 py-3.5 text-right whitespace-nowrap">
-              <a href="/admin/leads/{{ $lead->id }}" class="p-1.5 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition inline-block" title="View 360 Profile">
-                <i class="fa-solid fa-arrow-right text-xs"></i>
-              </a>
+              <div class="inline-flex items-center justify-end gap-1">
+                <a href="/admin/leads/{{ $lead->id }}" class="p-1.5 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition inline-block" title="View 360 Profile">
+                  <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+                <button type="button" onclick="confirmDeleteLead('{{ $lead->id }}', '{{ addslashes($lead->company_name) }}')" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Delete Lead">
+                  <i class="fa-regular fa-trash-can text-xs"></i>
+                </button>
+              </div>
             </td>
           </tr>
         @empty
@@ -112,14 +117,6 @@
         @endforelse
       </tbody>
     </table>
-  </div>
-
-  {{-- Asynchronous Pagination Footer --}}
-  <div id="leads-pagination-footer" class="px-4 py-3.5 border-t border-slate-200 bg-slate-50 flex items-center justify-between flex-wrap gap-3">
-    <p id="leads-pagination-info" class="text-xs font-semibold text-slate-500">
-      Showing <span class="font-bold text-slate-800">{{ $leads->firstItem() ?? 0 }}</span> to <span class="font-bold text-slate-800">{{ $leads->lastItem() ?? 0 }}</span> of <span class="font-bold text-slate-800">{{ number_format($leads->total()) }}</span> entries
-    </p>
-    <div id="leads-pagination-links" class="flex items-center gap-1"></div>
   </div>
 </div>
 

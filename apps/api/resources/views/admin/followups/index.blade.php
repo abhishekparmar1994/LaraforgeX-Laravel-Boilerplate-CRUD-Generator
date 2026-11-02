@@ -33,13 +33,13 @@
     </button>
   </div>
 
-  <!-- Metric Counters Tabs Bar (Screenshot 5 Replica) -->
+  <!-- Metric Counters Tabs Bar -->
   <div class="bg-white border border-slate-200 rounded-2xl p-2 shadow-xs">
     <div class="flex items-center gap-2 overflow-x-auto text-xs font-bold scrollbar-none">
       <a href="/admin/followups"
-        class="px-4 py-2 rounded-xl flex items-center gap-2 border transition {{ !request('filter') ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200' }}">
+        class="px-4 py-2 rounded-xl flex items-center gap-2 border transition {{ !request('filter') && !request('status') ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200' }}">
         <span>ALL</span>
-        <span class="text-[10px] px-1.5 py-0.2 rounded-full {{ !request('filter') ? 'bg-slate-800 text-slate-200' : 'bg-slate-200 text-slate-700' }}">{{ $counts['all'] ?? 0 }}</span>
+        <span class="text-[10px] px-1.5 py-0.2 rounded-full {{ !request('filter') && !request('status') ? 'bg-slate-800 text-slate-200' : 'bg-slate-200 text-slate-700' }}">{{ $counts['all'] ?? 0 }}</span>
       </a>
 
       <a href="/admin/followups?filter=overdue"
@@ -74,6 +74,9 @@
     </div>
   </div>
 
+  <!-- Search & Filter Bar -->
+  @include('admin.followups.partials.filters')
+
   <!-- 3-Column Responsive Cards Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
     @forelse($followups as $f)
@@ -81,23 +84,14 @@
     @empty
       <div class="col-span-3 p-12 text-center bg-white border border-slate-200 rounded-3xl shadow-xs">
         <i class="fa-solid fa-calendar-check text-4xl text-slate-300 mb-2"></i>
-        <h4 class="font-extrabold text-sm text-slate-800">No follow-ups in this queue</h4>
-        <p class="text-xs text-slate-400 mt-1">All scheduled consultations are completed or none match the active filters.</p>
+        <h4 class="font-extrabold text-sm text-slate-800">No follow-ups match criteria</h4>
+        <p class="text-xs text-slate-400 mt-1">Try adjusting your search keywords, consultation type, or queue tab.</p>
       </div>
     @endforelse
   </div>
 
-  <!-- Pagination -->
-  @if($followups->hasPages())
-    <div class="p-4 bg-white border border-slate-200 rounded-2xl flex items-center justify-between shadow-xs">
-      <span class="text-xs font-semibold text-slate-500">
-        Showing {{ $followups->firstItem() }} to {{ $followups->lastItem() }} of {{ $followups->total() }} follow-ups
-      </span>
-      <div class="flex items-center gap-1">
-        {{ $followups->withQueryString()->links() }}
-      </div>
-    </div>
-  @endif
+  <!-- Persistent Pagination & Page Size Control Footer -->
+  @include('admin.followups.partials.pagination')
 </div>
 
 @include('admin.followups.partials.modal')
@@ -107,20 +101,13 @@
 @section('scripts')
 <script>
   function completeFollowup(id) {
-    if (typeof Swal !== 'undefined') {
-      Swal.fire({
+    if (typeof window.confirmDelete === 'function') {
+      window.confirmDelete({
         title: 'Complete Follow-up?',
         text: 'Mark this solar client follow-up as successfully resolved.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#059669',
-        cancelButtonColor: '#64748b',
-        confirmButtonText: '<i class="fa-solid fa-check mr-1"></i> Yes, complete',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true
-      }).then(res => {
-        if (res.isConfirmed) submitFollowupComplete(id);
-      });
+        confirmText: 'Yes, complete',
+        icon: 'question'
+      }, () => submitFollowupComplete(id));
     } else if (confirm('Mark this solar follow-up as completed?')) {
       submitFollowupComplete(id);
     }

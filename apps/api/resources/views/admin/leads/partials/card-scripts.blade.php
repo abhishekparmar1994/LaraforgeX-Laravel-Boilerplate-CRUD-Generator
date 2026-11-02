@@ -1,5 +1,12 @@
 <script>
 /**
+ * Helper: Escape strings for safe HTML attribute and text injection in cards.
+ */
+function escapeCardHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[m]);
+}
+
+/**
  * Purpose: Render 3-column solar lead cards dynamically from AJAX leads payload.
  * Parameters: leads (Array)
  */
@@ -25,7 +32,27 @@ function buildLeadCardHtml(lead) {
   const waPhone = rawPhone.length === 10 ? '91' + rawPhone : rawPhone;
   const rating = lead.rating && lead.rating !== 'N/A' ? lead.rating : '4.5';
   const reviews = lead.total_reviews && lead.total_reviews !== '0' ? `(${lead.total_reviews})` : '(12)';
-  const stage = (lead.status || 'new').toUpperCase();
+  const stageColors = {
+    new: 'bg-sky-50 text-sky-700 border-sky-200',
+    contacted: 'bg-amber-50 text-amber-700 border-amber-200',
+    qualified: 'bg-blue-50 text-blue-700 border-blue-200',
+    proposal_sent: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    negotiation: 'bg-purple-50 text-purple-700 border-purple-200',
+    won: 'bg-emerald-600 text-white border-emerald-600',
+    lost: 'bg-rose-50 text-rose-700 border-rose-200'
+  };
+  const stageLabels = {
+    new: 'NEW LEAD',
+    contacted: 'SITE VISITED',
+    qualified: 'QUALIFIED',
+    proposal_sent: 'ESTIMATE SEND',
+    negotiation: 'DOCUMENT',
+    won: 'COMMISSIONED',
+    lost: 'LOST'
+  };
+  const stKey = (lead.status || 'new').toLowerCase();
+  const stageClass = stageColors[stKey] || 'bg-slate-100 text-slate-700 border-slate-200';
+  const stageText = stageLabels[stKey] || (lead.status || 'NEW').toUpperCase();
   const mapUrl = lead.google_maps_link || `https://maps.google.com/?q=${encodeURIComponent((lead.company_name || '') + ' ' + (lead.location || 'Vadodara'))}`;
   const location = lead.area_locality || lead.location || 'Vadodara, Gujarat';
   const repName = lead.assigned_developer ? lead.assigned_developer.name : 'Unassigned';
@@ -42,7 +69,7 @@ function buildLeadCardHtml(lead) {
           </div>
         </div>
       </div>
-      <span class="px-2 py-0.5 rounded-lg border text-[9px] font-extrabold tracking-wider uppercase shrink-0 bg-blue-50 text-blue-700 border-blue-200">${stage}</span>
+      <span class="px-2 py-0.5 rounded-lg border text-[9px] font-extrabold tracking-wider uppercase shrink-0 ${stageClass}">${stageText}</span>
     </div>
     <div class="space-y-1 text-xs">
       <div class="flex items-center justify-between text-[11px] text-slate-600">
@@ -56,7 +83,10 @@ function buildLeadCardHtml(lead) {
     </div>
     <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] font-bold text-slate-400">
       <span class="flex items-center gap-1"><i class="fa-regular fa-clock text-[9px]"></i> Active</span>
-      <span class="flex items-center gap-1 text-slate-600 truncate max-w-[140px]"><i class="fa-regular fa-user text-[9px]"></i> ${repName}</span>
+      <div class="flex items-center gap-2">
+        <span class="flex items-center gap-1 text-slate-600 truncate max-w-[120px]"><i class="fa-regular fa-user text-[9px]"></i> ${repName}</span>
+        <button type="button" onclick="confirmDeleteLead('${lead.id}', '${escapeCardHtml(lead.company_name).replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-rose-600 transition cursor-pointer p-0.5" title="Delete Lead"><i class="fa-regular fa-trash-can text-xs"></i></button>
+      </div>
     </div>
   </div>`;
 }

@@ -71,6 +71,10 @@
               class="h-10 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs flex items-center gap-2 shadow-sm shadow-amber-600/20 transition cursor-pointer">
         <i class="fa-solid fa-solar-panel"></i> Convert to Solar Project
       </button>
+      <button type="button" onclick="confirmDeleteCurrentLead('{{ $lead->id }}', '{{ addslashes($lead->company_name) }}')" 
+              class="h-10 px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer" title="Delete Lead">
+        <i class="fa-regular fa-trash-can"></i> Delete
+      </button>
     </div>
   </div>
 

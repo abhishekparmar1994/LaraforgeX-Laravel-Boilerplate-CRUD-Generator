@@ -56,6 +56,7 @@
   @include('admin.leads.partials.filter-bar')
   @include('admin.leads.partials.cards')
   @include('admin.leads.partials.table')
+  @include('admin.leads.partials.pagination')
 </div>
 
 @include('admin.leads.partials.import-modal')
