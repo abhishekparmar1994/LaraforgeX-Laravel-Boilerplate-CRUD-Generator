@@ -108,7 +108,7 @@ function confirmDeleteCurrentLead(leadId, leadName) {
 
   async function markFollowupComplete(id) {
     try {
-      const res = await axios.post('/admin/followups/' + id + '/complete');
+      const res = await axios.post('/admin/followups/' + id + '/complete', {}, { baseURL: '' });
       if (res.data?.success) {
         const badge = document.getElementById('fup-badge-' + id);
         if (badge) {

@@ -1,6 +1,6 @@
 {{-- ── CREATE MATERIAL ITEM MODAL ──────────────────────────────── --}}
-<div id="modal-create-material" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-  <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+<div id="modal-create-material" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+  <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100">
       <h3 class="font-extrabold text-slate-900 text-sm">Add Material to Catalog</h3>
       <button onclick="$('#modal-create-material').addClass('hidden')" class="text-slate-400 hover:text-slate-600 text-sm"><i class="fa-solid fa-xmark"></i></button>
@@ -11,7 +11,7 @@
         <label class="font-bold text-slate-700 block mb-1">Item Title *</label>
         <input type="text" name="name" required placeholder="e.g. Waaree 550Wp Mono-PERC Bifacial" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-brand-500">
       </div>
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label class="font-bold text-slate-700 block mb-1">Category *</label>
           <select name="category_id" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
@@ -30,7 +30,7 @@
           </select>
         </div>
       </div>
-      <div class="grid grid-cols-3 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label class="font-bold text-slate-700 block mb-1">Unit *</label>
           <input type="text" name="unit" required value="NOS" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
@@ -44,7 +44,7 @@
           <input type="number" step="0.01" name="selling_price" required placeholder="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
         </div>
       </div>
-      <div class="grid grid-cols-3 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label class="font-bold text-slate-700 block mb-1">GST % *</label>
           <input type="number" step="0.01" name="gst_percent" required value="12.00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">

@@ -1,6 +1,6 @@
 {{-- ── MATERIAL ITEM SPECIFICATIONS MODAL ───────────────────────── --}}
-<div id="modal-view-material" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-  <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4 font-sans text-xs">
+<div id="modal-view-material" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+  <div class="bg-white rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-2xl space-y-4 font-sans text-xs max-h-[90vh] overflow-y-auto">
     
     {{-- Modal Header --}}
     <div class="flex items-start justify-between pb-3 border-b border-slate-100 gap-3">

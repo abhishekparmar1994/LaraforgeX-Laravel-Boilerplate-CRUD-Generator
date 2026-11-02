@@ -109,9 +109,9 @@
 
 <!-- Modal: Add Item to BOM -->
 <div id="modal-add-bom-item" class="fixed inset-0 z-50 overflow-y-auto hidden">
-  <div class="flex items-center justify-center min-h-screen px-4 py-6">
+  <div class="flex items-center justify-center min-h-screen p-3 sm:p-6">
     <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs" onclick="$('#modal-add-bom-item').addClass('hidden')"></div>
-    <form action="/admin/projects/{{ $project->id }}/bom" method="POST" class="relative bg-white border border-slate-200 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4 font-sans text-xs">
+    <form action="/admin/projects/{{ $project->id }}/bom" method="POST" class="relative bg-white border border-slate-200 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl space-y-4 font-sans text-xs max-h-[90vh] overflow-y-auto">
       @csrf
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
@@ -134,7 +134,7 @@
           </select>
         </div>
 
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <div>
             <label class="font-bold text-slate-700 block mb-1">Quantity *</label>
             <input type="number" step="0.01" name="quantity" id="bom-qty-input" required value="1" min="0.01" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-semibold">
@@ -149,7 +149,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
             <label class="font-bold text-slate-700 block mb-1">Allocation Status</label>
             <select name="status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-semibold">
