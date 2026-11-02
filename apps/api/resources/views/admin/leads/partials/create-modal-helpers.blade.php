@@ -117,25 +117,71 @@
     let isValid = true;
     let firstInvalid = null;
 
-    const firstName = document.getElementById('lead-first-name');
-    if (!firstName || !firstName.value.trim()) {
-      setFieldError('first_name', 'First name is required to create a solar lead.');
-      isValid = false;
-      if (!firstInvalid) firstInvalid = 'first_name';
+    function checkRequired(id, fieldName, errorMsg) {
+      const el = document.getElementById(id);
+      const val = el ? el.value.trim() : '';
+      if (!val) {
+        setFieldError(fieldName, errorMsg);
+        isValid = false;
+        if (!firstInvalid) firstInvalid = fieldName;
+        return false;
+      }
+      return true;
     }
 
-    const email = document.getElementById('lead-email');
-    if (email && email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+    // Profile Tab mandatory fields
+    checkRequired('lead-first-name', 'first_name', 'First name is required.');
+    checkRequired('lead-phone', 'phone', 'Phone number is required.');
+    checkRequired('lead-whatsapp', 'whatsapp', 'WhatsApp number is required.');
+    
+    const emailEl = document.getElementById('lead-email');
+    const emailVal = emailEl ? emailEl.value.trim() : '';
+    if (!emailVal) {
+      setFieldError('email', 'Email address is required.');
+      isValid = false;
+      if (!firstInvalid) firstInvalid = 'email';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
       setFieldError('email', 'Please enter a valid email address.');
       isValid = false;
       if (!firstInvalid) firstInvalid = 'email';
     }
 
-    const pincode = document.getElementById('lead-pincode');
-    if (pincode && pincode.value.trim() && pincode.value.trim().length !== 6) {
+    checkRequired('lead-address-1', 'address_line_1', 'Address Line 1 is required.');
+    checkRequired('lead-address-2', 'address_line_2', 'Address Line 2 is required.');
+    
+    const pinEl = document.getElementById('lead-pincode');
+    const pinVal = pinEl ? pinEl.value.trim() : '';
+    if (!pinVal) {
+      setFieldError('pincode', 'Pincode is required.');
+      isValid = false;
+      if (!firstInvalid) firstInvalid = 'pincode';
+    } else if (pinVal.length !== 6) {
       setFieldError('pincode', 'Pincode must be exactly 6 digits.');
       isValid = false;
       if (!firstInvalid) firstInvalid = 'pincode';
+    }
+
+    checkRequired('lead-city', 'city', 'City is required.');
+    checkRequired('lead-state', 'state', 'State is required.');
+    checkRequired('lead-country', 'country', 'Country is required.');
+
+    // Qualifiers Tab mandatory fields
+    checkRequired('lead-monthly-bill', 'monthly_bill', 'Monthly electricity bill is required.');
+    checkRequired('lead-consumer-no', 'consumer_number', 'DISCOM consumer number is required.');
+    checkRequired('lead-discom', 'discom', 'Please select a DISCOM.');
+
+    // Info Tab mandatory fields
+    checkRequired('lead-society-name', 'society_name', 'Society name is required.');
+    checkRequired('lead-approval-status', 'approval_status', 'Approval status is required.');
+    checkRequired('lead-stage', 'stage', 'Pipeline stage is required.');
+
+    const a1 = document.getElementById('lead-assigned-to');
+    const a2 = document.getElementById('lead-info-assigned-to');
+    const assignedVal = (a1 && a1.value) ? a1.value : (a2 ? a2.value : '');
+    if (!assignedVal) {
+      setFieldError('assigned_to_user_id', 'Please assign the lead to a Solar Executive.');
+      isValid = false;
+      if (!firstInvalid) firstInvalid = 'assigned_to_user_id';
     }
 
     if (!isValid && firstInvalid) focusFirstInvalidField(firstInvalid);

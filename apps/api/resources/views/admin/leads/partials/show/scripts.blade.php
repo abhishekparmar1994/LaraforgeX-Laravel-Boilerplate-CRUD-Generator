@@ -51,7 +51,7 @@
           const progBadge = document.getElementById('pipeline-progress-badge');
           if (progBadge) {
             const pct = Math.round(((targetIdx + 1) / stages.length) * 100);
-            progBadge.textContent = `Stage ${targetIdx + 1} of ${stages.length} • ${pct}%`;
+            progBadge.textContent = `Stage ${targetIdx + 1} of ${stages.length} (${pct}%)`;
           }
         }
       }

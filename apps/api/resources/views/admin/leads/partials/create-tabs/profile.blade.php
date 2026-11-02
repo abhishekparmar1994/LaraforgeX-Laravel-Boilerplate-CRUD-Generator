@@ -27,8 +27,8 @@
         @endif
       </div>
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Phone</label>
-        <input type="tel" name="phone" id="lead-phone" placeholder="+91 XXXXX XXXXX"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Phone <span class="text-rose-500">*</span></label>
+        <input type="tel" name="phone" id="lead-phone" required placeholder="+91 XXXXX XXXXX"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition">
         <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="phone"></p>
         @if(isset($errors) && $errors->has('phone'))
@@ -39,8 +39,8 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">WhatsApp</label>
-        <input type="tel" name="whatsapp" id="lead-whatsapp" placeholder="+91 XXXXX XXXXX"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">WhatsApp <span class="text-rose-500">*</span></label>
+        <input type="tel" name="whatsapp" id="lead-whatsapp" required placeholder="+91 XXXXX XXXXX"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition">
         <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="whatsapp"></p>
         @if(isset($errors) && $errors->has('whatsapp'))
@@ -57,8 +57,8 @@
         @endif
       </div>
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Email</label>
-        <input type="email" name="email" id="lead-email" placeholder="email@example.com"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Email <span class="text-rose-500">*</span></label>
+        <input type="email" name="email" id="lead-email" required placeholder="email@example.com"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition">
         <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="email"></p>
         @if(isset($errors) && $errors->has('email'))
@@ -77,8 +77,8 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Address Line 1</label>
-        <input type="text" name="address_line_1" id="lead-address-1" placeholder="Street address"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Address Line 1 <span class="text-rose-500">*</span></label>
+        <input type="text" name="address_line_1" id="lead-address-1" required placeholder="Street address"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition">
         <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="address_line_1"></p>
         @if(isset($errors) && $errors->has('address_line_1'))
@@ -86,8 +86,8 @@
         @endif
       </div>
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Address Line 2</label>
-        <input type="text" name="address_line_2" id="lead-address-2" placeholder="Apartment, suite, society, etc."
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Address Line 2 <span class="text-rose-500">*</span></label>
+        <input type="text" name="address_line_2" id="lead-address-2" required placeholder="Apartment, suite, society, etc."
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition">
         <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="address_line_2"></p>
         @if(isset($errors) && $errors->has('address_line_2'))
@@ -104,8 +104,8 @@
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
         <div>
-          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">Pincode</label>
-          <input type="text" name="pincode" id="lead-pincode" maxlength="6" placeholder="e.g., 390001"
+          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">Pincode <span class="text-rose-500">*</span></label>
+          <input type="text" name="pincode" id="lead-pincode" maxlength="6" required placeholder="e.g., 390001"
             oninput="handlePincodeAutoFill(this.value)"
             class="w-full bg-white border border-sky-200 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-sky-500 transition">
           <p class="field-error-msg text-[10px] font-medium text-rose-500 mt-1 hidden" data-error-for="pincode"></p>
@@ -114,21 +114,22 @@
           @endif
         </div>
         <div>
-          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">City</label>
-          <input type="text" name="city" id="lead-city" placeholder="Auto-filled"
-            class="w-full bg-white/70 border border-sky-100 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none">
+          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">City <span class="text-rose-500">*</span></label>
+          <input type="text" name="city" id="lead-city" required placeholder="Auto-filled"
+            class="w-full bg-white border border-sky-200 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-sky-500">
           <p class="field-error-msg text-[10px] font-medium text-rose-500 mt-1 hidden" data-error-for="city"></p>
         </div>
         <div>
-          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">State</label>
-          <input type="text" name="state" id="lead-state" placeholder="Auto-filled"
-            class="w-full bg-white/70 border border-sky-100 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none">
+          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">State <span class="text-rose-500">*</span></label>
+          <input type="text" name="state" id="lead-state" required placeholder="Auto-filled"
+            class="w-full bg-white border border-sky-200 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-sky-500">
           <p class="field-error-msg text-[10px] font-medium text-rose-500 mt-1 hidden" data-error-for="state"></p>
         </div>
         <div>
-          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">Country</label>
+          <label class="block text-[10px] font-bold text-slate-600 mb-0.5">Country <span class="text-rose-500">*</span></label>
           <input type="text" name="country" id="lead-country" value="India" readonly
             class="w-full bg-white/70 border border-sky-100 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none">
+          <p class="field-error-msg text-[10px] font-medium text-rose-500 mt-1 hidden" data-error-for="country"></p>
         </div>
       </div>
     </div>

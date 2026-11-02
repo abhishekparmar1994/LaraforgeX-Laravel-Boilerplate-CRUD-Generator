@@ -56,14 +56,14 @@
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Society Name</label>
-        <input type="text" name="society_name" id="lead-society-name" placeholder="Housing society"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Society Name <span class="text-rose-500">*</span></label>
+        <input type="text" name="society_name" id="lead-society-name" required placeholder="Housing society"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
         <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="society_name"></p>
       </div>
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Approval Status</label>
-        <select name="approval_status" id="lead-approval-status"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Approval Status <span class="text-rose-500">*</span></label>
+        <select name="approval_status" id="lead-approval-status" required
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
           <option value="">Select status</option>
           <option value="Pending" selected>Pending Verification</option>
@@ -99,8 +99,8 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Stage</label>
-        <select name="stage" id="lead-stage"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Stage <span class="text-rose-500">*</span></label>
+        <select name="stage" id="lead-stage" required
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
           <option value="Qualified" selected>Qualified</option>
           <option value="New Lead">New Lead</option>
@@ -116,8 +116,8 @@
         <p class="field-error-msg text-[11px] font-medium text-rose-500 mt-1 hidden" data-error-for="stage"></p>
       </div>
       <div>
-        <label class="block text-[11px] font-bold text-slate-700 mb-1">Assigned To</label>
-        <select name="assigned_to_user_id" id="lead-info-assigned-to"
+        <label class="block text-[11px] font-bold text-slate-700 mb-1">Assigned To <span class="text-rose-500">*</span></label>
+        <select name="assigned_to_user_id" id="lead-info-assigned-to" required
           onchange="if(document.getElementById('lead-assigned-to')) document.getElementById('lead-assigned-to').value = this.value"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-500">
           <option value="">Select user</option>
