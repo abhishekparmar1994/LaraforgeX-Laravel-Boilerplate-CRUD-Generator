@@ -1,0 +1,113 @@
+{
+  "gu": {
+    "badge": "કાયદાકીય અને ડેટા સુરક્ષા નીતિ",
+    "title": "ગોપનીયતા નીતિ (Privacy Policy)",
+    "subtitle": "SolarPro & SolarSass તમારા વ્યવસાય અને સોલર ગ્રાહકોના ડેટાનું કેવી રીતે રક્ષણ, સંગ્રહ અને ઉપયોગ કરે છે તેની વિગતવાર નીતિ.",
+    "effectiveDate": "અમલમાં આવ્યાની તારીખ: ઓક્ટોબર 2026",
+    "version": "આવૃત્તિ: 2.1 (DPDP Act 2023 સુસંગત)",
+    "jurisdiction": "ન્યાયક્ષેત્ર: ગુજરાત, ભારત",
+    "backToHome": "મુખ્ય પેજ પર પાછા જાઓ",
+    "printPdf": "પ્રિન્ટ / PDF સેવ કરો",
+    "searchPlaceholder": "નીતિમાં શોધો (દા.ત. સબસિડી, આધાર, WhatsApp, ડેટા ડિલીટ)...",
+    "highlightsTitle": "મુખ્ય સુરક્ષા અને ગોપનીયતા બાંહેધરી",
+    "faqTitle": "વારંવાર પુછાતા પ્રશ્નો (FAQ)",
+    "contactOfficer": "ડેટા પ્રોટેક્શન અને ફરિયાદ નિવારણ અધિકારી",
+    "tocTitle": "અનુક્રમણિકા",
+    "trustBadges": [
+      {
+        "icon": "Ga",
+        "title": "ડેટા વેચાણ પર શૂન્ય છૂટ",
+        "desc": "અમે તમારા ગ્રાહકોના ફોન નંબર, લીડ્સ કે પ્રોજેક્ટ દસ્તાવેજો ક્યારેય કોઈ ત્રીજી કંપની કે જાહેરાતકર્તાને વેચતા નથી."
+      },
+      {
+        "icon": "kr",
+        "title": "મલ્ટી-ટેનન્ટ ડેટા આઇસોલેશન",
+        "desc": "દરેક સોલર ઇન્સ્ટોલરનો ડેટા સંપૂર્ણ અલગ ડેટાબેઝ પાર્ટીશનમાં સુરક્ષિત રહે છે. બીજો કોઈ ઇન્સ્ટોલર તમારી લીડ્સ જોઈ શકતો નથી."
+      },
+      {
+        "icon": "Ue",
+        "title": "PM સૂર્ય ઘર & સબસિડી સુરક્ષા",
+        "desc": "ગ્રાહકના આધાર, લાઇટ બિલ અને બેંક ખાતાની માહિતી 256-bit એન્ક્રિપ્શન સાથે અત્યંત સુરક્ષિત સંગ્રહાય છે."
+      },
+      {
+        "icon": "on",
+        "title": "રોલ-બેઝ્ડ એક્સેસ (RBAC)",
+        "desc": "તમારી કંપનીમાં કયો કર્મચારી (સેલ્સ, સર્વેયર કે એકાઉન્ટન્ટ) કયો ડેટા જોઈ શકે તેનું સંપૂર્ણ નિયંત્રણ તમારા હાથમાં છે."
+      }
+    ]
+  },
+  "hi": {
+    "badge": "कानूनी और डेटा सुरक्षा नीति",
+    "title": "गोपनीयता नीति (Privacy Policy)",
+    "subtitle": "SolarPro & SolarSass आपके सौर व्यवसाय और उपभोक्ताओं के डेटा की सुरक्षा, भंडारण और उपयोग कैसे करता है, इसका पूर्ण विवरण।",
+    "effectiveDate": "प्रभावी तिथि: अक्टूबर 2026",
+    "version": "संस्करण: 2.1 (DPDP Act 2023 अनुपालन)",
+    "jurisdiction": "अधिकार क्षेत्र: गुजरात, भारत",
+    "backToHome": "मुख्य पृष्ठ पर वापस जाएं",
+    "printPdf": "प्रिंट / PDF सेव करें",
+    "searchPlaceholder": "नीति में खोजें (उदा. सब्सिडी, आधार, WhatsApp, डेटा डिलीट)...",
+    "highlightsTitle": "मुख्य सुरक्षा और गोपनीयता वादे",
+    "faqTitle": "अक्सर पूछे जाने वाले सवाल (FAQ)",
+    "contactOfficer": "डेटा संरक्षण और शिकायत निवारण अधिकारी",
+    "tocTitle": "सामग्री सूची",
+    "trustBadges": [
+      {
+        "icon": "Ga",
+        "title": "डेटा बिक्री पर शून्य छूट",
+        "desc": "हम आपके सोलर ग्राहकों के नंबर, लीड्स या प्रोजेक्ट फाइलों को कभी भी किसी तीसरे पक्ष या विज्ञापनदाता को नहीं बेचते।"
+      },
+      {
+        "icon": "kr",
+        "title": "मल्टी-टेनेंट डेटा अलगाव",
+        "desc": "प्रत्येक सोलर इंस्टॉलर का डेटा अलग और सुरक्षित रहता है। कोई अन्य इंस्टॉलर आपकी लीड्स या कोटेशन नहीं देख सकता।"
+      },
+      {
+        "icon": "Ue",
+        "title": "पीएम सूर्य घर व सब्सिडी सुरक्षा",
+        "desc": "आधार, बिजली बिल और डीबीटी बैंक विवरण 256-बिट बैंक-ग्रेड एन्क्रिप्शन के साथ पूरी तरह सुरक्षित रखे जाते हैं।"
+      },
+      {
+        "icon": "on",
+        "title": "रोल-आधारित एक्सेस (RBAC)",
+        "desc": "आपकी टीम का कौन सा सदस्य कौन सा डेटा देख सकता है, इस पर केवल आपका पूर्ण नियंत्रण होता है।"
+      }
+    ]
+  },
+  "en": {
+    "badge": "Legal & Data Governance Policy",
+    "title": "Privacy Policy",
+    "subtitle": "Comprehensive data protection, encryption, and privacy practices governing SolarPro & SolarSass ERP & CRM platform for Solar Installers in India.",
+    "effectiveDate": "Effective Date: October 2026",
+    "version": "Version: 2.1 (DPDP Act 2023 & IT Act Compliant)",
+    "jurisdiction": "Jurisdiction: Gujarat, India",
+    "backToHome": "Back to Website",
+    "printPdf": "Print / Save as PDF",
+    "searchPlaceholder": "Search policy (e.g. subsidy, Aadhaar, WhatsApp, delete, retention)...",
+    "highlightsTitle": "Core Privacy & Security Commitments",
+    "faqTitle": "Privacy Frequently Asked Questions",
+    "contactOfficer": "Data Protection & Grievance Redressal Officer",
+    "tocTitle": "Table of Contents",
+    "trustBadges": [
+      {
+        "icon": "Ga",
+        "title": "Strictly No Data Selling",
+        "desc": "We never sell, monetize, or broker your customer leads, electricity bills, or installer records to any third parties."
+      },
+      {
+        "icon": "kr",
+        "title": "Multi-Tenant Data Isolation",
+        "desc": "Every solar installer operates within a logically isolated workspace. Competitors can never access your pipeline."
+      },
+      {
+        "icon": "Ue",
+        "title": "PM Surya Ghar & Subsidy Security",
+        "desc": "Customer Aadhaar, DISCOM consumer numbers, and subsidy applications are encrypted with AES-256 and TLS 1.3."
+      },
+      {
+        "icon": "on",
+        "title": "Granular Role-Based Access (RBAC)",
+        "desc": "Control which field engineers, sales agents, or accountants can view customer pricing, documents, and payments."
+      }
+    ]
+  }
+}

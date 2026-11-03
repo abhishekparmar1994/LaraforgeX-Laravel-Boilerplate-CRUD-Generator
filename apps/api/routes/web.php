@@ -22,7 +22,11 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstallController;
 
 Route::get('/', function () {
-    return redirect('/admin/dashboard');
+    return view('frontend.index');
+});
+
+Route::get('/privacy-policy', function () {
+    return view('frontend.privacy');
 });
 
 Route::get('/install', [InstallController::class, 'index']);
